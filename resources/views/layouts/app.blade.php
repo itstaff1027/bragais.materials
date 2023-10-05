@@ -14,6 +14,7 @@
 
     <!-- Scripts -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    {{-- <script src="https://cdn.tailwindcss.com"></script> --}}
 </head>
 
 <body class="font-sans antialiased">
@@ -34,6 +35,7 @@
             {{ $slot }}
         </main>
     </div>
+    <script src="{{ asset('js/app.js') }}"></script>
 </body>
 
 </html>
