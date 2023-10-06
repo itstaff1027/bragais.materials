@@ -8,6 +8,13 @@ use Illuminate\Support\Facades\DB;
 
 class Index extends Component
 {
+        // FILTERS - SEARCH
+    public $material_sku_search = '';
+    public $type_search = '';
+    public $name_search = '';
+    public $color_search = '';
+    public $size_search = '';
+
     public function render()
     {
         // return view('livewire.list-products', [
@@ -28,7 +35,16 @@ class Index extends Component
         //         ->paginate(25)
         // ]);
         return view('livewire.inventory.index', [
-            'materials' => Materials::paginate(25)
+            'materials' => Materials::where('materials.material_sku', 'like', '%'.$this->material_sku_search.'%')
+                ->where('materials.type', 'like', '%'.$this->type_search.'%')
+                ->where('materials.name', 'like', '%'.$this->name_search.'%')
+                ->where('materials.color', 'like', '%'.$this->color_search.'%')
+                ->where('materials.size', 'like', '%'.$this->size_search.'%')
+                ->leftJoin(DB::raw('(SELECT material_id, SUM(stocks) as total_stocks FROM materials_stocks GROUP BY material_id) as materials_stocks'), 'materials.id', '=', 'materials_stocks.material_id')
+                ->select('materials.id', 'materials.material_sku', 'materials.type', 'materials.name', 'materials.color', 'materials.size', 'materials.unit_per',
+                        DB::raw('COALESCE(materials_stocks.total_stocks, 0) as total_stocks'))
+                ->groupBy('materials.id', 'materials.material_sku', 'materials.type', 'materials.name', 'materials.color', 'materials.size', 'materials.unit_per', 'materials_stocks.total_stocks')
+                ->paginate(10)
         ]);
     }
 }

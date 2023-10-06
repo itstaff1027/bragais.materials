@@ -11,8 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('materials', function (Blueprint $table) {
-            $table->string('unit_per', 255)->default('')->nullable();
+        Schema::create('packaging_materials', function (Blueprint $table) {
+            $table->id();
+            $table->string('name', 255)->default('');
+            $table->string('size', 255)->default('');
+            $table->timestamps();
         });
     }
 
@@ -21,8 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('materials', function (Blueprint $table) {
-            $table->dropColumn('unit_per');
-        });
+        Schema::dropIfExists('packaging_materials');
     }
 };

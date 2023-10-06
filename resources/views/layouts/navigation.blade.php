@@ -16,8 +16,8 @@
                 @php
                 $routes = [
                 ['name' => 'Dashboard', 'path' => 'dashboard', 'to' => 'dashboard' ],
-                // ['name' => 'Users', 'path' => 'users', 'to' => 'users' ],
-                // ['name' => 'Customers', 'path' => 'customers', 'to' => 'customers' ],
+                ['name' => 'Products', 'path' => 'products', 'to' => 'products' ],
+                ['name' => 'Packaging', 'path' => 'packaging', 'to' => 'packaging' ],
                 ['name' => 'Inventory', 'path' => 'inventory', 'to' => 'inventory' ],
                 // ['name' => 'Sells', 'path' => 'sell', 'to' => 'sell' ],
                 ]

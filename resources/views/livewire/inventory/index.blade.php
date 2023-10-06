@@ -1,8 +1,8 @@
 <div>
-    <table class="table-auto w-full text-center text-pink-600 divide-y-2 divide-violet-400 hover:divide-pink-400">
+    <table class="table-auto w-full text-center divide-y-2 divide-violet-400 hover:divide-pink-400">
         <caption>
             <h1 class="italic text-xl font-bold p-2">All Materials
-                {{-- <a href="{{ route('add-new-model') }}">
+                {{-- <a href="{{ route('add-new-material') }}">
                     <button>
                         <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"
                             class="fill-green-400">
@@ -20,16 +20,14 @@
                 <button class="border-2 border-violet-700 rounded-r-full p-2 m-0" @click="open = ! open">Filter</button>
                 {{-- FILTER --}}
                 <div class="m-2" x-show="open" x-transition.duration.500ms>
-                    <input class="border-2 border-violet-700 rounded-full w-1/4 m-2"
-                        wire:model.live.debounce.500ms='model_search' placeholder="Model" />
-                    <input class="border-2 border-violet-700 rounded-full w-1/4 m-2"
+                    <input class="border-2 border-violet-700 rounded-full w-1/8 m-2"
+                        wire:model.live.debounce.500ms='type_search' placeholder="Type" />
+                    <input class="border-2 border-violet-700 rounded-full w-1/8 m-2"
+                        wire:model.live.debounce.500ms='name_search' placeholder="Name" />
+                    <input class="border-2 border-violet-700 rounded-full w-1/8 m-2"
                         wire:model.live.debounce.500ms='color_search' placeholder="Color" />
-                    <input class="border-2 border-violet-700 rounded-full w-1/4 m-2"
+                    <input class="border-2 border-violet-700 rounded-full w-1/8 m-2"
                         wire:model.live.debounce.500ms='size_search' placeholder="Size" />
-                    <input class="border-2 border-violet-700 rounded-full w-1/4 m-2"
-                        wire:model.live.debounce.500ms='heel_search' placeholder="Heel Height" />
-                    <input class="border-2 border-violet-700 rounded-full w-1/4 m-2"
-                        wire:model.live.debounce.500ms='category_search' placeholder="Category" />
                 </div>
 
             </div>
@@ -42,6 +40,7 @@
                 <th>Name</th>
                 <th>Color</th>
                 <th>Size</th>
+                <th>Unit Per</th>
                 <th>Stocks</th>
                 <th>Actions</th>
             </tr>
@@ -55,6 +54,7 @@
                 <td>{{ $material->name }}</td>
                 <td>{{ $material->color }}</td>
                 <td>{{ $material->size }}</td>
+                <td>{{ $material->unit_per }}</td>
                 <td>{{ $material->total_stocks }}</td>
                 <td>
                     {{-- <div x-data="{ modal_open: false }">

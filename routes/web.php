@@ -1,8 +1,11 @@
 <?php
 
 use App\Livewire\Counter;
+use App\Livewire\Inventory\Details;
+use App\Livewire\Packaging\AddStocks;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
+use App\Livewire\Products\CompletePackaging;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,7 +33,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return view('inventory');
     })->name('inventory');
 
-    // Route::get('/inventory/add-stocks/{id}', AddStocks::class)->name('add-stocks');
+    Route::get('/inventory/material-details/{id}', Details::class)->name('material-details');
 
     // Route::get('/inventory/add-outlet_stocks/{id}', AddOutletStocks::class)->name('add-outlet_stocks');
 
@@ -51,6 +54,22 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Route::get('/inventory/outlets', Outlets::class)->name('outlets');
 
     // Route::get('/inventory/new_model', NewModel::class)->name('new_model');
+});
+
+Route::middleware(['auth', 'verified'])->group( function () {
+    Route::get('/products', function () {
+        return view('products');
+    })->name('products');
+
+    Route::get('/products/complete_packaging/{id}', CompletePackaging::class)->name('complete-packaging');
+});
+
+Route::middleware(['auth', 'verified'])->group( function () {
+    Route::get('/packaging', function () {
+        return view('packaging_materials');
+    })->name('packaging');
+
+    Route::get('/packaging/add-stocks/{id}', AddStocks::class)->name('add-packaging-materials');
 });
 
 Route::middleware('auth')->group(function () {

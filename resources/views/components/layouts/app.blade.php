@@ -7,7 +7,7 @@
 
     <title>{{ $title ?? 'Page Title' }}</title>
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-    <script src="{{ asset('js/app.js') }}"></script>
+    {{-- <script src="{{ asset('js/app.js') }}"></script> --}}
 </head>
 
 <body>
