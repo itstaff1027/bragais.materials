@@ -39,11 +39,15 @@
                             </tbody>
                         </table>
                         <div class="flex flex-col justify-center items-center m-2 w-full">
-                            <form wire:submit.prevent="store" class="w-1/4 flex justify-between">
+                            <form wire:submit.prevent="store" class="w-full justify-between flex border-2">
                                 @csrf
-                                <input type="number" wire:model="order_number" class="p-2 mr-2" />
+                                {{-- <select wire:model="packaging_type" class="rounded-full">
+                                    <option value="COMPLETE_PACKAGING">COMPLETE_PACKAGING<option>
+                                    <option value="DUSTBAG_ONLY">DUSTBAG ONLY</option
+                                </select> --}}
+                                <input type="number" wire:model="order_number" />
                                 <button type="submit"
-                                    class="w-full p-2 pl-4 pr-4 bg-emerald-600 text-white rounded-full">
+                                    class="w-1/4 p-2 pl-4 pr-4 bg-emerald-600 text-white rounded-full">
                                     ADD
                                 </button>
                             </form>

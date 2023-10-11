@@ -1,11 +1,16 @@
 <?php
 
 use App\Livewire\Counter;
+use App\Livewire\Packaging\PerDay;
 use App\Livewire\Inventory\Details;
 use App\Livewire\Packaging\AddStocks;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PDFController;
+use App\Livewire\Packaging\DeductStocks;
 use App\Http\Controllers\ProfileController;
 use App\Livewire\Products\CompletePackaging;
+use App\Livewire\Packaging\Components\GeneratePdf;
+use App\Livewire\Packaging\MaterialLogs;
 
 /*
 |--------------------------------------------------------------------------
@@ -70,6 +75,13 @@ Route::middleware(['auth', 'verified'])->group( function () {
     })->name('packaging');
 
     Route::get('/packaging/add-stocks/{id}', AddStocks::class)->name('add-packaging-materials');
+    Route::get('/packaging/deduct-stocks/{id}', DeductStocks::class)->name('deduct-packaging-materials');
+
+    Route::get('/packaging/per-day', PerDay::class)->name('packaging-per-day');
+    Route::get('/packaging/material-logs', MaterialLogs::class)->name('material-logs');
+
+    Route::get('/packaging/per-day/generate_pdf_today_report', GeneratePdf::class)->name('generate-pdf');
+    Route::get('/generate-pdf', [PDFController::class, 'generatePDF']);
 });
 
 Route::middleware('auth')->group(function () {

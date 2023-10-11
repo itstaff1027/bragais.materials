@@ -18,6 +18,7 @@ class CompletePackaging extends Component
 
 
     public $packaging_material_id;
+    // public $packaging_tpye = '';
 
     public function mount($id){
         $this->product_id = $id;
@@ -60,77 +61,93 @@ class CompletePackaging extends Component
             21 =>['id' => '22', 'name' => 'WONDIATOR_BOX', 'size' => 'ONE_SIZE']
         ];
         
-
-        if($this->category === "PAGEANT"){
+        // if($this->packaging_type == 'COMPLETE_PACKAGING'){
+            if($this->category === "PAGEANT"){
             
-            // TISSUE
-            $this->insertCompletePackagingSale(18, $this->product_id, -1, 'OUTGOING');
-            // DUST BAG
-            $this->insertCompletePackagingSale(8, $this->product_id, -1, 'OUTGOING');
-
-            if($this->model == 'KEVIN-V2'){
-                // PILLON
-                $this->insertCompletePackagingSale(1, $this->product_id, -2, 'OUTGOING');
-                // RIBBON
-                $this->insertCompletePackagingSale(19, $this->product_id, -1, 'OUTGOING');
-
-                if($this->size >= 9 && $this->size <= 12){
-                    // Box
-                    $this->insertCompletePackagingSale(14, $this->product_id, -1, 'OUTGOING');
+                // TISSUE
+                $this->insertCompletePackagingSale(18, $this->product_id, -1, 'OUTGOING');
+                // DUST BAG
+                $this->insertCompletePackagingSale(8, $this->product_id, -1, 'OUTGOING');
+    
+                if($this->model == 'KEVIN-V2'){
+                    // PILLON
+                    $this->insertCompletePackagingSale(1, $this->product_id, -2, 'OUTGOING');
+                    // RIBBON
+                    $this->insertCompletePackagingSale(19, $this->product_id, -1, 'OUTGOING');
+    
+                    if($this->size >= 9 && $this->size <= 12){
+                        // Box
+                        $this->insertCompletePackagingSale(14, $this->product_id, -1, 'OUTGOING');
+                    }
+                    else{
+                        // Box
+                        $this->insertCompletePackagingSale(13, $this->product_id, -1, 'OUTGOING');
+                    }
                 }
                 else{
                     // Box
-                    $this->insertCompletePackagingSale(13, $this->product_id, -1, 'OUTGOING');
+                    $this->insertCompletePackagingSale(16, $this->product_id, -1, 'OUTGOING');
+                    // PILON
+                    $this->insertCompletePackagingSale(2, $this->product_id, -2, 'OUTGOING');
+                    // RIBBON
+                    $this->insertCompletePackagingSale(20, $this->product_id, -1, 'OUTGOING');
                 }
             }
-            else{
+    
+            if($this->category === "HEELS"){
                 // Box
-                $this->insertCompletePackagingSale(16, $this->product_id, -1, 'OUTGOING');
+                $this->insertCompletePackagingSale(15, $this->product_id, -1, 'OUTGOING');
                 // PILON
-                $this->insertCompletePackagingSale(2, $this->product_id, -2, 'OUTGOING');
+                $this->insertCompletePackagingSale(3, $this->product_id, -2, 'OUTGOING');
                 // RIBBON
                 $this->insertCompletePackagingSale(20, $this->product_id, -1, 'OUTGOING');
+                // TISSUE
+                $this->insertCompletePackagingSale(18, $this->product_id, -1, 'OUTGOING');
+                // DUST BAG
+                $this->insertCompletePackagingSale(8, $this->product_id, -1, 'OUTGOING');
             }
-        }
+    
+            if($this->category === "MANDIATOR"){
+                // Box
+                $this->insertCompletePackagingSale(21, $this->product_id, -1, 'OUTGOING');
+                // LL PILON
+                $this->insertCompletePackagingSale(4, $this->product_id, -1, 'OUTGOING');
+                // TISSUE
+                $this->insertCompletePackagingSale(18, $this->product_id, -1, 'OUTGOING');
+                // ll DUST BAG
+                $this->insertCompletePackagingSale(6, $this->product_id, -1, 'OUTGOING');
+            }
+    
+            if($this->category === "WONDIATOR"){
+                // Box
+                $this->insertCompletePackagingSale(22, $this->product_id, -1, 'OUTGOING');
+                // LL PILON
+                $this->insertCompletePackagingSale(5, $this->product_id, -1, 'OUTGOING');
+                // TISSUE
+                $this->insertCompletePackagingSale(18, $this->product_id, -1, 'OUTGOING');
+                // ll DUST BAG
+                $this->insertCompletePackagingSale(7, $this->product_id, -1, 'OUTGOING');
+            }
+        // }
 
-        if($this->category === "HEELS"){
-            // Box
-            $this->insertCompletePackagingSale(15, $this->product_id, -1, 'OUTGOING');
-            // PILON
-            $this->insertCompletePackagingSale(3, $this->product_id, -2, 'OUTGOING');
-            // RIBBON
-            $this->insertCompletePackagingSale(20, $this->product_id, -1, 'OUTGOING');
-            // TISSUE
-            $this->insertCompletePackagingSale(18, $this->product_id, -1, 'OUTGOING');
-            // DUST BAG
-            $this->insertCompletePackagingSale(8, $this->product_id, -1, 'OUTGOING');
-        }
-
-        if($this->category === "MANDIATOR"){
-            // Box
-            $this->insertCompletePackagingSale(21, $this->product_id, -1, 'OUTGOING');
-            // PILON
-            $this->insertCompletePackagingSale(4, $this->product_id, -2, 'OUTGOING');
-            // TISSUE
-            $this->insertCompletePackagingSale(18, $this->product_id, -1, 'OUTGOING');
-            // ll DUST BAG
-            $this->insertCompletePackagingSale(6, $this->product_id, -1, 'OUTGOING');
-        }
-
-        if($this->category === "WONDIATOR"){
-            // Box
-            $this->insertCompletePackagingSale(22, $this->product_id, -1, 'OUTGOING');
-            // PILON
-            $this->insertCompletePackagingSale(5, $this->product_id, -2, 'OUTGOING');
-            // TISSUE
-            $this->insertCompletePackagingSale(18, $this->product_id, -1, 'OUTGOING');
-            // ll DUST BAG
-            $this->insertCompletePackagingSale(7, $this->product_id, -1, 'OUTGOING');
-        }
+        // if($this->packaging_type == 'DUSTBAG_ONLY'){
+        //     if($this->category === "MANDIATOR"){
+        //         // ll DUST BAG
+        //         $this->insertCompletePackagingSale(6, $this->product_id, -1, 'OUTGOING');
+        //     }
+        //     else if($this->category === "WONDIATOR"){
+        //         // ll DUST BAG
+        //         $this->insertCompletePackagingSale(7, $this->product_id, -1, 'OUTGOING');
+        //     }
+        //     else{
+        //         // DUST BAG
+        //         $this->insertCompletePackagingSale(8, $this->product_id, -1, 'OUTGOING');
+        //     }
+        // }
 
         $this->reset(['order_number']);
 
-        return redirect('/inventory')->with('success', 'Successfully Addedd!');
+        return redirect('/products')->with('success', 'Successfully Addedd!');
     }
 
     public function render()

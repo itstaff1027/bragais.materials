@@ -1,8 +1,17 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Packaging') }}
-        </h2>
+        <div class="flex">
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                {{ __('Packaging') }}
+            </h2>
+            <a href="{{ route('packaging-per-day') }}" class="ml-2">
+                {{ __('Per Day') }}
+            </a>
+            <a href="{{ route('material-logs') }}" class="ml-2">
+                {{ __('Material Logs') }}
+            </a>
+        </div>
+        
     </x-slot>
 
     <div class="py-12">
