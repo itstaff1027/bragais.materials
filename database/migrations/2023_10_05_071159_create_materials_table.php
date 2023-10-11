@@ -18,7 +18,6 @@ return new class extends Migration
             $table->string('name', 255)->default('')->nullable();
             $table->string('color', 255)->default('')->nullable();
             $table->string('size', 255)->default('')->nullable();
-            $table->string('unit_per', 255)->default('')->nullable();
             $table->timestamps();
         });
     }
