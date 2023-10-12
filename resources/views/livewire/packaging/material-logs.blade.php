@@ -2,7 +2,7 @@
     <x-app-layout>
         <x-slot name="header">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('Packaging Per Day') }}
+                {{ __('Material Logs') }}
             </h2>
         </x-slot>
     
@@ -22,7 +22,8 @@
                                 <thead>
                                     <tr>
                                         <th>ID</th>
-                                        <th>Name</th>
+                                        <th>Material Name</th>
+                                        <th>Material Size</th>
                                         <th>Model</th>
                                         <th>Color</th>
                                         <th>Size</th>
@@ -37,6 +38,7 @@
                                     <tr class="hover:bg-violet-900 hover:text-white odd:bg-gray-200">
                                         <td class="p-2">{{ $getMaterialLogs->material_logs_id }}</td>
                                         <td>{{ $getMaterialLogs->name }}</td>
+                                        <td>{{ $getMaterialLogs->material_size }}</td>
                                         <td>{{ $getMaterialLogs->model }}</td>
                                         <td>{{ $getMaterialLogs->color }}</td>
                                         <td>{{ $getMaterialLogs->size }}</td>

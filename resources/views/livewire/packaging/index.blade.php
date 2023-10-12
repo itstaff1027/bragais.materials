@@ -4,20 +4,17 @@
         @foreach ($getTotalPilon as $totalPilon)
         @php
             if($totalPilon->size == 'LARGE'){
-                $PilonPerRoll = -($totalPilon->released_stocks) / 180;
+                $PilonPerRoll = -($totalPilon->released_stocks);
             }
             else if($totalPilon->size == 'MEDIUM'){
-                $PilonPerRoll = -($totalPilon->released_stocks) / 200;
+                $PilonPerRoll = -($totalPilon->released_stocks);
             }
             else if($totalPilon->size == 'SMALL'){
-                $PilonPerRoll = -($totalPilon->released_stocks) / 210;
+                $PilonPerRoll = -($totalPilon->released_stocks);
             }
             else{
                 if($totalPilon->name == 'LL_PILON_MANDIATOR'){
-                    $PilonPerRoll = -($totalPilon->released_stocks) / 210;
-                }
-                if($totalPilon->name == 'LL_PILON_WONDIATOR'){
-                    $PilonPerRoll = -($totalPilon->released_stocks) / 200;
+                    $PilonPerRoll = -($totalPilon->released_stocks);
                 }
             }
         @endphp
@@ -28,7 +25,13 @@
         @endforeach
     </div>
 
+    {{-- <div class="w-1/2 border-2 flex flex-col">
+        @foreach ($getTotalRibbon as $total_ribbon)
+            <h1>{{ $total_ribbon->model }} {{ $total_ribbon->name }} {{ $total_ribbon->material_stocks }} {{ $total_ribbon->size }} {{ $total_ribbon->heel_height }} {{ $total_ribbon->category }}</h1>
+        @endforeach
+    </div> --}}
 
+    {{-- {{ $packaging_materials }} --}}
 
     <div class="flex overflow-x-auto">
         @php
@@ -45,20 +48,25 @@
             @php
                 if($total_ribbon->category == 'PAGEANT'){
                     if($total_ribbon->name == "WHITE_RIBBON"){
-                        if($total_ribbon->size >= 8 && $total_ribbon->size <= 12){
-                            $total_white_ribbon_large =+ $total_ribbon->material_stocks;
+                        if($total_ribbon->size >= 9 && $total_ribbon->size <= 12 || $total_ribbon->size >= 39 && $total_ribbon->size <= 42){
+                            $total_white_ribbon_large = $total_white_ribbon_large + $total_ribbon->material_stocks;
                         }
                         else{
-                            $total_white_ribbon_medium =+ $total_ribbon->material_stocks;
+                            $total_white_ribbon_medium = $total_white_ribbon_medium + $total_ribbon->material_stocks;
                         }
                     }
                     else{
-                        $total_brown_ribbon_medium =+ $total_ribbon->material_stocks;
+                        if($total_ribbon->name == "BROWN_RIBBON"){
+                            if($total_ribbon->heel_height >= 5 && $total_ribbon->heel_height <= 6){
+                                $total_brown_ribbon_medium = $total_brown_ribbon_medium + $total_ribbon->material_stocks;
+                            }
+                        }
+                        
                     }
                 }
                 if($total_ribbon->category == 'HEELS'){
                     if($total_ribbon->name == "BROWN_RIBBON"){
-                        $total_brown_ribbon_small =+ $total_ribbon->material_stocks;
+                        $total_brown_ribbon_small = $total_brown_ribbon_small + $total_ribbon->material_stocks;
                     }
                 }
             @endphp
@@ -67,33 +75,32 @@
         @php
             $test = 1;
             // SET the value of used ribbons per pcs if the decimal HIT whole number means its one roll
-            $total_white_ribbon_large = $total_white_ribbon_large / 20;
-            $total_white_ribbon_medium = $total_white_ribbon_medium / 15;
+            // $total_white_ribbon_large = $total_white_ribbon_large / 20;
+            // $total_white_ribbon_medium = $total_white_ribbon_medium / 15;
 
-            $total_brown_ribbon_small = $total_brown_ribbon_small / 15;
-            $total_brown_ribbon_medium = $total_brown_ribbon_medium / 20;
+            // $total_brown_ribbon_small = $total_brown_ribbon_small / 15;
+            // $total_brown_ribbon_medium = $total_brown_ribbon_medium / 20;
 
             // SET TOTAL USED RIBBON IN TOTAL
-            $total_white_ribbon = $total_white_ribbon_large + $total_white_ribbon_medium;
-            $total_brown_ribbon = $total_brown_ribbon_small + $total_brown_ribbon_medium;
+            $total_white_ribbon = ($total_white_ribbon_large / 20) + ($total_white_ribbon_medium / 15);
+            $total_brown_ribbon = ($total_brown_ribbon_small / 15) + ($total_brown_ribbon_medium / 20);
 
         @endphp
-
         <div class="w-full flex flex-col">
             <label class="m-2 font-bold text-xs">W. R. in Used in Large Box</label>
-            <input class="m-2 w-max" type="text" value="{{ number_format($total_white_ribbon_large, 2) }}" disabled />
+            <input class="m-2 w-max" type="text" value="{{ number_format(($total_white_ribbon_large / 20), 2) }}" disabled />
         </div>
         <div class="w-full flex flex-col">
             <label class="m-2 font-bold text-xs">W. R. in Used in Medium Box</label>
-            <input class="m-2 w-max" type="text" value="{{ number_format($total_white_ribbon_medium, 2) }}" disabled />
+            <input class="m-2 w-max" type="text" value="{{ number_format(($total_white_ribbon_medium / 15), 2) }}" disabled />
         </div>
         <div class="w-full flex flex-col">
             <label class="m-2 font-bold text-xs">B. R. in Used in Medium Box</label>
-            <input class="m-2 w-max" type="text" value="{{ number_format($total_brown_ribbon_medium, 2) }}" disabled />
+            <input class="m-2 w-max" type="text" value="{{ number_format(($total_brown_ribbon_medium / 20), 2) }}" disabled />
         </div>
         <div class="w-full flex flex-col">
             <label class="m-2 font-bold text-xs">B. R. in Used in Small Box</label>
-            <input class="m-2 w-max" type="text" value="{{ number_format($total_brown_ribbon_small, 2) }}" disabled />
+            <input class="m-2 w-max" type="text" value="{{ number_format(($total_brown_ribbon_small / 15), 2) }}" disabled />
         </div>
     </div>
 
@@ -114,9 +121,9 @@
             <label class="m-2 font-bold">
                 {{ 
                     $total_ribbon_stocks->packaging_material_id == 19 ? 
-                        'TOTAL STOCKS W.R. - '.number_format($total_ribbon_stocks->incoming_stocks + $total_white_ribbon, 2) 
+                        'TOTAL STOCKS W.R. - REM. : '.number_format($total_ribbon_stocks->incoming_stocks + $total_white_ribbon, 2) 
                         : 
-                        'TOTAL STOCKS B.R. - '.number_format($total_ribbon_stocks->incoming_stocks + $total_brown_ribbon, 2) 
+                        'TOTAL STOCKS B.R. - REM. : '.number_format($total_ribbon_stocks->incoming_stocks + $total_brown_ribbon, 2) 
                 }}
             </label>
             <input class="m-2 w-max" type="text" value="{{ $total_ribbon_stocks->incoming_stocks }}" disabled />
@@ -167,6 +174,7 @@
                     <th>ID</th>
                     <th>Name</th>
                     <th>Size</th>
+                    {{-- <th>Beg. Stocks</th> --}}
                     <th>Stocks</th>
                     <th>Released Stocks</th>
                     <th>Action</th>
@@ -178,8 +186,25 @@
                     <td class="p-2">{{ $packaging_material->id }}</td>
                     <td>{{ $packaging_material->name }}</td>
                     <td>{{ $packaging_material->size }}</td>
-                    <td>{{ $packaging_material->total_stocks }}</td>
-                    <td>{{ $packaging_material->released_stocks }}</td>
+                    {{-- <td>{{ $packaging_material->beginning_total_stocks }}</td> --}}
+                    <td>
+                        @if ($packaging_material->name == 'WHITE_RIBBON')
+                            {{ number_format($packaging_material->beginning_total_stocks + $total_white_ribbon, 2)  }}
+                        @elseif ($packaging_material->name == 'BROWN_RIBBON')
+                            {{ number_format($packaging_material->beginning_total_stocks + $total_brown_ribbon, 2)  }}
+                        @else
+                            {{ $packaging_material->total_stocks }}
+                        @endif
+                    </td>
+                    <td>
+                        @if ($packaging_material->name == 'WHITE_RIBBON')
+                            {{ number_format($total_white_ribbon, 2)  }}
+                        @elseif ($packaging_material->name == 'BROWN_RIBBON')
+                            {{ number_format($total_brown_ribbon, 2)  }}
+                        @else
+                            {{ $packaging_material->released_stocks }}
+                        @endif
+                    </td>
                     <td>
                         <a href="{{ route('add-packaging-materials', ['id' => $packaging_material->id]) }}">
                             <button>
@@ -205,8 +230,8 @@
         </table>
     </div>
 
-    <div class="p-3">
+    {{-- <div class="p-3">
         {{ $packaging_materials->links() }}
-    </div>
+    </div> --}}
 
 </div>

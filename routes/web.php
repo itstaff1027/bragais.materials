@@ -81,8 +81,10 @@ Route::middleware(['auth', 'verified'])->group( function () {
     Route::get('/packaging/material-logs', MaterialLogs::class)->name('material-logs');
 
     Route::get('/packaging/per-day/generate_pdf_today_report', GeneratePdf::class)->name('generate-pdf');
-    Route::get('/generate-pdf', [PDFController::class, 'generatePDF']);
+    Route::get('/generate-pdf', [GeneratePdf::class, 'render']);
 });
+
+// Route::get('/generate-pdf', [PDFController::class, 'generatePDF']);
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

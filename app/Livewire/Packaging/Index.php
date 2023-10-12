@@ -28,6 +28,7 @@ class Index extends Component
         ->get();
 
         $getTotalRibbon = DB::table('packaging_material_logs')->where('packaging_material_logs.status', '=', 'OUTGOING')
+        ->whereIn('packaging_materials.name', ['BROWN_RIBBON', 'WHITE_RIBBON'])
         ->Join(DB::raw('packaging_materials'), 'packaging_materials.id', '=', 'packaging_material_logs.packaging_material_id')
         ->Join(DB::raw('products'), 'products.id', '=', 'packaging_material_logs.product_id')
         ->select(DB::raw('SUM(packaging_material_logs.stocks) as material_stocks'), 'packaging_materials.name', 
@@ -60,11 +61,12 @@ class Index extends Component
         return view('livewire.packaging.index', [
             'packaging_materials' => PackagingMaterials::where('packaging_materials.name', 'like', '%'.$this->name_search.'%')
                 ->where('packaging_materials.size', 'like', '%'.$this->size_search.'%')
+                ->leftJoin(DB::raw('(SELECT packaging_material_id, SUM(STOCKS) as total_stocks FROM packaging_material_logs WHERE status=\'INCOMING\' GROUP BY packaging_material_id) AS beginning_stocks'), 'packaging_materials.id', '=', 'beginning_stocks.packaging_material_id')
                 ->leftJoin(DB::raw('(SELECT packaging_material_id, SUM(STOCKS) as total_stocks FROM packaging_material_logs GROUP BY packaging_material_id) AS incoming_logs'), 'packaging_materials.id', '=', 'incoming_logs.packaging_material_id')
                 ->leftJoin(DB::raw('(SELECT packaging_material_id, SUM(STOCKS) as released_stocks FROM packaging_material_logs WHERE status=\'OUTGOING\' GROUP BY packaging_material_id) AS outgoing_logs'), 'packaging_materials.id', '=', 'outgoing_logs.packaging_material_id')
-                ->select('packaging_materials.id', 'packaging_materials.name', 'packaging_materials.size', DB::raw('COALESCE(incoming_logs.total_stocks, 0) as total_stocks'), DB::raw('COALESCE(outgoing_logs.released_stocks, 0) as released_stocks'))
-                ->groupBy('packaging_materials.id', 'packaging_materials.name', 'packaging_materials.size', 'incoming_logs.total_stocks', 'outgoing_logs.released_stocks')
-                ->paginate(25),
+                ->select('packaging_materials.id', 'packaging_materials.name', 'packaging_materials.size', DB::raw('COALESCE(beginning_stocks.total_stocks, 0) as beginning_total_stocks'), DB::raw('COALESCE(incoming_logs.total_stocks, 0) as total_stocks'), DB::raw('COALESCE(outgoing_logs.released_stocks, 0) as released_stocks'))
+                ->groupBy('packaging_materials.id', 'packaging_materials.name', 'packaging_materials.size', 'incoming_logs.total_stocks', 'outgoing_logs.released_stocks', 'beginning_stocks.total_stocks')
+                ->get(),
             'getTotalPilon' => $getTotalPilon,
             'getTotalRibbon' => $getTotalRibbon,
             'incomingRibbonStocks' => $incomingRibbonStocks,

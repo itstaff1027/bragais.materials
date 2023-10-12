@@ -122,7 +122,7 @@ class CompletePackaging extends Component
                 // Box
                 $this->insertCompletePackagingSale(22, $this->product_id, -1, 'OUTGOING');
                 // LL PILON
-                $this->insertCompletePackagingSale(5, $this->product_id, -1, 'OUTGOING');
+                $this->insertCompletePackagingSale(4, $this->product_id, -1, 'OUTGOING');
                 // TISSUE
                 $this->insertCompletePackagingSale(18, $this->product_id, -1, 'OUTGOING');
                 // ll DUST BAG
