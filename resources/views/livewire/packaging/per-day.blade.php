@@ -56,12 +56,20 @@
                         
                             <div class="flex overflow-x-auto">
                                 @php
+                                    // OVERALL
                                     $total_white_ribbon_large = 0;
                                     $total_white_ribbon_medium = 0;
                                     $total_brown_ribbon_medium = 0;
                                     $total_brown_ribbon_small = 0;
                                     $total_white_ribbon = 0;
                                     $total_brown_ribbon = 0;
+                                    // TODAY
+                                    $today_total_white_ribbon_large = 0;
+                                    $today_total_white_ribbon_medium = 0;
+                                    $today_total_brown_ribbon_medium = 0;
+                                    $today_total_brown_ribbon_small = 0;
+                                    $today_total_white_ribbon = 0;
+                                    $today_total_brown_ribbon = 0;
                                 @endphp
 
                                 {{-- ITERATE over the data to SUM UP all the used ribbons per pcs in per boxes --}}
@@ -92,19 +100,45 @@
                                         }
                                     @endphp
                                 @endforeach
+                                        {{-- GET TOTAL RIBBON BASE ON THE DAY --}}
+                                @foreach ($getTotalRibbonToday as $today_total_ribbon)
+                                    @php
+                                        if($today_total_ribbon->category == 'PAGEANT'){
+                                            if($today_total_ribbon->name == "WHITE_RIBBON"){
+                                                if($today_total_ribbon->size >= 9 && $today_total_ribbon->size <= 12 || $today_total_ribbon->size >= 39 && $today_total_ribbon->size <= 42){
+                                                    $today_total_white_ribbon_large = $today_total_white_ribbon_large + $today_total_ribbon->material_stocks;
+                                                }
+                                                else{
+                                                    $today_total_white_ribbon_medium = $today_total_white_ribbon_medium + $today_total_ribbon->material_stocks;
+                                                }
+                                            }
+                                            else{
+                                                if($today_total_ribbon->name == "BROWN_RIBBON"){
+                                                    if($today_total_ribbon->heel_height >= 5 && $today_total_ribbon->heel_height <= 6){
+                                                        $today_total_brown_ribbon_medium = $today_total_brown_ribbon_medium + $today_total_ribbon->material_stocks;
+                                                    }
+                                                }
+                                                
+                                            }
+                                        }
+                                        if($today_total_ribbon->category == 'HEELS'){
+                                            if($today_total_ribbon->name == "BROWN_RIBBON"){
+                                                $today_total_brown_ribbon_small = $today_total_brown_ribbon_small + $today_total_ribbon->material_stocks;
+                                            }
+                                        }
+                                    @endphp
+                                @endforeach
 
                                 @php
                                     $test = 1;
-                                    // SET the value of used ribbons per pcs if the decimal HIT whole number means its one roll
-                                    // $total_white_ribbon_large = $total_white_ribbon_large / 20;
-                                    // $total_white_ribbon_medium = $total_white_ribbon_medium / 15;
-
-                                    // $total_brown_ribbon_small = $total_brown_ribbon_small / 15;
-                                    // $total_brown_ribbon_medium = $total_brown_ribbon_medium / 20;
 
                                     // SET TOTAL USED RIBBON IN TOTAL
                                     $total_white_ribbon = ($total_white_ribbon_large / 20) + ($total_white_ribbon_medium / 15);
                                     $total_brown_ribbon = ($total_brown_ribbon_small / 15) + ($total_brown_ribbon_medium / 20);
+
+                                    // SET TOTAL USED RIBBON IN TODAY_TOTAL
+                                    $today_total_white_ribbon = ($today_total_white_ribbon_large / 20) + ($today_total_white_ribbon_medium / 15);
+                                    $today_total_brown_ribbon = ($today_total_brown_ribbon_small / 15) + ($today_total_brown_ribbon_medium / 20);
 
                                 @endphp
                                 <div class="w-full flex flex-col">
@@ -135,54 +169,6 @@
                                     <input class="m-2 w-max" type="text" value="{{ number_format($total_brown_ribbon, 2) }}" disabled />
                                 </div>
                             </div>
-
-                            @php
-                                $A_total_white_ribbon_large = 0;
-                                $A_total_white_ribbon_medium = 0;
-                                $A_total_brown_ribbon_medium = 0;
-                                $A_total_brown_ribbon_small = 0;
-                                $A_total_white_ribbon = 0;
-                                $A_total_brown_ribbon = 0;
-                            @endphp
-
-                            {{-- ITERATE over the data to SUM UP all the used ribbons per pcs in per boxes --}}
-                            @foreach ($getTotalRibbon as $total_ribbon)
-                                @php
-                                    if($total_ribbon->category == 'PAGEANT'){
-                                        if($total_ribbon->name == "WHITE_RIBBON"){
-                                            if($total_ribbon->size >= 8 && $total_ribbon->size <= 12){
-                                                $A_total_white_ribbon_large =+ $total_ribbon->material_stocks;
-                                            }
-                                            else{
-                                                $A_total_white_ribbon_medium =+ $total_ribbon->material_stocks;
-                                            }
-                                        }
-                                        else{
-                                            $A_total_brown_ribbon_medium =+ $total_ribbon->material_stocks;
-                                        }
-                                    }
-                                    if($total_ribbon->category == 'HEELS'){
-                                        if($total_ribbon->name == "BROWN_RIBBON"){
-                                            $A_total_brown_ribbon_small =+ $total_ribbon->material_stocks;
-                                        }
-                                    }
-                                @endphp
-                            @endforeach
-                
-                        @php
-                            $test = 1;
-                            // SET the value of used ribbons per pcs if the decimal HIT whole number means its one roll
-                            $A_total_white_ribbon_large = $A_total_white_ribbon_large / 20;
-                            $A_total_white_ribbon_medium = $A_total_white_ribbon_medium / 15;
-                
-                            $A_total_brown_ribbon_small = $A_total_brown_ribbon_small / 15;
-                            $A_total_brown_ribbon_medium = $A_total_brown_ribbon_medium / 20;
-                
-                            // SET TOTAL USED RIBBON IN TOTAL
-                            $A_total_white_ribbon = $A_total_white_ribbon_large + $A_total_white_ribbon_medium;
-                            $A_total_brown_ribbon = $A_total_brown_ribbon_small + $A_total_brown_ribbon_medium;
-                
-                        @endphp
                         
                             <div class="w-full justify-center items-center flex">
                                 @foreach ($incomingRibbonStocks as $total_ribbon_stocks)
@@ -198,45 +184,20 @@
                                     {{-- <input class="m-2 w-max" type="text" value="{{ $total_ribbon_stocks->incoming_stocks }}" disabled /> --}}
                                 </div>
                                 @endforeach
+                                
                             </div>
-                        
+                        {{ $incomingRibbonStocks }}
+
+                                {{ $total_white_ribbon }}
+
+                                {{ $total_brown_ribbon }}
+
+                                {{ $today_total_white_ribbon }}
+                                {{ $today_total_brown_ribbon }}
                             <div class="overflow-x-auto">
                                 <table class="table-auto w-full text-center divide-y-2 divide-violet-400 hover:divide-pink-400">
                                     <caption>
-                                        <h1 class="italic text-xl font-bold p-2">All Materials Released Per Day
-                                            {{-- <a href="{{ route('add-new-model') }}">
-                                                <button>
-                                                    <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"
-                                                        class="fill-green-400">
-                                                        <!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
-                                                        </style>
-                                                        <path
-                                                            d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z" />
-                                                    </svg>
-                                                </button>
-                                            </a> --}}
-                                        </h1>
-                                        {{-- <div class="m-2" x-data="{ open: false }">
-                                            <input class="border-2 border-violet-700 rounded-l-full w-1/2 p-2 m-0"
-                                                wire:model.live.debounce.500ms='packaging_material_sku_search'
-                                                placeholder="Search Stock [packaging_material SKU]" />
-                                            <button class="border-2 border-violet-700 rounded-r-full p-2 m-0"
-                                                @click="open = ! open">Filter</button>
-                        
-                                            <div class="m-2" x-show="open" x-transition.duration.500ms>
-                                                <input class="border-2 border-violet-700 rounded-full w-1/4 m-2"
-                                                    wire:model.live.debounce.500ms='model_search' placeholder="Model" />
-                                                <input class="border-2 border-violet-700 rounded-full w-1/4 m-2"
-                                                    wire:model.live.debounce.500ms='color_search' placeholder="Color" />
-                                                <input class="border-2 border-violet-700 rounded-full w-1/4 m-2"
-                                                    wire:model.live.debounce.500ms='size_search' placeholder="Size" />
-                                                <input class="border-2 border-violet-700 rounded-full w-1/4 m-2"
-                                                    wire:model.live.debounce.500ms='heel_search' placeholder="Heel Height" />
-                                                <input class="border-2 border-violet-700 rounded-full w-1/4 m-2"
-                                                    wire:model.live.debounce.500ms='category_search' placeholder="Category" />
-                                            </div>
-                        
-                                        </div> --}}
+                                        <h1 class="italic text-xl font-bold p-2">All Materials Released Per Day</h1>
                                     </caption>
                                     <thead>
                                         <tr>
@@ -267,31 +228,13 @@
                                             </td>
                                             <td>
                                                 @if ($packaging_material->name == 'WHITE_RIBBON')
-                                                    {{ $packaging_material->released_stocks ? number_format(($packaging_material->released_stocks / ($packaging_material->beginning_total_stocks + $total_white_ribbon)), 2) : 0  }}
+                                                    {{ number_format($today_total_white_ribbon, 2) }}
                                                 @elseif ($packaging_material->name == 'BROWN_RIBBON')
-                                                    {{ $packaging_material->released_Stocks ? number_format(($packaging_material->released_stocks / ($packaging_material->beginning_total_stocks + $total_brown_ribbon)), 2) : 0  }}
+                                                    {{ number_format($today_total_brown_ribbon, 2) }}
                                                 @else
                                                     {{ $packaging_material->released_stocks }}
                                                 @endif
                                             </td>
-                                            {{-- <td>
-                                                <a href="{{ route('add-packaging-materials', ['id' => $packaging_material->id]) }}">
-                                                    <button>
-                                                        <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"
-                                                            class="fill-green-400">
-                                                            <!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
-                                                            </style>
-                                                            <path
-                                                                d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z" />
-                                                        </svg>
-                                                    </button>
-                                                </a>
-                                                <a href="{{ route('deduct-packaging-materials', ['id' => $packaging_material->id]) }}">
-                                                    <button class="text-red-600">
-                                                        -
-                                                    </button>
-                                                </a>
-                                            </td> --}}
                                         </tr>
                                         @endforeach
                                     </tbody>

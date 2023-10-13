@@ -41,6 +41,8 @@ class PerDay extends Component
 
 
         $getTotalRibbonToday = DB::table('packaging_material_logs')->where('packaging_material_logs.status', '=', 'OUTGOING')
+        ->whereBetween(DB::raw('DATE(packaging_material_logs.created_at)'), [$this->filter_date_range_first, $this->filter_date_range_second])
+        ->orWhereDate('packaging_material_logs.created_at', 'LIKE', '%'.$this->filter_date.'%')
         ->Join(DB::raw('packaging_materials'), 'packaging_materials.id', '=', 'packaging_material_logs.packaging_material_id')
         ->Join(DB::raw('products'), 'products.id', '=', 'packaging_material_logs.product_id')
         ->select(DB::raw('SUM(packaging_material_logs.stocks) as material_stocks'), 'packaging_materials.name', 
@@ -63,6 +65,13 @@ class PerDay extends Component
         ->groupBy('packaging_material_logs.packaging_material_id')
         ->get();
 
+        $outgoingRibbonStocks = DB::table('packaging_material_logs')
+        ->where('packaging_material_logs.status', '=', 'OUTGOING')
+        ->whereIn('packaging_material_logs.packaging_material_id', [19, 20])
+        ->select(DB::raw('SUM(packaging_material_logs.stocks) as outgoing_stocks'), 'packaging_material_logs.packaging_material_id')
+        ->groupBy('packaging_material_logs.packaging_material_id')
+        ->get();
+
 
         return view('livewire.packaging.per-day', [
             'packaging_materials' => PackagingMaterials::leftJoin(DB::raw("(SELECT packaging_material_id, SUM(stocks) as total_stocks FROM packaging_material_logs WHERE status='INCOMING' and (DATE(created_at) LIKE '{$this->filter_date}%' OR DATE(created_at) BETWEEN '{$this->filter_date_range_first}' AND '{$this->filter_date_range_second}') GROUP BY packaging_material_id) AS added_stocks"), 'packaging_materials.id', '=', 'added_stocks.packaging_material_id')
@@ -76,6 +85,7 @@ class PerDay extends Component
             'getTotalRibbonToday' => $getTotalRibbonToday,
             'getTotalRibbon' => $getTotalRibbon,
             'incomingRibbonStocks' => $incomingRibbonStocks,
+            'outgoingRibbonStocks' => $outgoingRibbonStocks,
             'today' => $this->filter_date
         ]);
     }

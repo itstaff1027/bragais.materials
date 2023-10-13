@@ -4,10 +4,13 @@
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 {{ __('Packaging') }}
             </h2>
-            <a href="{{ route('packaging-per-day') }}" class="ml-2">
+            <a href="{{ route('packaging-per-day') }}" class="space-x-8 sm:-my-px sm:ml-10 sm:flex">
                 {{ __('Per Day') }}
             </a>
-            <a href="{{ route('material-logs') }}" class="ml-2">
+            <a href="{{ route('summary') }}" class="space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                {{ __('Summary') }}
+            </a>
+            <a href="{{ route('material-logs') }}" class="space-x-8 sm:-my-px sm:ml-10 sm:flex">
                 {{ __('Material Logs') }}
             </a>
         </div>
