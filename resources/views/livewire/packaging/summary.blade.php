@@ -45,27 +45,27 @@
                             </caption>
                             <thead>
                                 <tr>
-                                    <th  class="bg-gray-500 text-white"># Dates</th>
+                                    <th># Dates</th>
                                     @foreach ($dates as $date)
-                                        <th colspan="2" class="bg-orange-500 text-white border">{{ $date->date }}</th>
+                                        <th colspan="2" class="bg-orange-500 border">{{ $date->date }}</th>
                                     @endforeach
-                                    <th colspan="3"  class="bg-gray-500 text-white">Total</th>
+                                    <th colspan="3"  class="bg-gray-500">Total</th>
                                 </tr>
                                 <tr>
-                                    <th class="bg-gray-500 text-white">Names</th>
+                                    <th>Names</th>
                                     @foreach ($dates as $date)
-                                        <th class="bg-emerald-500 text-white">Add</th>
-                                        <th class="bg-red-500 text-white">Rel.</th>
+                                        <th class="bg-emerald-500">Add</th>
+                                        <th class="bg-red-500">Rel.</th>
                                     @endforeach
-                                    <th class="bg-emerald-500 text-white">Add</th>
-                                    <th class="bg-red-500 text-white">Rel.</th>
-                                    <th class="bg-blue-500 text-white">Rem.</th>
+                                    <th class="bg-emerald-500">Add</th>
+                                    <th class="bg-red-500">Rel.</th>
+                                    <th class="bg-blue-500">Rem.</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($materials as $material)
                                     <tr class="border">
-                                        <td  class="bg-gray-500 text-white">{{ $material->name }}</td>
+                                        <td>{{ $material->name }}</td>
                                         @php
                                             $incomingStockSum = 0;
                                             $outgoingStockSum = 0;
@@ -136,13 +136,13 @@
                                                 $incomingStockSum += $incomingStock;
                                                 $outgoingStockSum += $outgoingStock;
                                             @endphp
-                                            <td class="bg-emerald-800 text-white">{{ $incomingStock }}</td>
-                                            <td class="bg-red-900 text-white">{{ $outgoingStock }}</td>
+                                            <td class="bg-emerald-400">{{ $incomingStock }}</td>
+                                            <td class="bg-red-400">{{ $outgoingStock }}</td>
                                         @endforeach
 
-                                        <td class="bg-emerald-500 text-white">{{ $incomingStockSum }}</td>
-                                        <td class="bg-red-500 text-white">{{ $outgoingStockSum }}</td>
-                                        <td class="bg-blue-500 text-white">{{ $incomingStockSum + $outgoingStockSum }}</td>
+                                        <td class="bg-emerald-400">{{ $incomingStockSum }}</td>
+                                        <td class="bg-red-400">{{ $outgoingStockSum }}</td>
+                                        <td class="bg-blue-400">{{ $incomingStockSum + $outgoingStockSum }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>
