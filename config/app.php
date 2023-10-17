@@ -170,6 +170,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
         Elibyy\TCPDF\ServiceProvider::class,
+        Maatwebsite\Excel\ExcelServiceProvider::class,
 
     ])->toArray(),
 
@@ -188,6 +189,7 @@ return [
         // 'Example' => App\Facades\Example::class,
         // 'PDF' => Barryvdh\DomPDF\Facade::class,
         // 'PDF' => Elibyy\TCPDF\Facades\TCPDF::class
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
     ])->toArray(),
 
 ];
