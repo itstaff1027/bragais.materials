@@ -31,23 +31,53 @@ class Summary extends Component
     }
 
     public function render()
-    {
-        $today = $this->filter_date;
+{
+    $today = $this->filter_date;
 
-        $dates = DB::table('packaging_material_logs')
-            ->whereDate(DB::raw('DATE(created_at)'), 'LIKE', '%'.$this->filter_date.'%')
-            ->select(DB::raw('DATE(created_at) as date'))
-            ->groupBy(DB::raw('DATE(created_at)'))
-            ->first();
-    
-        $products = DB::table('packaging_material_logs')
-            ->whereDate(DB::raw('DATE(created_at)'), 'LIKE', '%'.$this->filter_date.'%')
-            ->Join(DB::raw('products'), 'products.id', '=', 'packaging_material_logs.product_id')
-            ->select(DB::raw('DATE(packaging_material_logs.created_at) as date'), 'products.model', 'products.color', 'products.size', 'products.heel_height', 'products.category', 'packaging_material_logs.product_id')
-            ->groupBy('products.model', 'products.color', 'products.size', 'products.heel_height', 'products.category', 'packaging_material_logs.product_id', 'date')
-            ->get();
+    $products = DB::table('packaging_material_logs')
+        ->whereDate(DB::raw('DATE(created_at)'), 'LIKE', '%' . $this->filter_date . '%')
+        ->join('products', 'products.id', '=', 'packaging_material_logs.product_id')
+        ->select(
+            'products.model',
+            'products.color',
+            'products.heel_height',
+            'products.size',
+            'packaging_material_logs.quantity as total_quantity'
+        )
+        ->groupBy('products.model', 'products.color', 'products.heel_height', 'products.size', 'packaging_material_logs.quantity')
+        ->get();
+        
+        // dd($products);
+    // Prepare an associative array to store quantities based on model, color, heel height, and size
+    $quantitiesUS = [];
+    $quantitiesEURO = [];
 
-        return view('livewire.inventory.summary', compact('dates', 'today','products'));
+    foreach ($products as $product) {
+        if($product->size >= 5 && $product->size <= 12){
+            $key = "{$product->model}-{$product->color}-{$product->heel_height}";
+            $size = $product->size;
 
+            if (!isset($quantitiesUS[$key])) {
+                $quantitiesUS[$key] = [];
+            }
+            // If there's no quantity recorded for a size, it defaults to 0
+             $quantitiesUS[$key][$size] = $product->total_quantity;
+        }
+        if($product->size >= 35 && $product->size <= 45){
+            $key = "{$product->model}-{$product->color}-{$product->heel_height}";
+            $size = $product->size;
+
+            if (!isset($quantitiesEURO[$key])) {
+                $quantitiesEURO[$key] = [];
+            }
+            // If there's no quantity recorded for a size, it defaults to 0
+            $quantitiesEURO[$key][$size] = $product->total_quantity;
+        }
+        
     }
+
+    return view('livewire.inventory.summary', compact('today', 'quantitiesUS', 'quantitiesEURO'));
+}
+
+    
 }

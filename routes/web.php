@@ -6,6 +6,7 @@ use App\Exports\MaterialLogsExport;
 use App\Livewire\Inventory\Details;
 use App\Livewire\Inventory\Summary as summaryOutgoing;
 use App\Livewire\Packaging\AddStocks;
+use App\Livewire\Products\OutgoingProducts;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PDFController;
 use App\Livewire\Packaging\DeductStocks;
@@ -14,6 +15,7 @@ use App\Http\Controllers\ProfileController;
 use App\Livewire\Products\CompletePackaging;
 use App\Livewire\Packaging\Components\GeneratePdf;
 use App\Livewire\Packaging\Summary as summaryPackaging;
+use App\Livewire\Products\Summary as summaryOutgoingProducts;
 
 /*
 |--------------------------------------------------------------------------
@@ -43,8 +45,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/inventory/material-details/{id}', Details::class)->name('material-details');
 
-    Route::get('/inventory/outgoing/summary', summaryOutgoing::class)->name('summary-outgoing');
-
     // Route::get('/inventory/add-outlet_stocks/{id}', AddOutletStocks::class)->name('add-outlet_stocks');
 
     // Route::get('/inventory/add-display_stocks/{id}', AddDisplayStocks::class)->name('add-display_stocks');
@@ -72,6 +72,10 @@ Route::middleware(['auth', 'verified'])->group( function () {
     })->name('products');
 
     Route::get('/products/complete_packaging/{id}', CompletePackaging::class)->name('complete-packaging');
+    Route::get('/products/add-outgoing_products/{id}', OutgoingProducts::class)->name('outgoing-products');
+
+    Route::get('/products/outgoing/summary', summaryOutgoingProducts::class)->name('summary-outgoing');
+
 });
 
 Route::middleware(['auth', 'verified'])->group( function () {

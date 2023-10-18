@@ -33,7 +33,7 @@
                             $size_us = ['5', '6', '7', '8', '9', '10', '11', '12'];
                             $size_euro = ['36', '37', '38', '39', '40', '41', '42', '43', '44', '45'];
                         @endphp
-                        <table class="table-auto w-full text-center divide-y-2 divide-violet-400 hover:divide-pink-400 overflow-x-auto ">
+                        <table class="table-auto w-full text-center divide-y-2 border-2 ">
                             <caption>
                                 <h1 class="font-bold text-2xl">Summary</h1>
                             </caption>
@@ -41,11 +41,11 @@
                                 <tr>
                                     <th>DATE : {{ $today }}</th>
                                 </tr>
-                                <tr>
+                                <tr class=" border-2 ">
                                     <th>Design</th>
                                     <th>Color</th>
                                     <th>Heel Height</th>
-                                    <th colspan="8">Size</th>
+                                    <th colspan="8" class="border-2">Size</th>
                                     <th>Quantity</th>
                                 </tr>
                                 <tr>
@@ -53,7 +53,7 @@
                                     <th></th>
                                     <th></th>
                                     @foreach ($size_us as $sizes)
-                                        <th>{{ $sizes }}</th>
+                                        <th class=" border-2 ">{{ $sizes }}</th>
                                     @endforeach
                                     <th></th>
                                 </tr>
@@ -69,7 +69,7 @@
                                         <td>{{ $color }}</td>
                                         <td>{{ $heelHeight }}</td>
                                         @foreach ($size_us as $size)
-                                            <td>
+                                            <td class=" border-2 ">
                                                 @if(isset($sizes[$size]))
                                                     {{ $sizes[$size] }}
                                                     @php
@@ -85,20 +85,14 @@
                                 @endforeach
                             </tbody>
                         </table>
-
-                        <table class="table-auto w-full text-center divide-y-2 divide-violet-400 hover:divide-pink-400 overflow-x-auto ">
-                            <caption>
-                                <h1 class="font-bold text-2xl">Summary</h1>
-                            </caption>
+                        <br><br>
+                        <table class="table-auto w-full text-center divide-y-2 border-2 ">
                             <thead>
-                                <tr>
-                                    <th>DATE : {{ $today }}</th>
-                                </tr>
-                                <tr>
+                                <tr class=" border-2 ">
                                     <th>Design</th>
                                     <th>Color</th>
                                     <th>Heel Height</th>
-                                    <th colspan="10">Size</th>
+                                    <th colspan="10" class="border-2">Size</th>
                                     <th>Quantity</th>
                                 </tr>
                                 <tr>
@@ -106,7 +100,7 @@
                                     <th></th>
                                     <th></th>
                                     @foreach ($size_euro as $sizes)
-                                        <th>{{ $sizes }}</th>
+                                        <th class=" border-2 ">{{ $sizes }}</th>
                                     @endforeach
                                     <th></th>
                                 </tr>
@@ -122,7 +116,7 @@
                                         <td>{{ $color }}</td>
                                         <td>{{ $heelHeight }}</td>
                                         @foreach ($size_euro as $size)
-                                            <td>
+                                            <td class=" border-2 ">
                                                 @if(isset($sizes[$size]))
                                                     {{ $sizes[$size] }}
                                                     @php

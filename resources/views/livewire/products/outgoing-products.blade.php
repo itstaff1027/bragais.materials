@@ -2,7 +2,7 @@
     <x-app-layout>
         <x-slot name="header">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('Complete Packaging') }}
+                {{ __('Outgoing Products') }}
             </h2>
         </x-slot>
 
@@ -12,7 +12,7 @@
                     <div class="p-6 text-gray-900">
                         <table class="w-full">
                             <caption class="text-4xl border-b-2 border-pink-700">
-                                <b>Do you want to add a Complete Packaing Record to this Product? ID:{{ $product->id }}</b>
+                                <b>Outgoin Product? ID:{{ $product->id }}</b>
                             </caption>
                             <thead class="text-4xl border-b-2 border-pink-700">
                                 <tr>
@@ -38,7 +38,7 @@
                             </tbody>
                         </table>
                         <div class="flex flex-col justify-center items-center m-2 w-full">
-                            <form wire:submit.prevent="store" class="w-full justify-between flex">
+                            <form wire:submit.prevent="putOutgoingProduct" class="w-full justify-between flex">
                                 @csrf
                                 {{-- <select wire:model="packaging_type" class="rounded-full">
                                     <option value="COMPLETE_PACKAGING">COMPLETE_PACKAGING<option>

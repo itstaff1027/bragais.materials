@@ -104,9 +104,9 @@ class MaterialLogsExport implements FromView, ShouldAutoSize, WithStyles
     public function styles(Worksheet $sheet)
     {
         // Get the number of rows in your data
-        $rowCount = count($this->materials) + 5; // Add 1 for the header row
+        // $rowCount = count($this->materials) + 5; // Add 1 for the header row
 
-        $countDates = count($this->dates);
+        // $countDates = count($this->dates);
         
         // Apply background color to specific cells
         $sheet->getStyle('A1:O1')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('FF00FF'); // Set header row background color to Light Salmon

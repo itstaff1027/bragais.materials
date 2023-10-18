@@ -15,6 +15,7 @@ class CompletePackaging extends Component
     public $category;
     public $model;
     public $size;
+    public $quantity;
 
 
     public $packaging_material_id;
@@ -24,109 +25,154 @@ class CompletePackaging extends Component
         $this->product_id = $id;
     }
 
-    private function insertCompletePackagingSale($id, $product_id, $stocks, $status){
+    private function insertCompletePackagingSale($id, $product_id, $stocks, $quantity, $status){
+
+        $totalStocks = $this->getTotalDeduction($stocks, $quantity);
+
         DB::table('packaging_material_logs')->insert([
             'packaging_material_id' => $id,
             'product_id' => $product_id,
             'order_number' => $this->order_number,
-            'stocks' => $stocks,
+            'stocks' => $totalStocks,
+            'quantity' => $quantity,
             'status' => $status
         ]);
     }
 
+    private function getTotalDeduction($numberOfDeduction, $quantity){
+        $computedDeduction = 0;
+        $quantity == 1 ? $computedDeduction = $numberOfDeduction : $computedDeduction = $quantity * $numberOfDeduction;
+        return $computedDeduction;
+    }
+
     public function store(){
 
-        $array_list = [
-            0 => ['id' => '1', 'name' => 'PILON', 'size' => 'LARGE'],
-            1 =>['id' => '2', 'name' => 'PILON', 'size' => 'MEDIUM'],
-            2 =>['id' => '3', 'name' => 'PILON', 'size' => 'SMALL'],
-            3 =>['id' => '4', 'name' => 'LL_PILON_MANDIATOR', 'size' => 'ONE_SIZE'],
-            4 =>['id' => '5', 'name' => 'LL_PILON_WONDIATOR', 'size' => 'ONE_SIZE'],
-            5 =>['id' => '6', 'name' => 'LL_DUSTBAG_MANDIATOR', 'size' => 'ONE_SIZE'],
-            6 =>['id' => '7', 'name' => 'LL_DUSTBAG_WONDIATOR', 'size' => 'ONE_SIZE'],
-            7 =>['id' => '8', 'name' => 'DUSTBAG', 'size' => 'ONE_SIZE'],
-            8 =>['id' => '9', 'name' => 'LGBT_BOX', 'size' => 'SMALL'],
-            9 =>['id' => '10', 'name' => 'LGBT_BOX', 'size' => 'MEDIUM'],
-            10 =>['id' => '11', 'name' => 'LGBT_BOX', 'size' => 'LARGE'],
-            11 =>['id' => '12', 'name' => 'WHITE_BOX', 'size' => 'SMALL'],
-            12 =>['id' => '13', 'name' => 'WHITE_BOX', 'size' => 'MEDIUM'],
-            13 =>['id' => '14', 'name' => 'WHITE_BOX', 'size' => 'LARGE'],
-            14 =>['id' => '15', 'name' => 'BROWN_BOX', 'size' => 'SMALL'],
-            15 =>['id' => '16', 'name' => 'BROWN_BOX', 'size' => 'MEDIUM'],
-            16 =>['id' => '17', 'name' => 'BROWN_BOX', 'size' => 'LARGE'],
-            17 =>['id' => '18', 'name' => 'TISSUE_PAPER', 'size' => 'ONE_SIZE'],
-            18 =>['id' => '19', 'name' => 'WHITE_RIBBON', 'size' => 'ONE_ROLL'],
-            19 =>['id' => '20', 'name' => 'BROWN_RIBBON', 'size' => 'ONE_ROLL'],
-            20 =>['id' => '21', 'name' => 'MANDIATOR_BOX', 'size' => 'ONE_SIZE'],
-            21 =>['id' => '22', 'name' => 'WONDIATOR_BOX', 'size' => 'ONE_SIZE']
-        ];
+        $this->validate([
+            'order_number' => 'required|integer|min:1',
+            'quantity' => 'required|integer|min:1',
+        ]);
+
+        // $categoriesMapping = [
+        //     'PAGEANT' => [
+        //         18, // TISSUE
+        //         8,  // DUST BAG
+        //         [
+        //             'KEVIN-V2' => [
+        //                 1,  // PILLON
+        //                 19, // RIBBON
+        //                 [
+        //                     '9-12' => 11, // Box for size 9-12
+        //                     'others' => 10  // Box for other sizes
+        //                 ]
+        //             ],
+        //             'others' => [
+        //                 16, // Box
+        //                 2,  // PILON
+        //                 20  // RIBBON
+        //             ]
+        //         ]
+        //     ],
+        //     'HEELS' => [
+        //         15, // Box
+        //         3,  // PILON
+        //         20, // RIBBON
+        //         18, // TISSUE
+        //         8   // DUST BAG
+        //     ],
+        //     'MANDIATOR' => [
+        //         21, // Box
+        //         4,  // LL PILON
+        //         18, // TISSUE
+        //         6   // LL DUST BAG
+        //     ],
+        //     'WONDIATOR' => [
+        //         22, // Box
+        //         4,  // LL PILON
+        //         18, // TISSUE
+        //         7   // LL DUST BAG
+        //     ]
+        // ];
+    
+        // $categoryMaterials = $categoriesMapping[$this->category];
+    
+        // foreach ($categoryMaterials as $material) {
+        //     if (is_array($material)) {
+        //         if (isset($material[$this->model])) {
+        //             $this->insertCompletePackagingSale($material[$this->model], $quantity, $status);
+        //         } else {
+        //             $this->insertCompletePackagingSale($material['others'], $quantity, $status);
+        //         }
+        //     } else {
+        //         $this->insertCompletePackagingSale($material, $quantity, $status);
+        //     }
+        // }
         
         // if($this->packaging_type == 'COMPLETE_PACKAGING'){
             if($this->category === "PAGEANT"){
             
                 // TISSUE
-                $this->insertCompletePackagingSale(18, $this->product_id, -1, 'OUTGOING');
+                $this->insertCompletePackagingSale(18, $this->product_id, -1, $this->quantity, 'OUTGOING');
                 // DUST BAG
-                $this->insertCompletePackagingSale(8, $this->product_id, -1, 'OUTGOING');
+                $this->insertCompletePackagingSale(8, $this->product_id, -1, $this->quantity, 'OUTGOING');
     
                 if($this->model == 'KEVIN-V2'){
                     // PILLON
-                    $this->insertCompletePackagingSale(1, $this->product_id, -2, 'OUTGOING');
+                    $this->insertCompletePackagingSale(1, $this->product_id, -2, $this->quantity, 'OUTGOING');
                     // RIBBON
-                    $this->insertCompletePackagingSale(19, $this->product_id, -1, 'OUTGOING');
+                    $this->insertCompletePackagingSale(19, $this->product_id, -1, $this->quantity, 'OUTGOING');
     
                     if($this->size >= 9 && $this->size <= 12){
                         // Box
-                        $this->insertCompletePackagingSale(11, $this->product_id, -1, 'OUTGOING');
+                        $this->insertCompletePackagingSale(11, $this->product_id, -1, $this->quantity, 'OUTGOING');
                     }
                     else{
                         // Box
-                        $this->insertCompletePackagingSale(10, $this->product_id, -1, 'OUTGOING');
+                        $this->insertCompletePackagingSale(10, $this->product_id, -1, $this->quantity, 'OUTGOING');
                     }
                 }
                 else{
                     // Box
-                    $this->insertCompletePackagingSale(16, $this->product_id, -1, 'OUTGOING');
+                    $this->insertCompletePackagingSale(16, $this->product_id, -1, $this->quantity, 'OUTGOING');
                     // PILON
-                    $this->insertCompletePackagingSale(2, $this->product_id, -2, 'OUTGOING');
+                    $this->insertCompletePackagingSale(2, $this->product_id, -2, $this->quantity, 'OUTGOING');
                     // RIBBON
-                    $this->insertCompletePackagingSale(20, $this->product_id, -1, 'OUTGOING');
+                    $this->insertCompletePackagingSale(20, $this->product_id, -1, $this->quantity, 'OUTGOING');
                 }
             }
     
             if($this->category === "HEELS"){
                 // Box
-                $this->insertCompletePackagingSale(15, $this->product_id, -1, 'OUTGOING');
+                $this->insertCompletePackagingSale(15, $this->product_id, -1, $this->quantity, 'OUTGOING');
                 // PILON
-                $this->insertCompletePackagingSale(3, $this->product_id, -2, 'OUTGOING');
+                $this->insertCompletePackagingSale(3, $this->product_id, -2, $this->quantity, 'OUTGOING');
                 // RIBBON
-                $this->insertCompletePackagingSale(20, $this->product_id, -1, 'OUTGOING');
+                $this->insertCompletePackagingSale(20, $this->product_id, -1, $this->quantity, 'OUTGOING');
                 // TISSUE
-                $this->insertCompletePackagingSale(18, $this->product_id, -1, 'OUTGOING');
+                $this->insertCompletePackagingSale(18, $this->product_id, -1, $this->quantity, 'OUTGOING');
                 // DUST BAG
-                $this->insertCompletePackagingSale(8, $this->product_id, -1, 'OUTGOING');
+                $this->insertCompletePackagingSale(8, $this->product_id, -1, $this->quantity, 'OUTGOING');
             }
     
             if($this->category === "MANDIATOR"){
                 // Box
-                $this->insertCompletePackagingSale(21, $this->product_id, -1, 'OUTGOING');
+                $this->insertCompletePackagingSale(21, $this->product_id, -1, $this->quantity, 'OUTGOING');
                 // LL PILON
-                $this->insertCompletePackagingSale(4, $this->product_id, -1, 'OUTGOING');
+                $this->insertCompletePackagingSale(4, $this->product_id, -1, $this->quantity, 'OUTGOING');
                 // TISSUE
-                $this->insertCompletePackagingSale(18, $this->product_id, -1, 'OUTGOING');
+                $this->insertCompletePackagingSale(18, $this->product_id, -1, $this->quantity, 'OUTGOING');
                 // ll DUST BAG
-                $this->insertCompletePackagingSale(6, $this->product_id, -1, 'OUTGOING');
+                $this->insertCompletePackagingSale(6, $this->product_id, -1, $this->quantity, 'OUTGOING');
             }
     
             if($this->category === "WONDIATOR"){
                 // Box
-                $this->insertCompletePackagingSale(22, $this->product_id, -1, 'OUTGOING');
+                $this->insertCompletePackagingSale(22, $this->product_id, -1, $this->quantity, 'OUTGOING');
                 // LL PILON
-                $this->insertCompletePackagingSale(4, $this->product_id, -1, 'OUTGOING');
+                $this->insertCompletePackagingSale(4, $this->product_id, -1, $this->quantity, 'OUTGOING');
                 // TISSUE
-                $this->insertCompletePackagingSale(18, $this->product_id, -1, 'OUTGOING');
+                $this->insertCompletePackagingSale(18, $this->product_id, -1, $this->quantity, 'OUTGOING');
                 // ll DUST BAG
-                $this->insertCompletePackagingSale(7, $this->product_id, -1, 'OUTGOING');
+                $this->insertCompletePackagingSale(7, $this->product_id, -1, $this->quantity, 'OUTGOING');
             }
         // }
 

@@ -4,9 +4,6 @@
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 {{ __('Inventory') }}
             </h2>
-            <a href="{{ route('summary-outgoing') }}" class="space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                {{ __('Summary') }}
-            </a>
         </div>
     </x-slot>
 
