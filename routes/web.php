@@ -1,18 +1,19 @@
 <?php
 
-use App\Exports\MaterialLogsExport;
 use App\Livewire\Counter;
 use App\Livewire\Packaging\PerDay;
+use App\Exports\MaterialLogsExport;
 use App\Livewire\Inventory\Details;
+use App\Livewire\Inventory\Summary as summaryOutgoing;
 use App\Livewire\Packaging\AddStocks;
-use App\Livewire\Packaging\Summary;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PDFController;
 use App\Livewire\Packaging\DeductStocks;
+use App\Livewire\Packaging\MaterialLogs;
 use App\Http\Controllers\ProfileController;
 use App\Livewire\Products\CompletePackaging;
 use App\Livewire\Packaging\Components\GeneratePdf;
-use App\Livewire\Packaging\MaterialLogs;
+use App\Livewire\Packaging\Summary as summaryPackaging;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,6 +42,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('inventory');
 
     Route::get('/inventory/material-details/{id}', Details::class)->name('material-details');
+
+    Route::get('/inventory/outgoing/summary', summaryOutgoing::class)->name('summary-outgoing');
 
     // Route::get('/inventory/add-outlet_stocks/{id}', AddOutletStocks::class)->name('add-outlet_stocks');
 
@@ -81,12 +84,12 @@ Route::middleware(['auth', 'verified'])->group( function () {
 
     Route::get('/packaging/per-day', PerDay::class)->name('packaging-per-day');
     Route::get('/packaging/material-logs', MaterialLogs::class)->name('material-logs');
-    Route::get('/packaging/summary', Summary::class)->name('summary');
+    Route::get('/packaging/summary', summaryPackaging::class)->name('summary-materials');
+    // Route::get('/packaging/materials/export/', [summaryPackaging::class, 'export'])->name('export-material');
 
     Route::get('/packaging/per-day/generate_pdf_today_report', GeneratePdf::class)->name('generate-pdf');
     Route::get('/generate-pdf', [GeneratePdf::class, 'render']);
-
-    Route::get('materials/export/', [Summary::class, 'export'])->name('export');
+    
 });
 
 // Route::get('/generate-pdf', [PDFController::class, 'generatePDF']);
