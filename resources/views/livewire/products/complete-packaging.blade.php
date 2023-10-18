@@ -12,8 +12,7 @@
                     <div class="p-6 text-gray-900">
                         <table class="w-full">
                             <caption class="text-4xl border-b-2 border-pink-700">
-                                <b>Do you want to add a Complete Packaing Record to this Product? ID:{{ $product->id
-                                    }}</b>
+                                <b>Do you want to add a Complete Packaing Record to this Product? ID:{{ $product->id }}</b>
                             </caption>
                             <thead class="text-4xl border-b-2 border-pink-700">
                                 <tr>
@@ -39,17 +38,26 @@
                             </tbody>
                         </table>
                         <div class="flex flex-col justify-center items-center m-2 w-full">
-                            <form wire:submit.prevent="store" class="w-full justify-between flex border-2">
+                            <form wire:submit.prevent="store" class="w-full justify-between flex">
                                 @csrf
                                 {{-- <select wire:model="packaging_type" class="rounded-full">
                                     <option value="COMPLETE_PACKAGING">COMPLETE_PACKAGING<option>
                                     <option value="DUSTBAG_ONLY">DUSTBAG ONLY</option
                                 </select> --}}
-                                <input type="number" wire:model="order_number" />
-                                <button type="submit"
-                                    class="w-1/4 p-2 pl-4 pr-4 bg-emerald-600 text-white rounded-full">
-                                    ADD
-                                </button>
+                                <div class="w-1/8 flex flex-col">
+                                    <label class="font-bold">Order Number</label>
+                                    <input type="number" wire:model="order_number" />
+                                </div>
+                                {{-- <div class="w-1/8 flex flex-col">
+                                    <label class="font-bold">Quantity</label>
+                                    <input type="number" wire:model="order_number" />
+                                </div> --}}
+                                <div class="w-1/8 flex justify-center items-center">
+                                    <button type="submit"
+                                        class="w-full p-2 pl-4 pr-4 bg-emerald-600 text-white rounded-full">
+                                        ADD
+                                    </button>
+                                </div>
                             </form>
                             <a href="{{ route('products') }}" class="p-4">
                                 <button class="w-full p-2 pl-4 pr-4 bg-blue-900 text-white rounded-full">

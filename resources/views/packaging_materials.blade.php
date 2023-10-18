@@ -7,7 +7,7 @@
             <a href="{{ route('packaging-per-day') }}" class="space-x-8 sm:-my-px sm:ml-10 sm:flex">
                 {{ __('Per Day') }}
             </a>
-            <a href="{{ route('summary') }}" class="space-x-8 sm:-my-px sm:ml-10 sm:flex">
+            <a href="{{ route('summary-materials') }}" class="space-x-8 sm:-my-px sm:ml-10 sm:flex">
                 {{ __('Summary') }}
             </a>
             <a href="{{ route('material-logs') }}" class="space-x-8 sm:-my-px sm:ml-10 sm:flex">

@@ -65,7 +65,7 @@
                             <tbody>
                                 @foreach ($materials as $material)
                                     <tr class="border">
-                                        <td>{{ $material->name }}</td>
+                                        <td>{{ $material->name }} : {{ $material->size }}</td>
                                         @php
                                             $incomingStockSum = 0;
                                             $outgoingStockSum = 0;

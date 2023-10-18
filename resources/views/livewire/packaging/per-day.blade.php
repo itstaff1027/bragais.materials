@@ -186,14 +186,6 @@
                                 @endforeach
                                 
                             </div>
-                        {{ $incomingRibbonStocks }}
-
-                                {{ $total_white_ribbon }}
-
-                                {{ $total_brown_ribbon }}
-
-                                {{ $today_total_white_ribbon }}
-                                {{ $today_total_brown_ribbon }}
                             <div class="overflow-x-auto">
                                 <table class="table-auto w-full text-center divide-y-2 divide-violet-400 hover:divide-pink-400">
                                     <caption>
