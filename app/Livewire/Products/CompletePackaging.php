@@ -77,11 +77,11 @@ class CompletePackaging extends Component
     
                     if($this->size >= 9 && $this->size <= 12){
                         // Box
-                        $this->insertCompletePackagingSale(14, $this->product_id, -1, 'OUTGOING');
+                        $this->insertCompletePackagingSale(11, $this->product_id, -1, 'OUTGOING');
                     }
                     else{
                         // Box
-                        $this->insertCompletePackagingSale(13, $this->product_id, -1, 'OUTGOING');
+                        $this->insertCompletePackagingSale(10, $this->product_id, -1, 'OUTGOING');
                     }
                 }
                 else{
