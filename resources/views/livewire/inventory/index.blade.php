@@ -3,7 +3,7 @@
         <div class="flex justify-between w-full">
             <div class="flex justify-between">
                 <button @click="open = ! open">
-                    <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 576 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+                    <svg class="fill-slate-700" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 576 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
                         <path d="M0 24C0 10.7 10.7 0 24 0H69.5c22 0 41.5 12.8 50.6 32h411c26.3 0 45.5 25 38.6 50.4l-41 152.3c-8.5 31.4-37 53.3-69.5 53.3H170.7l5.4 28.5c2.2 11.3 12.1 19.5 23.6 19.5H488c13.3 0 24 10.7 24 24s-10.7 24-24 24H199.7c-34.6 0-64.3-24.6-70.7-58.5L77.4 54.5c-.7-3.8-4-6.5-7.9-6.5H24C10.7 48 0 37.3 0 24zM128 464a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zm336-48a48 48 0 1 1 0 96 48 48 0 1 1 0-96z"/>
                     </svg>
                 </button>
@@ -27,7 +27,7 @@
                 </a>
             </div>
         </div>
-        <form class="w-full flex" >
+        <form wire:submit.prevent='store' class="w-full flex" >
             @csrf
             <div class="w-full flex flex-col md:flex-row md:h-56" x-show="open" x-transition.duration.500ms>
                 <div class=" w-full bg-white drop-shadow-2xl rounded-xl p-4 md:w-1/2 overflow-x-auto">
@@ -52,7 +52,7 @@
                                     </td>
                                     <td>
                                         <button wire:click.prevent="removeFromCart({{ $index }})">
-                                            REMOVE
+                                            <svg class="fill-red-500" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M135.2 17.7C140.6 6.8 151.7 0 163.8 0H284.2c12.1 0 23.2 6.8 28.6 17.7L320 32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64S14.3 32 32 32h96l7.2-14.3zM32 128H416V448c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 64c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16z"/></svg>
                                         </button>
                                     </td>
                                 </tr>
@@ -68,7 +68,7 @@
                             <option value="DELIVER">DELIVER</option>
                         </select>
                         <textarea type="text" wire:model='remarks' class="rounded-xl border-slate-500 m-2" placeholder="Remarks"></textarea>
-                        <button type="submit" wire:submit.prevent='store' class="m-2 rounded-lg p-2 bg-emerald-300">
+                        <button type="submit" class="m-2 rounded-lg p-2 bg-emerald-300">
                             SUBMIT
                         </button>
                     </div>
@@ -126,8 +126,8 @@
                 <td>{{ $material->unit_per }}</td>
                 <td>{{ $material->total_stocks }}</td>
                 <td>
-                    <button wire:click='addToCart({{ $material }})'>
-                        ADD
+                    <button wire:click='addToCart({{ $material }})' class="text-emerald-500">
+                        <svg class="fill-emerald-500" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 576 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M24 0C10.7 0 0 10.7 0 24S10.7 48 24 48H69.5c3.8 0 7.1 2.7 7.9 6.5l51.6 271c6.5 34 36.2 58.5 70.7 58.5H488c13.3 0 24-10.7 24-24s-10.7-24-24-24H199.7c-11.5 0-21.4-8.2-23.6-19.5L170.7 288H459.2c32.6 0 61.1-21.8 69.5-53.3l41-152.3C576.6 57 557.4 32 531.1 32H360V134.1l23-23c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-64 64c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l23 23V32H120.1C111 12.8 91.6 0 69.5 0H24zM176 512a48 48 0 1 0 0-96 48 48 0 1 0 0 96zm336-48a48 48 0 1 0 -96 0 48 48 0 1 0 96 0z"/></svg>
                     </button>
                     <a href="{{ route('update-material-details', ['id' => $material->id]) }}">
                         <button>

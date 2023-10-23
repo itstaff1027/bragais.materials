@@ -1213,6 +1213,15 @@ select {
 .fill-green-400 {
   fill: #4ade80;
 }
+.fill-emerald-500 {
+  fill: #10b981;
+}
+.fill-slate-700 {
+  fill: #334155;
+}
+.fill-red-500 {
+  fill: #ef4444;
+}
 .p-0 {
   padding: 0px;
 }
@@ -1430,6 +1439,10 @@ select {
 .text-white {
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+.text-emerald-500 {
+  --tw-text-opacity: 1;
+  color: rgb(16 185 129 / var(--tw-text-opacity));
 }
 .underline {
   text-decoration-line: underline;
