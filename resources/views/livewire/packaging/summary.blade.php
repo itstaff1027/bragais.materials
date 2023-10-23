@@ -75,12 +75,18 @@
                                                 $incomingStock = 0;
                                                 $outgoingStock = 0;
                                                 // OVERALL - SET ZERO
+                                                // whtie
                                                 $total_white_ribbon_large = 0;
                                                 $total_white_ribbon_medium = 0;
+                                                // brown
+                                                $total_brown_ribbon_large = 0;
                                                 $total_brown_ribbon_medium = 0;
                                                 $total_brown_ribbon_small = 0;
                                                 $total_white_ribbon = 0;
                                                 $total_brown_ribbon = 0;
+                                                // Deducted Ribbon
+                                                $total_brown_ribbon_deducted = 0;
+                                                $total_white_ribbon_deducted = 0;
 
                                                 // ITERATE OVER THE DATA:getTotalRibbon TO GET THE TOTAL AMOUNT OF OUTGOING MATERIALS IN 19 || 20
                                                 foreach ($getTotalRibbon as $total_ribbon){
@@ -98,6 +104,9 @@
                                                                 }
                                                                 else{
                                                                     if($total_ribbon->name == "BROWN_RIBBON"){
+                                                                        if($total_ribbon->heel_height >= 8 && $total_ribbon->heel_height <= 12){
+                                                                            $total_brown_ribbon_large = $total_brown_ribbon_large + $total_ribbon->material_stocks;
+                                                                        }
                                                                         if($total_ribbon->heel_height >= 5 && $total_ribbon->heel_height <= 6){
                                                                             $total_brown_ribbon_medium = $total_brown_ribbon_medium + $total_ribbon->material_stocks;
                                                                         }
@@ -109,6 +118,15 @@
                                                                 if($total_ribbon->name == "BROWN_RIBBON"){
                                                                     $total_brown_ribbon_small = $total_brown_ribbon_small + $total_ribbon->material_stocks;
                                                                 }
+                                                            }
+                                                            if(!$total_ribbon->products_id){
+                                                                if($total_ribbon->name == 'BROWN_RIBBON'){
+                                                                    $total_brown_ribbon_deducted += $total_ribbon->material_stocks;
+                                                                }
+                                                                if($total_ribbon->name == 'WHITE_RIBBON'){
+                                                                    $total_white_ribbon_deducted += $total_ribbon->material_stocks;
+                                                                }
+                                                                
                                                             }
                                                         }
                                                     }
@@ -122,10 +140,10 @@
                                                         } 
                                                         if ($stock->status == 'OUTGOING') {
                                                             if($stock->packaging_material_id == 19){
-                                                                $outgoingStock = number_format(($total_white_ribbon_large / 20) + ($total_white_ribbon_medium / 15), 2);
+                                                                $outgoingStock = $total_white_ribbon_large + $total_white_ribbon_medium + $total_white_ribbon_deducted;
                                                             }
                                                             else if($stock->packaging_material_id == 20){
-                                                                $outgoingStock = number_format(($total_brown_ribbon_small / 15) + ($total_brown_ribbon_medium / 20), 2);
+                                                                $outgoingStock = $total_brown_ribbon_small + $total_brown_ribbon_medium + $total_brown_ribbon_deducted + $total_brown_ribbon_large;
                                                             }
                                                             else {
                                                                 $outgoingStock += $stock->total_stocks;

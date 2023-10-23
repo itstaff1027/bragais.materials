@@ -15,6 +15,8 @@ class CompletePackaging extends Component
     public $category;
     public $model;
     public $size;
+
+    public $heel_height;
     public $quantity;
 
 
@@ -118,25 +120,38 @@ class CompletePackaging extends Component
                 if($this->model == 'KEVIN-V2'){
                     // PILLON
                     $this->insertCompletePackagingSale(1, $this->product_id, -2, $this->quantity, 'OUTGOING');
-                    // RIBBON
-                    $this->insertCompletePackagingSale(19, $this->product_id, -1, $this->quantity, 'OUTGOING');
     
                     if($this->size >= 9 && $this->size <= 12){
                         // Box
                         $this->insertCompletePackagingSale(11, $this->product_id, -1, $this->quantity, 'OUTGOING');
+                        // RIBBON
+                        $this->insertCompletePackagingSale(19, $this->product_id, (-1/15), $this->quantity, 'OUTGOING');
                     }
                     else{
                         // Box
                         $this->insertCompletePackagingSale(10, $this->product_id, -1, $this->quantity, 'OUTGOING');
+                        // RIBBON
+                        $this->insertCompletePackagingSale(19, $this->product_id, (-1/20), $this->quantity, 'OUTGOING');
                     }
                 }
                 else{
-                    // Box
-                    $this->insertCompletePackagingSale(16, $this->product_id, -1, $this->quantity, 'OUTGOING');
-                    // PILON
-                    $this->insertCompletePackagingSale(2, $this->product_id, -2, $this->quantity, 'OUTGOING');
-                    // RIBBON
-                    $this->insertCompletePackagingSale(20, $this->product_id, -1, $this->quantity, 'OUTGOING');
+                    if($this->heel_height >= 8 and $this->heel_height <= 12){
+                        // Box
+                        $this->insertCompletePackagingSale(16, $this->product_id, -1, $this->quantity, 'OUTGOING');
+                        // PILON
+                        $this->insertCompletePackagingSale(2, $this->product_id, -2, $this->quantity, 'OUTGOING');
+                        // RIBBON
+                        $this->insertCompletePackagingSale(20, $this->product_id, (-1/15), $this->quantity, 'OUTGOING');
+                    }
+                    else {
+                        // Box
+                        $this->insertCompletePackagingSale(16, $this->product_id, -1, $this->quantity, 'OUTGOING');
+                        // PILON
+                        $this->insertCompletePackagingSale(2, $this->product_id, -2, $this->quantity, 'OUTGOING');
+                        // RIBBON
+                        $this->insertCompletePackagingSale(20, $this->product_id, (-1/20), $this->quantity, 'OUTGOING');
+                    }
+                    
                 }
             }
     
@@ -146,7 +161,7 @@ class CompletePackaging extends Component
                 // PILON
                 $this->insertCompletePackagingSale(3, $this->product_id, -2, $this->quantity, 'OUTGOING');
                 // RIBBON
-                $this->insertCompletePackagingSale(20, $this->product_id, -1, $this->quantity, 'OUTGOING');
+                $this->insertCompletePackagingSale(20, $this->product_id, (-1/20), $this->quantity, 'OUTGOING');
                 // TISSUE
                 $this->insertCompletePackagingSale(18, $this->product_id, -1, $this->quantity, 'OUTGOING');
                 // DUST BAG
@@ -202,7 +217,8 @@ class CompletePackaging extends Component
 
         $this->category = $products->category;
         $this->model = $products->model;
-
+        $this->size = $products->size;
+        $this->heel_height = $products->heel_height;
         return view('livewire.products.complete-packaging', [
             'product' => $products
         ]);

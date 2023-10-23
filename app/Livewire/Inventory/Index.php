@@ -15,6 +15,35 @@ class Index extends Component
     public $color_search = '';
     public $size_search = '';
 
+    public $cart = [];
+
+    public function addToCart($material){
+        // Check if the material with the same ID already exists in the cart
+        $existingItem = array_search($material['id'], array_column($this->cart, 'id'));
+
+        if ($existingItem !== false) {
+            // If the material already exists in the cart, increment the quantity by 1
+            $this->cart[$existingItem]['quantity'] += 1;
+        } else {
+            // If the material does not exist in the cart, add it as a new item with quantity 1
+            $material['quantity'] = 1;
+            $this->cart[] = $material;
+        }
+    }
+
+    
+    public function removeFromCart($index)
+    {
+        if (isset($this->cart[$index])) {
+            unset($this->cart[$index]);
+            $this->cart = array_values($this->cart); // Re-index the array after removal
+        }
+    }
+
+    public function store(){
+        dd($this->cart);
+    }
+    
     public function render()
     {
         // return view('livewire.list-products', [

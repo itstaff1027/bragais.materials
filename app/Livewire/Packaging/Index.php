@@ -29,8 +29,8 @@ class Index extends Component
 
         $getTotalRibbon = DB::table('packaging_material_logs')->where('packaging_material_logs.status', '=', 'OUTGOING')
         ->whereIn('packaging_materials.name', ['BROWN_RIBBON', 'WHITE_RIBBON'])
-        ->Join(DB::raw('packaging_materials'), 'packaging_materials.id', '=', 'packaging_material_logs.packaging_material_id')
-        ->Join(DB::raw('products'), 'products.id', '=', 'packaging_material_logs.product_id')
+        ->leftJoin(DB::raw('packaging_materials'), 'packaging_materials.id', '=', 'packaging_material_logs.packaging_material_id')
+        ->leftJoin(DB::raw('products'), 'products.id', '=', 'packaging_material_logs.product_id')
         ->select(DB::raw('SUM(packaging_material_logs.stocks) as material_stocks'), 'packaging_materials.name', 
             'products.id as products_id', 'products.model', 'products.color', 'products.size', 'products.heel_height', 'products.category', 'packaging_material_logs.product_id')
         ->groupBy('packaging_materials.name', 'products.id', 'products.model', 'products.color', 'products.size', 'products.heel_height', 'products.category', 'packaging_material_logs.product_id')

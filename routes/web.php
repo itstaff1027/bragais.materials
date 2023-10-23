@@ -1,6 +1,7 @@
 <?php
 
 use App\Livewire\Counter;
+use App\Livewire\Inventory\NewModel;
 use App\Livewire\Packaging\PerDay;
 use App\Exports\MaterialLogsExport;
 use App\Livewire\Inventory\Details;
@@ -12,6 +13,7 @@ use App\Http\Controllers\PDFController;
 use App\Livewire\Packaging\DeductStocks;
 use App\Livewire\Packaging\MaterialLogs;
 use App\Http\Controllers\ProfileController;
+use App\Livewire\Inventory\Progress;
 use App\Livewire\Products\CompletePackaging;
 use App\Livewire\Packaging\Components\GeneratePdf;
 use App\Livewire\Packaging\Summary as summaryPackaging;
@@ -43,7 +45,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return view('inventory');
     })->name('inventory');
 
-    Route::get('/inventory/material-details/{id}', Details::class)->name('material-details');
+    Route::get('/inventory/product_progress', Progress::class)->name('product-development-progress');
+
+    Route::get('/inventory/material-details/{id}', Details::class)->name('update-material-details');
+
+    Route::get('/inventory/add-new_material', NewModel::class)->name('add-new-material');
 
     // Route::get('/inventory/add-outlet_stocks/{id}', AddOutletStocks::class)->name('add-outlet_stocks');
 

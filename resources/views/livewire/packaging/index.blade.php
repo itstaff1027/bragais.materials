@@ -35,12 +35,19 @@
 
     <div class="flex overflow-x-auto">
         @php
+            // white
             $total_white_ribbon_large = 0;
             $total_white_ribbon_medium = 0;
+            // brown
+            $total_brown_ribbon_large = 0;
             $total_brown_ribbon_medium = 0;
             $total_brown_ribbon_small = 0;
+            // total
             $total_white_ribbon = 0;
             $total_brown_ribbon = 0;
+            // Deducted Ribbon
+            $total_brown_ribbon_deducted = 0;
+            $total_white_ribbon_deducted = 0;
         @endphp
 
         {{-- ITERATE over the data to SUM UP all the used ribbons per pcs in per boxes --}}
@@ -57,6 +64,9 @@
                     }
                     else{
                         if($total_ribbon->name == "BROWN_RIBBON"){
+                            if($total_ribbon->heel_height >= 8 && $total_ribbon->heel_height <= 12){
+                                $total_brown_ribbon_large = $total_brown_ribbon_large + $total_ribbon->material_stocks;
+                            }
                             if($total_ribbon->heel_height >= 5 && $total_ribbon->heel_height <= 6){
                                 $total_brown_ribbon_medium = $total_brown_ribbon_medium + $total_ribbon->material_stocks;
                             }
@@ -68,6 +78,15 @@
                     if($total_ribbon->name == "BROWN_RIBBON"){
                         $total_brown_ribbon_small = $total_brown_ribbon_small + $total_ribbon->material_stocks;
                     }
+                }
+                if(!$total_ribbon->products_id){
+                    if($total_ribbon->name == 'BROWN_RIBBON'){
+                        $total_brown_ribbon_deducted += $total_ribbon->material_stocks;
+                    }
+                    if($total_ribbon->name == 'WHITE_RIBBON'){
+                        $total_white_ribbon_deducted += $total_ribbon->material_stocks;
+                    }
+                    
                 }
             @endphp
         @endforeach
@@ -82,36 +101,50 @@
             // $total_brown_ribbon_medium = $total_brown_ribbon_medium / 20;
 
             // SET TOTAL USED RIBBON IN TOTAL
-            $total_white_ribbon = ($total_white_ribbon_large / 20) + ($total_white_ribbon_medium / 15);
-            $total_brown_ribbon = ($total_brown_ribbon_small / 15) + ($total_brown_ribbon_medium / 20);
+            $total_white_ribbon = $total_white_ribbon_large + $total_white_ribbon_medium + $total_white_ribbon_deducted;
+            $total_brown_ribbon = $total_brown_ribbon_small + $total_brown_ribbon_medium + $total_brown_ribbon_large + $total_brown_ribbon_deducted;
 
         @endphp
         <div class="w-full flex flex-col">
             <label class="m-2 font-bold text-xs">W. R. in Used in Large Box</label>
-            <input class="m-2 w-max" type="text" value="{{ number_format(($total_white_ribbon_large / 20), 2) }}" disabled />
+            <input class="m-2 w-max" type="text" value="{{ $total_white_ribbon_large }}" disabled />
         </div>
         <div class="w-full flex flex-col">
             <label class="m-2 font-bold text-xs">W. R. in Used in Medium Box</label>
-            <input class="m-2 w-max" type="text" value="{{ number_format(($total_white_ribbon_medium / 15), 2) }}" disabled />
+            <input class="m-2 w-max" type="text" value="{{ $total_white_ribbon_medium }}" disabled />
+        </div>
+        <div class="w-full flex flex-col">
+            <label class="m-2 font-bold text-xs">B. R. in Used in Large Box</label>
+            <input class="m-2 w-max" type="text" value="{{ $total_brown_ribbon_large }}" disabled />
         </div>
         <div class="w-full flex flex-col">
             <label class="m-2 font-bold text-xs">B. R. in Used in Medium Box</label>
-            <input class="m-2 w-max" type="text" value="{{ number_format(($total_brown_ribbon_medium / 20), 2) }}" disabled />
+            <input class="m-2 w-max" type="text" value="{{ $total_brown_ribbon_medium }}" disabled />
         </div>
         <div class="w-full flex flex-col">
             <label class="m-2 font-bold text-xs">B. R. in Used in Small Box</label>
-            <input class="m-2 w-max" type="text" value="{{ number_format(($total_brown_ribbon_small / 15), 2) }}" disabled />
+            <input class="m-2 w-max" type="text" value="{{ $total_brown_ribbon_small }}" disabled />
+        </div>
+    </div>
+    <div class="flex overflow-x-auto">
+        <div class="w-full flex flex-col">
+            <label class="m-2 font-bold text-xs">W. R. Deducted For Dropship</label>
+            <input class="m-2 w-max" type="text" value="{{ $total_white_ribbon_deducted }}" disabled />
+        </div>
+        <div class="w-full flex flex-col">
+            <label class="m-2 font-bold text-xs">B. R. Deducted For Dropship</label>
+            <input class="m-2 w-max" type="text" value="{{ $total_brown_ribbon_deducted }}" disabled />
         </div>
     </div>
 
     <div class="w-full justify-center items-center flex">
         <div class="w-full flex flex-col justify-center items-center">
             <label class="m-2 font-bold">Total White Ribbon Used</label>
-            <input class="m-2 w-max" type="text" value="{{ number_format($total_white_ribbon, 2) }}" disabled />
+            <input class="m-2 w-max" type="text" value="{{ $total_white_ribbon }}" disabled />
         </div>
         <div class="w-full flex flex-col justify-center items-center">
             <label class="m-2 font-bold">Total Brown Ribbon Used</label>
-            <input class="m-2 w-max" type="text" value="{{ number_format($total_brown_ribbon, 2) }}" disabled />
+            <input class="m-2 w-max" type="text" value="{{ $total_brown_ribbon }}" disabled />
         </div>
     </div>
 
@@ -121,9 +154,9 @@
             <label class="m-2 font-bold">
                 {{ 
                     $total_ribbon_stocks->packaging_material_id == 19 ? 
-                        'TOTAL STOCKS W.R. - REM. : '.number_format($total_ribbon_stocks->incoming_stocks + $total_white_ribbon, 2) 
+                        'TOTAL STOCKS W.R. - REM. : '.$total_ribbon_stocks->incoming_stocks + $total_white_ribbon 
                         : 
-                        'TOTAL STOCKS B.R. - REM. : '.number_format($total_ribbon_stocks->incoming_stocks + $total_brown_ribbon, 2) 
+                        'TOTAL STOCKS B.R. - REM. : '.$total_ribbon_stocks->incoming_stocks + $total_brown_ribbon 
                 }}
             </label>
             <input class="m-2 w-max" type="text" value="{{ $total_ribbon_stocks->incoming_stocks }}" disabled />
@@ -156,18 +189,18 @@
                     {{-- <td>{{ $packaging_material->beginning_total_stocks }}</td> --}}
                     <td>
                         @if ($packaging_material->name == 'WHITE_RIBBON')
-                            {{ number_format($packaging_material->beginning_total_stocks + $total_white_ribbon, 2)  }}
+                            {{ $packaging_material->beginning_total_stocks + $total_white_ribbon  }}
                         @elseif ($packaging_material->name == 'BROWN_RIBBON')
-                            {{ number_format($packaging_material->beginning_total_stocks + $total_brown_ribbon, 2)  }}
+                            {{ $packaging_material->beginning_total_stocks + $total_brown_ribbon  }}
                         @else
                             {{ $packaging_material->total_stocks }}
                         @endif
                     </td>
                     <td>
                         @if ($packaging_material->name == 'WHITE_RIBBON')
-                            {{ number_format($total_white_ribbon, 2)  }}
+                            {{ $total_white_ribbon  }}
                         @elseif ($packaging_material->name == 'BROWN_RIBBON')
-                            {{ number_format($total_brown_ribbon, 2)  }}
+                            {{ $total_brown_ribbon  }}
                         @else
                             {{ $packaging_material->released_stocks }}
                         @endif

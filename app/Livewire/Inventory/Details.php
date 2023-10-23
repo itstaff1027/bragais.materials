@@ -13,9 +13,9 @@ class Details extends Component
     
     public $material_id;
 
-    public $stocks;
+    public $addStocks, $reduceStocks;
 
-    public $remarks = '';
+    public $addRemarks = '', $reduceRemarks = '';
 
     public $material_sku = '';
 
@@ -33,24 +33,46 @@ class Details extends Component
         $this->material_id = $id;
     }
 
-    public function store(){
+    public function storeAddStocks(){
 
         $this->validate([
-            'stocks' => 'required|integer|min:1',
-            'remarks' => 'required|string|max:255'
+            'addStocks' => 'required|integer|min:1',
+            'addRemarks' => 'required|string|max:255'
         ]);
         $user_id = Auth::id();
 
         DB::table('materials_stocks')->insert([
             'user_id' => $user_id,
             'material_id' => $this->material_id,
-            'stocks' => $this->stocks,
-            'remarks' => $this->remarks,
+            'stocks' => $this->addStocks,
+            'remarks' => $this->addRemarks,
             'status' => 'INCOMING',
             'action' => 'ADD'
         ]);
 
-        $this->reset(['stocks', 'remarks']);
+        $this->reset(['addStocks', 'addRemarks']);
+
+        return redirect('/inventory');
+    }
+
+    public function storeReduceStocks(){
+
+        $this->validate([
+            'reduceStocks' => 'required|integer|min:-1',
+            'reduceRemarks' => 'required|string|max:255'
+        ]);
+        $user_id = Auth::id();
+
+        DB::table('materials_stocks')->insert([
+            'user_id' => $user_id,
+            'material_id' => $this->material_id,
+            'stocks' => -$this->reduceStocks,
+            'remarks' => $this->reduceRemarks,
+            'status' => 'OUTGOING',
+            'action' => 'REDUCE'
+        ]);
+
+        $this->reset(['reduceStocks', 'reduceRemarks']);
 
         return redirect('/inventory');
     }

@@ -2,7 +2,7 @@
     <x-app-layout>
         <x-slot name="header">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __("Material's Detail") }}
+                {{ __("Add Material Stocks") }}
             </h2>
         </x-slot>
 
@@ -10,7 +10,7 @@
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 text-gray-900" x-data="{ open: false }">
-                        {{-- <div class="flex justify-end">
+                        <div class="flex justify-end">
                             <button @click="open = ! open"
                                 class="transition ease-in-out delay-150 hover:-translate-y-1 hover:scale-110 duration-300 text-white rounded-full p-2 mb-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"
@@ -21,7 +21,7 @@
                                         d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z" />
                                 </svg>
                             </button>
-                        </div> --}}
+                        </div>
 
                         <form wire:submit.prevent="update" class="w-full flex flex-col justify-center items-center">
                             <table class="w-full">
@@ -114,10 +114,10 @@
                             </div>
                         </form>
 
-                        <div class="p-2 flex border-2">
-                            <form wire:submit.prevent="storeAddStocks" class="w-1/2 flex justify-center items-center border-2">
+                        <div class="p-2">
+                            <form wire:submit.prevent="store">
                                 @csrf
-                                <table class="w-1/2 m-2">
+                                <table class="w-full" x-show="open" x-transition.duration.500ms>
                                     <thead>
                                         <tr>
                                             <th></th>
@@ -126,18 +126,18 @@
                                     <tbody>
                                         <tr>
                                             <td>
-                                                <input type="number" wire:model="addStocks"
-                                                    class="w-full border-2 rounded-xl" placeholder="Add Stocks" />
-                                                @error('addStocks')<span class="error text-red-600">{{ $message
+                                                <input type="number" wire:model="stocks"
+                                                    class="w-full border-2 rounded-xl" placeholder="Stocks" />
+                                                @error('stocks')<span class="error text-red-600">{{ $message
                                                     }}</span>
                                                 @enderror
                                             </td>
                                         </tr>
                                         <tr>
                                             <td>
-                                                <textarea wire:model="addRemarks" class="w-full border-2 rounded-xl"
+                                                <textarea wire:model="remarks" class="w-full border-2 rounded-xl"
                                                     placeholder="Remarks"></textarea>
-                                                @error('addRemarks')<span class="error text-red-600">{{ $message
+                                                @error('remarks')<span class="error text-red-600">{{ $message
                                                     }}</span>
                                                 @enderror
                                             </td>
@@ -147,44 +147,6 @@
                                                 <button type="submit"
                                                     class="w-full p-2 pl-4 pr-4 bg-emerald-600 text-white rounded-full">
                                                     ADD
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </form>
-                            <form wire:submit.prevent="storeReduceStocks" class="w-1/2 flex justify-center items-center border-2">
-                                @csrf
-                                <table class="w-1/2 m-2" >
-                                    <thead>
-                                        <tr>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>
-                                                <input type="number" wire:model="reduceStocks"
-                                                    class="w-full border-2 rounded-xl" placeholder="Reduce Stocks" />
-                                                @error('reduceStocks')<span class="error text-red-600">{{ $message
-                                                    }}</span>
-                                                @enderror
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <textarea wire:model="reduceRemarks" class="w-full border-2 rounded-xl"
-                                                    placeholder="Remarks"></textarea>
-                                                @error('reduceRemarks')<span class="error text-red-600">{{ $message
-                                                    }}</span>
-                                                @enderror
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <button type="submit"
-                                                    class="w-full p-2 pl-4 pr-4 bg-red-600 text-white rounded-full">
-                                                    REDUCE
                                                 </button>
                                             </td>
                                         </tr>
