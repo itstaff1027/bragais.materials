@@ -39,134 +39,137 @@
                             <input type="text" class="w-1/4 rounded-l-md border-2 border-blue-400 m-2"  wire:model.live.debounce.500ms='filter_date_range_first' placeholder="DATE-FIRST : FORMAT [y-m-d]" />
                             <input type="text" class="w-1/4 rounded-l-md border-2 border-blue-400 m-2"  wire:model.live.debounce.500ms='filter_date_range_second' placeholder="DATE-SECOND : FORMAT [y-m-d]" />
                         </div>
-                        <table class="table-auto w-full text-center divide-y-2 divide-violet-400 hover:divide-pink-400 overflow-x-auto ">
-                            <caption>
-                                <h1 class="font-bold text-2xl">Summary</h1>
-                            </caption>
-                            <thead>
-                                <tr>
-                                    <th># Dates</th>
-                                    @foreach ($dates as $date)
-                                        <th colspan="2" class="bg-orange-500 border">{{ $date->date }}</th>
-                                    @endforeach
-                                    <th colspan="3"  class="bg-gray-500">Total</th>
-                                </tr>
-                                <tr>
-                                    <th>Names</th>
-                                    @foreach ($dates as $date)
+                        <div class="w-full overflow-x-auto">
+                            <table class="table-auto w-full text-center divide-y-2 divide-violet-400 hover:divide-pink-400">
+                                <caption>
+                                    <h1 class="font-bold text-2xl">Summary</h1>
+                                </caption>
+                                <thead>
+                                    <tr>
+                                        <th># Dates</th>
+                                        @foreach ($dates as $date)
+                                            <th colspan="2" class="bg-orange-500 border">{{ $date->date }}</th>
+                                        @endforeach
+                                        <th colspan="3"  class="bg-gray-500">Total</th>
+                                    </tr>
+                                    <tr>
+                                        <th>Names</th>
+                                        @foreach ($dates as $date)
+                                            <th class="bg-emerald-500">Add</th>
+                                            <th class="bg-red-500">Rel.</th>
+                                        @endforeach
                                         <th class="bg-emerald-500">Add</th>
                                         <th class="bg-red-500">Rel.</th>
-                                    @endforeach
-                                    <th class="bg-emerald-500">Add</th>
-                                    <th class="bg-red-500">Rel.</th>
-                                    <th class="bg-blue-500">Rem.</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($materials as $material)
-                                    <tr class="border">
-                                        <td>{{ $material->name }} : {{ $material->size }}</td>
-                                        @php
-                                            $incomingStockSum = 0;
-                                            $outgoingStockSum = 0;
-                                        @endphp
-                                        @foreach ($dates as $date)
+                                        <th class="bg-blue-500">Rem.</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($materials as $material)
+                                        <tr class="border">
+                                            <td>{{ $material->name }} : {{ $material->size }}</td>
                                             @php
-                                                $incomingStock = 0;
-                                                $outgoingStock = 0;
-                                                // OVERALL - SET ZERO
-                                                // whtie
-                                                $total_white_ribbon_large = 0;
-                                                $total_white_ribbon_medium = 0;
-                                                // brown
-                                                $total_brown_ribbon_large = 0;
-                                                $total_brown_ribbon_medium = 0;
-                                                $total_brown_ribbon_small = 0;
-                                                $total_white_ribbon = 0;
-                                                $total_brown_ribbon = 0;
-                                                // Deducted Ribbon
-                                                $total_brown_ribbon_deducted = 0;
-                                                $total_white_ribbon_deducted = 0;
+                                                $incomingStockSum = 0;
+                                                $outgoingStockSum = 0;
+                                            @endphp
+                                            @foreach ($dates as $date)
+                                                @php
+                                                    $incomingStock = 0;
+                                                    $outgoingStock = 0;
+                                                    // OVERALL - SET ZERO
+                                                    // whtie
+                                                    $total_white_ribbon_large = 0;
+                                                    $total_white_ribbon_medium = 0;
+                                                    // brown
+                                                    $total_brown_ribbon_large = 0;
+                                                    $total_brown_ribbon_medium = 0;
+                                                    $total_brown_ribbon_small = 0;
+                                                    $total_white_ribbon = 0;
+                                                    $total_brown_ribbon = 0;
+                                                    // Deducted Ribbon
+                                                    $total_brown_ribbon_deducted = 0;
+                                                    $total_white_ribbon_deducted = 0;
 
-                                                // ITERATE OVER THE DATA:getTotalRibbon TO GET THE TOTAL AMOUNT OF OUTGOING MATERIALS IN 19 || 20
-                                                foreach ($getTotalRibbon as $total_ribbon){
-                                                    // check if the $dates is = to the $total_ribbon->date for accurate computation
-                                                    if ($date->date == $total_ribbon->ribbon_date && $material->id == 19 || $material->id == 20){
-                                                        if($date->date == $total_ribbon->ribbon_date){
-                                                            if($total_ribbon->category == 'PAGEANT'){
-                                                                if($total_ribbon->name == "WHITE_RIBBON"){
-                                                                    if($total_ribbon->size >= 9 && $total_ribbon->size <= 12 || $total_ribbon->size >= 39 && $total_ribbon->size <= 42){
-                                                                        $total_white_ribbon_large = $total_white_ribbon_large + $total_ribbon->material_stocks;
+                                                    // ITERATE OVER THE DATA:getTotalRibbon TO GET THE TOTAL AMOUNT OF OUTGOING MATERIALS IN 19 || 20
+                                                    foreach ($getTotalRibbon as $total_ribbon){
+                                                        // check if the $dates is = to the $total_ribbon->date for accurate computation
+                                                        if ($date->date == $total_ribbon->ribbon_date && $material->id == 19 || $material->id == 20){
+                                                            if($date->date == $total_ribbon->ribbon_date){
+                                                                if($total_ribbon->category == 'PAGEANT'){
+                                                                    if($total_ribbon->name == "WHITE_RIBBON"){
+                                                                        if($total_ribbon->size >= 9 && $total_ribbon->size <= 12 || $total_ribbon->size >= 39 && $total_ribbon->size <= 42){
+                                                                            $total_white_ribbon_large = $total_white_ribbon_large + $total_ribbon->material_stocks;
+                                                                        }
+                                                                        else{
+                                                                            $total_white_ribbon_medium = $total_white_ribbon_medium + $total_ribbon->material_stocks;
+                                                                        }
                                                                     }
                                                                     else{
-                                                                        $total_white_ribbon_medium = $total_white_ribbon_medium + $total_ribbon->material_stocks;
+                                                                        if($total_ribbon->name == "BROWN_RIBBON"){
+                                                                            if($total_ribbon->heel_height >= 8 && $total_ribbon->heel_height <= 12){
+                                                                                $total_brown_ribbon_large = $total_brown_ribbon_large + $total_ribbon->material_stocks;
+                                                                            }
+                                                                            if($total_ribbon->heel_height >= 5 && $total_ribbon->heel_height <= 6){
+                                                                                $total_brown_ribbon_medium = $total_brown_ribbon_medium + $total_ribbon->material_stocks;
+                                                                            }
+                                                                        }
+                                                                        
                                                                     }
                                                                 }
-                                                                else{
+                                                                if($total_ribbon->category == 'HEELS'){
                                                                     if($total_ribbon->name == "BROWN_RIBBON"){
-                                                                        if($total_ribbon->heel_height >= 8 && $total_ribbon->heel_height <= 12){
-                                                                            $total_brown_ribbon_large = $total_brown_ribbon_large + $total_ribbon->material_stocks;
-                                                                        }
-                                                                        if($total_ribbon->heel_height >= 5 && $total_ribbon->heel_height <= 6){
-                                                                            $total_brown_ribbon_medium = $total_brown_ribbon_medium + $total_ribbon->material_stocks;
-                                                                        }
+                                                                        $total_brown_ribbon_small = $total_brown_ribbon_small + $total_ribbon->material_stocks;
+                                                                    }
+                                                                }
+                                                                if(!$total_ribbon->products_id){
+                                                                    if($total_ribbon->name == 'BROWN_RIBBON'){
+                                                                        $total_brown_ribbon_deducted += $total_ribbon->material_stocks;
+                                                                    }
+                                                                    if($total_ribbon->name == 'WHITE_RIBBON'){
+                                                                        $total_white_ribbon_deducted += $total_ribbon->material_stocks;
                                                                     }
                                                                     
                                                                 }
                                                             }
-                                                            if($total_ribbon->category == 'HEELS'){
-                                                                if($total_ribbon->name == "BROWN_RIBBON"){
-                                                                    $total_brown_ribbon_small = $total_brown_ribbon_small + $total_ribbon->material_stocks;
+                                                        }
+                                                        
+                                                    }
+
+                                                    foreach ($getMaterialStocks as $stock) {
+                                                        if ($stock->packaging_material_id == $material->id && $stock->date == $date->date) {
+                                                            if ($stock->status == 'INCOMING') {
+                                                                $incomingStock += $stock->total_stocks;
+                                                            } 
+                                                            if ($stock->status == 'OUTGOING') {
+                                                                if($stock->packaging_material_id == 19){
+                                                                    $outgoingStock = $total_white_ribbon_large + $total_white_ribbon_medium + $total_white_ribbon_deducted;
                                                                 }
-                                                            }
-                                                            if(!$total_ribbon->products_id){
-                                                                if($total_ribbon->name == 'BROWN_RIBBON'){
-                                                                    $total_brown_ribbon_deducted += $total_ribbon->material_stocks;
+                                                                else if($stock->packaging_material_id == 20){
+                                                                    $outgoingStock = $total_brown_ribbon_small + $total_brown_ribbon_medium + $total_brown_ribbon_deducted + $total_brown_ribbon_large;
                                                                 }
-                                                                if($total_ribbon->name == 'WHITE_RIBBON'){
-                                                                    $total_white_ribbon_deducted += $total_ribbon->material_stocks;
+                                                                else {
+                                                                    $outgoingStock += $stock->total_stocks;
                                                                 }
-                                                                
                                                             }
                                                         }
-                                                    }
-                                                    
-                                                }
+                                                    } 
+                                                    $incomingStockSum += $incomingStock;
+                                                    $outgoingStockSum += $outgoingStock;
+                                                @endphp
+                                                <td class="bg-emerald-400">{{ $incomingStock }}</td>
+                                                <td class="bg-red-400">{{ $outgoingStock }}</td>
+                                            @endforeach
 
-                                                foreach ($getMaterialStocks as $stock) {
-                                                    if ($stock->packaging_material_id == $material->id && $stock->date == $date->date) {
-                                                        if ($stock->status == 'INCOMING') {
-                                                            $incomingStock += $stock->total_stocks;
-                                                        } 
-                                                        if ($stock->status == 'OUTGOING') {
-                                                            if($stock->packaging_material_id == 19){
-                                                                $outgoingStock = $total_white_ribbon_large + $total_white_ribbon_medium + $total_white_ribbon_deducted;
-                                                            }
-                                                            else if($stock->packaging_material_id == 20){
-                                                                $outgoingStock = $total_brown_ribbon_small + $total_brown_ribbon_medium + $total_brown_ribbon_deducted + $total_brown_ribbon_large;
-                                                            }
-                                                            else {
-                                                                $outgoingStock += $stock->total_stocks;
-                                                            }
-                                                        }
-                                                    }
-                                                } 
-                                                $incomingStockSum += $incomingStock;
-                                                $outgoingStockSum += $outgoingStock;
-                                            @endphp
-                                            <td class="bg-emerald-400">{{ $incomingStock }}</td>
-                                            <td class="bg-red-400">{{ $outgoingStock }}</td>
-                                        @endforeach
-
-                                        <td class="bg-emerald-400">{{ $incomingStockSum }}</td>
-                                        <td class="bg-red-400">{{ $outgoingStockSum }}</td>
-                                        <td class="bg-blue-400">{{ $incomingStockSum + $outgoingStockSum }}</td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                            
-                            
-                        </table>
+                                            <td class="bg-emerald-400">{{ $incomingStockSum }}</td>
+                                            <td class="bg-red-400">{{ $outgoingStockSum }}</td>
+                                            <td class="bg-blue-400">{{ $incomingStockSum + $outgoingStockSum }}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                                
+                                
+                            </table>
+                        </div>
+                        
                         
                     </div>
                 </div>
