@@ -19,6 +19,7 @@
                 ['name' => 'Products', 'path' => 'products', 'to' => 'products' ],
                 ['name' => 'Packaging', 'path' => 'packaging', 'to' => 'packaging' ],
                 ['name' => 'Inventory', 'path' => 'inventory', 'to' => 'inventory' ],
+                ['name' => 'Factory', 'path' => 'factory', 'to' => 'factory' ],
                 // ['name' => 'Sells', 'path' => 'sell', 'to' => 'sell' ],
                 ]
                 @endphp

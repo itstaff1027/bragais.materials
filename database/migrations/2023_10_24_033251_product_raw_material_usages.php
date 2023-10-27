@@ -11,13 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('packaging_material_logs', function (Blueprint $table) {
+        Schema::create('product_raw_material_usages', function (Blueprint $table) {
             $table->id();
-            $table->integer('packaging_material_id');
-            $table->integer('product_id')->default(0);
-            $table->integer('order_number')->default(0);
-            $table->decimal('stocks', 10, 2)->default(0);
-            $table->string('status', 255);
+            $table->integer('product_development_list_id');
+            $table->integer('material_id');
+            $table->integer('quantity');
             $table->timestamps();
         });
     }
@@ -27,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('packaging_material_logs');
+        Schema::dropIfExists('product_raw_material_usages');
     }
 };
