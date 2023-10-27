@@ -9,7 +9,7 @@
                 </button>
             </div>
             <div class="flex justify-between">
-                {{-- <a href="{{ route('add-new-material') }}" class="m-2">
+                <a href="{{ route('add-new-material') }}" class="m-2">
                     <button>
                         <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"
                             class="fill-green-400">
@@ -24,7 +24,7 @@
                     <button>
                         <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><style>svg{fill:#fff957}</style><path d="M448 160H320V128H448v32zM48 64C21.5 64 0 85.5 0 112v64c0 26.5 21.5 48 48 48H464c26.5 0 48-21.5 48-48V112c0-26.5-21.5-48-48-48H48zM448 352v32H192V352H448zM48 288c-26.5 0-48 21.5-48 48v64c0 26.5 21.5 48 48 48H464c26.5 0 48-21.5 48-48V336c0-26.5-21.5-48-48-48H48z"/></svg>
                     </button>
-                </a> --}}
+                </a>
             </div>
         </div>
         <form wire:submit.prevent='store' class="w-full flex" >
@@ -79,7 +79,7 @@
     </div>
     <table class="table-auto w-full text-center divide-y-2 divide-violet-400 hover:divide-pink-400">
         <caption>
-            <h1 class="italic text-xl font-bold p-2">All Products
+            <h1 class="italic text-xl font-bold p-2">All Products has stocks
                 {{-- <a href="{{ route('add-new-model') }}">
                     <button>
                         <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"
@@ -93,11 +93,9 @@
                 </a> --}}
             </h1>
             <div class="m-2" x-data="{ open: false }">
-                <input class="border-2 border-violet-700 rounded-l-full rounded-r-md w-1/2 p-2 m-0"
+                <input class="border-2 border-violet-700 rounded-l-full w-1/2 p-2 m-0"
                     wire:model.live.debounce.500ms='product_sku_search' placeholder="Search Stock [Product SKU]" />
-                <button class="border-2 border-violet-700 rounded-md p-2 m-0" @click="open = ! open">Filter</button>
-                <button class="border-2 border-violet-700 rounded-md p-2 m-0" wire:click="filterStocks(0)">All</button>
-                <button class="border-2 border-violet-700 rounded-l-md rounded-r-full p-2 m-0" wire:click="filterStocks(1)">Stocks</button>
+                <button class="border-2 border-violet-700 rounded-r-full p-2 m-0" @click="open = ! open">Filter</button>
                 {{-- FILTER --}}
                 <div class="m-2" x-show="open" x-transition.duration.500ms>
                     <input class="border-2 border-violet-700 rounded-full w-1/4 m-2"
@@ -142,9 +140,24 @@
                     <button wire:click='addToCart({{ $product }})' class="text-emerald-500">
                         <svg class="fill-emerald-500" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 576 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M24 0C10.7 0 0 10.7 0 24S10.7 48 24 48H69.5c3.8 0 7.1 2.7 7.9 6.5l51.6 271c6.5 34 36.2 58.5 70.7 58.5H488c13.3 0 24-10.7 24-24s-10.7-24-24-24H199.7c-11.5 0-21.4-8.2-23.6-19.5L170.7 288H459.2c32.6 0 61.1-21.8 69.5-53.3l41-152.3C576.6 57 557.4 32 531.1 32H360V134.1l23-23c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-64 64c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l23 23V32H120.1C111 12.8 91.6 0 69.5 0H24zM176 512a48 48 0 1 0 0-96 48 48 0 1 0 0 96zm336-48a48 48 0 1 0 -96 0 48 48 0 1 0 96 0z"/></svg>
                     </button>
-                    <a href="{{ route('update-product', ['id' => $product->id]) }}">
+                    <a href="{{ route('complete-packaging', ['id' => $product->id]) }}">
                         <button>
-                            <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><style>svg{fill:#4173c8}</style><path d="M368.4 18.3L312.7 74.1 437.9 199.3l55.7-55.7c21.9-21.9 21.9-57.3 0-79.2L447.6 18.3c-21.9-21.9-57.3-21.9-79.2 0zM288 94.6l-9.2 2.8L134.7 140.6c-19.9 6-35.7 21.2-42.3 41L3.8 445.8c-3.8 11.3-1 23.9 7.3 32.4L164.7 324.7c-3-6.3-4.7-13.3-4.7-20.7c0-26.5 21.5-48 48-48s48 21.5 48 48s-21.5 48-48 48c-7.4 0-14.4-1.7-20.7-4.7L33.7 500.9c8.6 8.3 21.1 11.2 32.4 7.3l264.3-88.6c19.7-6.6 35-22.4 41-42.3l43.2-144.1 2.8-9.2L288 94.6z"/></svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"
+                                class="fill-green-400">
+                                <!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+                                </style>
+                                <path
+                                    d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z" />
+                            </svg>
+                        </button>
+                    </a>
+                    <a href="{{ route('outgoing-products', ['id' => $product->id]) }}">
+                        <button>
+                            <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512">
+                                <!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+                                <style>svg{fill:#974e35}</style>
+                                <path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"/>
+                            </svg>
                         </button>
                     </a>
                 </td>

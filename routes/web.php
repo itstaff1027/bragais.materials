@@ -1,22 +1,29 @@
 <?php
 
 use App\Livewire\Counter;
-use App\Livewire\Inventory\NewModel;
+use App\Livewire\Factory\AddTodo as FactAddTodo;
+use App\Livewire\Factory\Details as FactDetails;
+use App\Livewire\Factory\NewModel as FactNewModel;
+use App\Livewire\Factory\Progress as FactProgress;
 use App\Livewire\Packaging\PerDay;
 use App\Exports\MaterialLogsExport;
-use App\Livewire\Inventory\Details;
-use App\Livewire\Inventory\Summary as summaryOutgoing;
 use App\Livewire\Packaging\AddStocks;
-use App\Livewire\Products\OutgoingProducts;
+use App\Livewire\Products\Details as ProductDetails;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PDFController;
 use App\Livewire\Packaging\DeductStocks;
 use App\Livewire\Packaging\MaterialLogs;
 use App\Http\Controllers\ProfileController;
-use App\Livewire\Inventory\Progress;
+use App\Livewire\Products\OutgoingProducts;
 use App\Livewire\Products\CompletePackaging;
+use App\Livewire\Inventory\AddTodo as InvAddTodo;
+use App\Livewire\Inventory\Details as InvDetails;
 use App\Livewire\Packaging\Components\GeneratePdf;
+use App\Livewire\Inventory\NewModel as InvNewModel;
+use App\Livewire\Inventory\Progress as InvProgress;
+use App\Livewire\Inventory\Summary as summaryOutgoing;
 use App\Livewire\Packaging\Summary as summaryPackaging;
+use App\Livewire\Products\OnStock;
 use App\Livewire\Products\Summary as summaryOutgoingProducts;
 
 /*
@@ -45,11 +52,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return view('inventory');
     })->name('inventory');
 
-    Route::get('/inventory/product_progress', Progress::class)->name('product-development-progress');
+    Route::get('/inventory/product_progress', InvProgress::class)->name('product-development-progress');
 
-    Route::get('/inventory/material-details/{id}', Details::class)->name('update-material-details');
+    Route::get('/inventory/material-details/{id}', InvDetails::class)->name('update-material-details');
 
-    Route::get('/inventory/add-new_material', NewModel::class)->name('add-new-material');
+    Route::get('/inventory/add-new_material', InvNewModel::class)->name('add-new-material');
+
+    Route::get('/inventory/add-todo', InvAddTodo::class)->name('add_to-do');
 
     // Route::get('/inventory/add-outlet_stocks/{id}', AddOutletStocks::class)->name('add-outlet_stocks');
 
@@ -82,6 +91,8 @@ Route::middleware(['auth', 'verified'])->group( function () {
 
     Route::get('/products/outgoing/summary', summaryOutgoingProducts::class)->name('summary-outgoing');
 
+    Route::get('/products/details/{id}', ProductDetails::class)->name('update-product');
+
 });
 
 Route::middleware(['auth', 'verified'])->group( function () {
@@ -99,6 +110,24 @@ Route::middleware(['auth', 'verified'])->group( function () {
 
     Route::get('/packaging/per-day/generate_pdf_today_report', GeneratePdf::class)->name('generate-pdf');
     Route::get('/generate-pdf', [GeneratePdf::class, 'render']);
+    
+});
+
+Route::middleware(['auth', 'verified'])->group( function () {
+    Route::get('/factory', function () {
+        return view('factory');
+    })->name('factory');
+
+    Route::get('/factory/to-receive', FactAddTodo::class)->name('to-receive_materials');
+
+    Route::get('/factory/product_progress', FactProgress::class)->name('factory-product-development-progress');
+
+    Route::get('/factory/material-details/{id}', FactDetails::class)->name('factory-update-material-details');
+
+    Route::get('/factory/add-new_material', FactNewModel::class)->name('factory-add-new-material');
+
+    Route::get('/factory/add-todo', FactAddTodo::class)->name('factory-add_to-do');
+
     
 });
 

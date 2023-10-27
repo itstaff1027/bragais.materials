@@ -4,40 +4,10 @@ namespace App\Livewire\Products;
 
 use Livewire\Component;
 use App\Models\Products;
-use Livewire\WithPagination;
-use Livewire\Attributes\Rule;
 use Illuminate\Support\Facades\DB;
 
-class Index extends Component
+class OnStock extends Component
 {
-    use WithPagination;
-
-    public $product_id;
-
-    #[Rule('required|max:15')] 
-    public $product_sku;
-
-    #[Rule('required|max:15')] 
-    public $model;
-
-    #[Rule('required|max:15')] 
-    public $color;
-
-    #[Rule('required|max:15')] 
-    public $size;
-
-    #[Rule('required|max:15')] 
-    public $heel_height;
-
-    #[Rule('required|max:15')] 
-    public $category;
-
-    #[Rule('required|max:15')] 
-    public $price;
-
-    #[Rule('required|max:15')] 
-    public $stocks;
-
     // FILTERS - SEARCH
     public $product_sku_search = '';
     public $model_search = '';
@@ -45,9 +15,6 @@ class Index extends Component
     public $size_search = '';
     public $heel_search = '';
     public $category_search = '';
-
-    public $filterProducts = 0;
-
     public $cart = [];
 
     public function addToCart($product){
@@ -77,26 +44,19 @@ class Index extends Component
     public function store(){
         dd($this->cart);
     }
-
-    public function filterStocks($value){
-        $this->filterProducts = $value;
-    }
-
     public function render()
     {
-        return view('livewire.products.index', [
-            'products' => Products::select('products.id', 'products.product_sku', 'products.model', 'products.color', 'products.size', 'products.heel_height', 'products.category', DB::raw('COALESCE(product_stocks.total_stocks, 0) as product_total_stocks'))
-                ->where('products.product_sku', 'like', '%'.$this->product_sku_search.'%')
+        return view('livewire.products.on-stock', [
+            'products' => Products::where('products.product_sku', 'like', '%'.$this->product_sku_search.'%')
                 ->where('products.model', 'like', '%'.$this->model_search.'%')
                 ->where('products.color', 'like', '%'.$this->color_search.'%')
                 ->where('products.size', 'like', '%'.$this->size_search.'%')
                 ->where('products.heel_height', 'like', '%'.$this->heel_search.'%')
                 ->where('products.category', 'like', '%'.$this->category_search.'%')
-                ->leftJoin(DB::raw('(SELECT product_id, SUM(stocks) as total_stocks FROM product_stocks GROUP BY product_id) as product_stocks'), 'products.id', '=', 'product_stocks.product_id')
+                ->leftJoin(DB::raw('(SELECT product_id, SUM(stocks) as total_stocks FROM product_stocks WHERE status=\'INCOMING\' GROUP BY product_id) as product_stocks'), 'products.id', '=', 'product_stocks.product_id')
+                ->select('products.id', 'products.product_sku', 'products.model', 'products.color', 'products.size', 'products.heel_height', 'products.category', DB::raw('COALESCE(product_stocks.total_stocks, 0) as product_total_stocks'))
                 ->groupBy('products.id', 'products.product_sku', 'products.model', 'products.color', 'products.size', 'products.heel_height', 'products.category', 'product_total_stocks')
-                ->havingRaw("COALESCE(product_total_stocks, 0) >= '{$this->filterProducts}'")
                 ->paginate(25)
         ]);
     }
 }
-
