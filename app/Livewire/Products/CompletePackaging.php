@@ -5,6 +5,7 @@ namespace App\Livewire\Products;
 use Livewire\Component;
 use App\Models\Products;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class CompletePackaging extends Component
 {
@@ -27,12 +28,12 @@ class CompletePackaging extends Component
         $this->product_id = $id;
     }
 
-    private function insertCompletePackagingSale($id, $product_id, $stocks, $quantity, $status){
+    private function insertCompletePackagingSale($material_id, $product_id, $stocks, $quantity, $status){
 
         $totalStocks = $this->getTotalDeduction($stocks, $quantity);
 
         DB::table('packaging_material_logs')->insert([
-            'packaging_material_id' => $id,
+            'packaging_material_id' => $material_id,
             'product_id' => $product_id,
             'order_number' => $this->order_number,
             'stocks' => $totalStocks,
@@ -52,6 +53,18 @@ class CompletePackaging extends Component
         $this->validate([
             'order_number' => 'required|integer|min:1',
             'quantity' => 'required|integer|min:1',
+        ]);
+
+        $user_id = Auth::user()->id;
+
+        DB::table('product_stocks')->insert([
+            'user_id' => $user_id,
+            'product_id' => $this->product_id,
+            'order_number' => $this->order_number,
+            'stocks' => -($this->quantity),
+            'remarks' => 'DEDUCT FOR COMPLETE PACKAGING',
+            'status' => 'OUTGOING',
+            'action' => 'DEDUCT'
         ]);
 
         // $categoriesMapping = [
