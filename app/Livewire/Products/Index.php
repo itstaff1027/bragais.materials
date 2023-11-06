@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Products;
 
+use App\Models\User;
 use Livewire\Component;
 use App\Models\Products;
 use Livewire\WithPagination;
@@ -95,6 +96,7 @@ class Index extends Component
                 ->leftJoin(DB::raw('(SELECT product_id, SUM(stocks) as total_stocks FROM product_stocks GROUP BY product_id) as product_stocks'), 'products.id', '=', 'product_stocks.product_id')
                 ->groupBy('products.id', 'products.product_sku', 'products.model', 'products.color', 'products.size', 'products.heel_height', 'products.category', 'product_total_stocks')
                 ->havingRaw("COALESCE(product_total_stocks, 0) >= '{$this->filterProducts}'")
+                ->orderBy('products.id', 'asc')
                 ->paginate(25)
         ]);
     }
