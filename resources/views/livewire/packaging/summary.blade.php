@@ -70,11 +70,27 @@
                                             @php
                                                 $incomingStockSum = 0;
                                                 $outgoingStockSum = 0;
+                                                $remainingStocks = 0;
                                             @endphp
+
+                                                {{-- This is to get the total remaining stocks so that it will not affect --}}
+                                                {{-- the filter's computation --}}
+                                            @php
+                                                foreach ($getMaterialStocks as $stock) {
+
+                                                    if ($stock->packaging_material_id == $material->id ) {
+                                                        $remainingStocks += $stock->total_stocks;
+                                                    }
+                                                } 
+                                            @endphp
+
+                                            {{-- it will loop base on the date as well as the stocks --}}
+
                                             @foreach ($dates as $date)
                                                 @php
                                                     $incomingStock = 0;
                                                     $outgoingStock = 0;
+                                                    
                                                     // OVERALL - SET ZERO
                                                     // whtie
                                                     $total_white_ribbon_large = 0;
@@ -133,8 +149,9 @@
                                                         }
                                                         
                                                     }
-
+                                                    // Get the total stocks base on the date as well as the ribbons
                                                     foreach ($getMaterialStocks as $stock) {
+
                                                         if ($stock->packaging_material_id == $material->id && $stock->date == $date->date) {
                                                             if ($stock->status == 'INCOMING') {
                                                                 $incomingStock += $stock->total_stocks;
@@ -161,7 +178,7 @@
 
                                             <td class="bg-emerald-400">{{ $incomingStockSum }}</td>
                                             <td class="bg-red-400">{{ $outgoingStockSum }}</td>
-                                            <td class="bg-blue-400">{{ $incomingStockSum + $outgoingStockSum }}</td>
+                                            <td class="bg-blue-400">{{ $remainingStocks }}</td>
                                         </tr>
                                     @endforeach
                                 </tbody>
