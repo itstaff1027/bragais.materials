@@ -5,7 +5,7 @@
             <img src="data:image/png;base64,{{ DNS1D::getBarcodePNG("$barcode->barcode_id-$barcode->barcode", 'C128') }}" alt="Barcode">
         </div>
         <div style="text-align: center;">
-            <span>{{ $barcode->barcode_id }}-{{ $barcode->barcode }}</span>
+            <span>{{ $barcode->barcode_id }}-{{ $barcode->barcode }}-{{ $barcode->model }}-{{ $barcode->color }}-{{ $barcode->size }}-{{ $barcode->heel_height }}</span>
         </div>
     </div>
     @endforeach

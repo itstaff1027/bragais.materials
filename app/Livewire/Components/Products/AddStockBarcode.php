@@ -14,7 +14,9 @@ class AddStockBarcode extends Component
     public $scannedBarcode;
     public $text;
     protected $listeners = ['handleBarcode', 'clearMessage'];
-    public $errorMessage = false, $successMessage = false;
+    public $errorMessage = '', $successMessage = '';
+    public $is_error = false;
+    public $is_success = false;
     public $barcodeValidationResult;
 
     public $arr = [];
@@ -28,6 +30,7 @@ class AddStockBarcode extends Component
         foreach ($barcodeArray as $value) {
             if (!is_numeric($value)) {
                 $this->errorMessage = "Unknown Barcode, Please try again!";
+                $this->is_error = true;
                 // or any other logic you want to perform when a non-numeric value is found
                 break; // exit the loop if a non-numeric value is found
             }
@@ -37,6 +40,7 @@ class AddStockBarcode extends Component
         if (!$this->errorMessage) {
             if (count($barcodeArray) !== 3) {
                 $this->errorMessage = "Unknown Barcode, Please try again!";
+                $this->is_error = true;
                 // or any other logic you want to perform when the array doesn't have exactly 3 elements
             }
         }
@@ -49,14 +53,16 @@ class AddStockBarcode extends Component
 
         $status = DB::table('product_barcodes')->select('status')->where('id', '=', $barcode_id)->first();
 
-        if(!$status){
+        if(!$status->status){
             $this->errorMessage = 'No barcode found, Please try again!';
+            $this->is_error = true;
         }
 
         $user_id = Auth::user()->id;
 
-        if($status == 'ADDED'){
-            $this->successMessage = 'Already Added, cannot be added again!' . $status->status;
+        if($status->status == 'ADDED'){
+            $this->errorMessage = 'Already Added, cannot be added again! ' . $status->status;
+            $this->is_error = true;
         }
 
         // UPDATE BARCODE FROM THE LIST TO ADDED
@@ -74,7 +80,8 @@ class AddStockBarcode extends Component
                 'remarks' => "Added Stocks From scan barcode {$date_created}"
             ]);
 
-            $this->successMessage = 'Barcode processed Successfully' . $status->status;
+            $this->successMessage = 'Barcode processed Successfully';
+            $this->is_success = true;
             // return response()->json(['message' => "Barcode processed successfully {$this->scannedBarcode}{$this->errorMessage}"]);
         }
 
@@ -89,7 +96,28 @@ class AddStockBarcode extends Component
         $today = date('Ymd');
 
         return view('livewire.components.products.add-stock-barcode',[
-            'barcodeLists' => ProductBarcode::where('status', '=', 'ADDED')->where(DB::raw('DATE(updated_at)'), '=', $today)->paginate(10)
+            'barcodeLists' => ProductBarcode::where('product_barcodes.status', '=', 'ADDED')
+            ->where(DB::raw('DATE(product_barcodes.updated_at)'), '=', $today)
+            ->join('products', 'products.id', '=', 'product_barcodes.product_id')
+            ->select(
+                'product_barcodes.id',
+                'product_barcodes.barcode',
+                'products.model',
+                'products.color',
+                'products.size',
+                'products.heel_height',
+                'product_barcodes.updated_at'
+            )
+            ->groupBy(
+                'product_barcodes.id',
+                'product_barcodes.barcode',
+                'products.model',
+                'products.color',
+                'products.size',
+                'products.heel_height',
+                'product_barcodes.updated_at'
+            )
+            ->paginate(10)
         ]);
     }
 }

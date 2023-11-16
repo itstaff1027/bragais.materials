@@ -14,6 +14,9 @@
 
     <!-- Scripts -->
     <link href="{{ asset('css/guest/styles.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    @livewireStyles
+
 </head>
 
 <body>

@@ -22,6 +22,7 @@
                                 <thead>
                                     <tr>
                                         <th>ID</th>
+                                        <th>Order Number</th>
                                         <th>Material Name</th>
                                         <th>Material Size</th>
                                         <th>Model</th>
@@ -37,6 +38,7 @@
                                     @foreach ($getMaterialLogs as $getMaterialLogs)
                                     <tr class="hover:bg-violet-900 hover:text-white odd:bg-gray-200">
                                         <td class="p-2">{{ $getMaterialLogs->material_logs_id }}</td>
+                                        <td>{{ $getMaterialLogs->order_number }}</td>
                                         <td>{{ $getMaterialLogs->name }}</td>
                                         <td>{{ $getMaterialLogs->material_size }}</td>
                                         <td>{{ $getMaterialLogs->model }}</td>
