@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\ProductBarcode;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Throwable;
 
 class AddStockBarcode extends Component
 {
@@ -24,69 +25,79 @@ class AddStockBarcode extends Component
     public function handleBarcode($scannedBarcode)
     {
        // Split the barcode into an array using the '-' delimiter
-        $barcodeArray = explode('-', $scannedBarcode);
-        
+       try{
+            $barcodeArray = explode('-', $scannedBarcode);
 
-        foreach ($barcodeArray as $value) {
-            if (!is_numeric($value)) {
-                $this->errorMessage = "Unknown Barcode, Please try again!";
-                $this->is_error = true;
-                // or any other logic you want to perform when a non-numeric value is found
-                break; // exit the loop if a non-numeric value is found
+            foreach ($barcodeArray as $value) {
+                if (!is_numeric($value)) {
+                    $this->errorMessage = "Unknown Barcode, Please try again!";
+                    $this->is_error = true;
+                    // or any other logic you want to perform when a non-numeric value is found
+                    break; // exit the loop if a non-numeric value is found
+                }
             }
-        }
-        
-        // If the loop completes without encountering a non-numeric value, you can proceed with further checks or processing.
-        if (!$this->errorMessage) {
-            if (count($barcodeArray) !== 3) {
-                $this->errorMessage = "Unknown Barcode, Please try again!";
-                $this->is_error = true;
-                // or any other logic you want to perform when the array doesn't have exactly 3 elements
+            
+            // If the loop completes without encountering a non-numeric value, you can proceed with further checks or processing.
+            if (!$this->errorMessage) {
+                if (count($barcodeArray) !== 3) {
+                    $this->errorMessage = "Unknown Barcode, Please try again!";
+                    $this->is_error = true;
+                    // or any other logic you want to perform when the array doesn't have exactly 3 elements
+                }
             }
-        }
+    
+    
+            // You can access the individual parts of the barcode using array indexing
+            $barcode_id = $barcodeArray[0]; // '1'
+            $date_created = $barcodeArray[1]; // '20231108'
+            $product_id = $barcodeArray[2]; // '25'
 
-
-        // You can access the individual parts of the barcode using array indexing
-        $barcode_id = $barcodeArray[0]; // '1'
-        $date_created = $barcodeArray[1]; // '20231108'
-        $product_id = $barcodeArray[2]; // '25'
-
-        $status = DB::table('product_barcodes')->select('status')->where('id', '=', $barcode_id)->first();
-
-        if(!$status->status){
-            $this->errorMessage = 'No barcode found, Please try again!';
+       } catch (Throwable $e){
             $this->is_error = true;
-        }
+            // report($e);
+            return $this->errorMessage . $e;
+       } 
 
-        $user_id = Auth::user()->id;
+       try{
+            $status = DB::table('product_barcodes')->select('status')->where('id', '=', $barcode_id)->first();
 
-        if($status->status == 'ADDED'){
-            $this->errorMessage = 'Already Added, cannot be added again! ' . $status->status;
+            if(!$status->status){
+                $this->errorMessage = 'No barcode found, Please try again!';
+                $this->is_error = true;
+            }
+
+            $user_id = Auth::user()->id;
+
+            if($status->status == 'ADDED'){
+                $this->errorMessage = 'Already Added, cannot be added again! ' . $status->status;
+                $this->is_error = true;
+            }
+
+            // UPDATE BARCODE FROM THE LIST TO ADDED
+            $barcode = ProductBarcode::find($barcode_id);
+            $barcode->user_id =$user_id;
+            $barcode->status = 'ADDED';
+            $barcode->save();
+
+            if($status->status == 'PENDING'){
+                DB::table('product_stocks')->insert([
+                    'user_id' => $user_id,
+                    'product_id' => $product_id,
+                    'barcode_id' => $barcode_id,
+                    'order_number' => 0,
+                    'stocks' => 1,
+                    'remarks' => "Added Stocks From scan barcode {$date_created}"
+                ]);
+
+                $this->is_success = true;
+                return $this->successMessage = 'Barcode processed Successfully';
+            }
+
+       }catch(Throwable $e){
             $this->is_error = true;
-        }
-
-        // UPDATE BARCODE FROM THE LIST TO ADDED
-        $barcode = ProductBarcode::find($barcode_id);
-        $barcode->user_id =$user_id;
-        $barcode->status = 'ADDED';
-        $barcode->save();
-
-        if($status->status == 'PENDING'){
-            DB::table('product_stocks')->insert([
-                'user_id' => $user_id,
-                'product_id' => $product_id,
-                'order_number' => 0,
-                'stocks' => 1,
-                'remarks' => "Added Stocks From scan barcode {$date_created}"
-            ]);
-
-            $this->successMessage = 'Barcode processed Successfully';
-            $this->is_success = true;
-            // return response()->json(['message' => "Barcode processed successfully {$this->scannedBarcode}{$this->errorMessage}"]);
-        }
-
-        // $this->errorMessage = '';
-        // $this->successMessage = '';
+            // report($e);
+            return $this->errorMessage . $e;
+       }
         
     }
 

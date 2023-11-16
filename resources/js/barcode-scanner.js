@@ -45,8 +45,8 @@ document.addEventListener('livewire:init', () => {
                         console.log(result.codeResult.code);
     
                         scannedBarcode = result.codeResult.code;
-                        // Livewire.on('handleBarcode', scannedBarcode);
-                        // sendBarcodeToServer(scannedBarcode);
+
+                        
                         Livewire.dispatch('handleBarcode', { scannedBarcode: result.codeResult.code });
                         scanning = false; // Pause scanning
                         setTimeout(function() {
