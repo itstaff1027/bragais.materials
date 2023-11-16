@@ -4,6 +4,9 @@
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 {{ __('Products') }}
             </h2>
+            <a href="{{ route('list-barcodes') }}" class="space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                {{ __('Barcodes') }}
+            </a>
             <a href="{{ route('summary-outgoing') }}" class="space-x-8 sm:-my-px sm:ml-10 sm:flex">
                 {{ __('Summary') }}
             </a>

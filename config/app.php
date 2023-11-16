@@ -171,6 +171,7 @@ return [
         Barryvdh\DomPDF\ServiceProvider::class,
         Elibyy\TCPDF\ServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
+        Milon\Barcode\BarcodeServiceProvider::class,
 
     ])->toArray(),
 
@@ -190,6 +191,8 @@ return [
         // 'PDF' => Barryvdh\DomPDF\Facade::class,
         // 'PDF' => Elibyy\TCPDF\Facades\TCPDF::class
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
+        'DNS1D' => Milon\Barcode\Facades\DNS1DFacade::class,
+        'DNS2D' => Milon\Barcode\Facades\DNS2DFacade::class,
     ])->toArray(),
 
 ];

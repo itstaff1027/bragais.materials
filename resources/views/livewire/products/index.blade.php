@@ -63,14 +63,14 @@
                 </div>
                 <div class=" bg-white drop-shadow-2xl rounded-xl p-4 w-full md:w-1/2">
                     <div class="w-full h-full flex flex-col">
-                        <select wire:model='status' class="rounded-xl border-slate-500 m-2">
+                        {{-- <select wire:model='status' class="rounded-xl border-slate-500 m-2">
                             <option disabled>CHOOSE</option>
                             <option value="DELIVER">DELIVER</option>
                         </select>
                         <textarea type="text" wire:model='remarks' class="rounded-xl border-slate-500 m-2" placeholder="Remarks"></textarea>
                         <button type="submit" class="m-2 rounded-lg p-2 bg-emerald-300">
                             SUBMIT
-                        </button>
+                        </button> --}}
                     </div>
                 </div>
             </div>
@@ -139,6 +139,11 @@
                 <td>{{ $product->category }}</td>
                 <td>{{ $product->product_total_stocks }}</td>
                 <td>
+                    <a href="{{ route('generate-barcode-product', ['id' => $product->id]) }}">
+                        <button>
+                            <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M24 32C10.7 32 0 42.7 0 56V456c0 13.3 10.7 24 24 24H40c13.3 0 24-10.7 24-24V56c0-13.3-10.7-24-24-24H24zm88 0c-8.8 0-16 7.2-16 16V464c0 8.8 7.2 16 16 16s16-7.2 16-16V48c0-8.8-7.2-16-16-16zm72 0c-13.3 0-24 10.7-24 24V456c0 13.3 10.7 24 24 24h16c13.3 0 24-10.7 24-24V56c0-13.3-10.7-24-24-24H184zm96 0c-13.3 0-24 10.7-24 24V456c0 13.3 10.7 24 24 24h16c13.3 0 24-10.7 24-24V56c0-13.3-10.7-24-24-24H280zM448 56V456c0 13.3 10.7 24 24 24h16c13.3 0 24-10.7 24-24V56c0-13.3-10.7-24-24-24H472c-13.3 0-24 10.7-24 24zm-64-8V464c0 8.8 7.2 16 16 16s16-7.2 16-16V48c0-8.8-7.2-16-16-16s-16 7.2-16 16z"/></svg>
+                        </button>
+                    </a>
                     <button wire:click='addToCart({{ $product }})' class="text-emerald-500">
                         <svg class="fill-emerald-500" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 576 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M24 0C10.7 0 0 10.7 0 24S10.7 48 24 48H69.5c3.8 0 7.1 2.7 7.9 6.5l51.6 271c6.5 34 36.2 58.5 70.7 58.5H488c13.3 0 24-10.7 24-24s-10.7-24-24-24H199.7c-11.5 0-21.4-8.2-23.6-19.5L170.7 288H459.2c32.6 0 61.1-21.8 69.5-53.3l41-152.3C576.6 57 557.4 32 531.1 32H360V134.1l23-23c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-64 64c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l23 23V32H120.1C111 12.8 91.6 0 69.5 0H24zM176 512a48 48 0 1 0 0-96 48 48 0 1 0 0 96zm336-48a48 48 0 1 0 -96 0 48 48 0 1 0 96 0z"/></svg>
                     </button>
@@ -176,4 +181,7 @@
     <div class="p-3">
         {{ $products->links() }}
     </div>
+
+    <livewire:components.products.add-stock-barcode />
+    
 </div>

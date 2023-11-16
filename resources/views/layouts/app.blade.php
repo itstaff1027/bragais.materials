@@ -11,10 +11,11 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+    {{-- <meta name="csrf-token" content="{{ csrf_token() }}"> --}}
 
     <!-- Scripts -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-    {{-- <script src="https://cdn.tailwindcss.com"></script> --}}
+    @livewireStyles
 </head>
 
 <body class="font-sans antialiased">
@@ -35,7 +36,7 @@
             {{ $slot }}
         </main>
     </div>
-    <script src="{{ asset('js/app.js') }}"></script>
+    <script src="{{ asset('js/barcode-scanner.js') }}"></script>
     @livewireScripts
 </body>
 

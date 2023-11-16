@@ -6,13 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>{{ $title ?? 'Page Title' }}</title>
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-    {{-- <script src="{{ asset('js/app.js') }}"></script> --}}
+    <link href="{{ asset('css/products/styles.css') }}" rel="stylesheet">
 </head>
 
 <body>
     {{ $slot }}
-    @livewireScripts
 </body>
 
 </html>
