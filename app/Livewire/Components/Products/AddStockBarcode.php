@@ -2,12 +2,14 @@
 
 namespace App\Livewire\Components\Products;
 
+use Error;
+use Exception;
+use Throwable;
 use Livewire\Component;
 use Illuminate\Http\Request;
 use App\Models\ProductBarcode;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
-use Throwable;
 
 class AddStockBarcode extends Component
 {
@@ -30,19 +32,20 @@ class AddStockBarcode extends Component
 
             foreach ($barcodeArray as $value) {
                 if (!is_numeric($value)) {
-                    $this->errorMessage = "Unknown Barcode, Please try again!";
                     $this->is_error = true;
-                    // or any other logic you want to perform when a non-numeric value is found
-                    break; // exit the loop if a non-numeric value is found
+                    $this->errorMessage = "Unknown Barcode, Please try again!";
+                    return $this->errorMessasge;
+                    // throw new Error("Unknown Barcode, Please try again!");
                 }
             }
             
             // If the loop completes without encountering a non-numeric value, you can proceed with further checks or processing.
             if (!$this->errorMessage) {
                 if (count($barcodeArray) !== 3) {
-                    $this->errorMessage = "Unknown Barcode, Please try again!";
                     $this->is_error = true;
-                    // or any other logic you want to perform when the array doesn't have exactly 3 elements
+                    $this->errorMessage = "Unknown Barcode, Please try again!";
+                    return $this->errorMessasge;
+                    // throw new Error("Unknown Barcode, Please try again!");
                 }
             }
     
@@ -54,23 +57,35 @@ class AddStockBarcode extends Component
 
        } catch (Throwable $e){
             $this->is_error = true;
-            // report($e);
-            return $this->errorMessage . $e;
+            if ($e instanceof Exception) {
+                // Handle Exception objects
+                $this->errorMessage = $e->getMessage();
+            } elseif ($e instanceof Error) {
+                // Handle Error objects
+                // Replace this with your own error handling logic
+                $this->errorMessage = 'An error occurred';
+            }
+            // Re-throw the error to stop function execution
+            throw $e;
        } 
 
        try{
             $status = DB::table('product_barcodes')->select('status')->where('id', '=', $barcode_id)->first();
 
-            if(!$status->status){
-                $this->errorMessage = 'No barcode found, Please try again!';
+            if(!$status){
                 $this->is_error = true;
+                $this->errorMessage = 'No barcode found, Please try again!';
+                return $this->errorMessage;
             }
+            
 
             $user_id = Auth::user()->id;
 
             if($status->status == 'ADDED'){
-                $this->errorMessage = 'Already Added, cannot be added again! ' . $status->status;
                 $this->is_error = true;
+                $this->errorMessage = 'Already Added, cannot be added again! ' . $status->status;
+                return $this->errorMessage;
+                // throw new Error("Already Added, cannot be added again! {$status->status}");
             }
 
             // UPDATE BARCODE FROM THE LIST TO ADDED
@@ -95,8 +110,16 @@ class AddStockBarcode extends Component
 
        }catch(Throwable $e){
             $this->is_error = true;
-            // report($e);
-            return $this->errorMessage . $e;
+            if ($e instanceof Exception) {
+                // Handle Exception objects
+                $this->errorMessage = $e->getMessage();
+            } elseif ($e instanceof Error) {
+                // Handle Error objects
+                // Replace this with your own error handling logic
+                $this->errorMessage = 'An error occurred';
+            }
+            // Re-throw the error to stop function execution
+            throw $e;
        }
         
     }
