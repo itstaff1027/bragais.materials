@@ -1,5 +1,3 @@
-
-
 <table class="tables">
     <caption>
         <h1 class="font-bold text-2xl">Summary</h1>
@@ -144,7 +142,7 @@
 
                 <td class="bg-emerald-400">{{ $incomingStockSum }}</td>
                 <td class="bg-red-400">{{ $outgoingStockSum }}</td>
-                <td class="bg-blue-400">{{ $remainingStocks }}</td>
+                <td class="bg-blue-400" style="color: red; font-weight: bold; text-decoration: underline;">{{ $remainingStocks }}</td>
             </tr>
         @endforeach
     </tbody>
