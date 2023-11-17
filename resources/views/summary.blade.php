@@ -30,23 +30,45 @@
     </thead>
     <tbody>
         @foreach ($materials as $material)
-            <tr style="text-align: center;">
-                <td style="text-align: center; font-weight: bold;">{{ $material->name }} : {{ $material->size }}</td>
+            <tr class="border">
+                <td>{{ $material->name }} : {{ $material->size }}</td>
                 @php
                     $incomingStockSum = 0;
                     $outgoingStockSum = 0;
+                    $remainingStocks = 0;
                 @endphp
+
+                    {{-- This is to get the total remaining stocks so that it will not affect --}}
+                    {{-- the filter's computation --}}
+                @php
+                    foreach ($getMaterialStocks as $stock) {
+
+                        if ($stock->packaging_material_id == $material->id ) {
+                            $remainingStocks += $stock->total_stocks;
+                        }
+                    } 
+                @endphp
+
+                {{-- it will loop base on the date as well as the stocks --}}
+
                 @foreach ($dates as $date)
                     @php
                         $incomingStock = 0;
                         $outgoingStock = 0;
+                        
                         // OVERALL - SET ZERO
+                        // whtie
                         $total_white_ribbon_large = 0;
                         $total_white_ribbon_medium = 0;
+                        // brown
+                        $total_brown_ribbon_large = 0;
                         $total_brown_ribbon_medium = 0;
                         $total_brown_ribbon_small = 0;
                         $total_white_ribbon = 0;
                         $total_brown_ribbon = 0;
+                        // Deducted Ribbon
+                        $total_brown_ribbon_deducted = 0;
+                        $total_white_ribbon_deducted = 0;
 
                         // ITERATE OVER THE DATA:getTotalRibbon TO GET THE TOTAL AMOUNT OF OUTGOING MATERIALS IN 19 || 20
                         foreach ($getTotalRibbon as $total_ribbon){
@@ -64,6 +86,9 @@
                                         }
                                         else{
                                             if($total_ribbon->name == "BROWN_RIBBON"){
+                                                if($total_ribbon->heel_height >= 8 && $total_ribbon->heel_height <= 12){
+                                                    $total_brown_ribbon_large = $total_brown_ribbon_large + $total_ribbon->material_stocks;
+                                                }
                                                 if($total_ribbon->heel_height >= 5 && $total_ribbon->heel_height <= 6){
                                                     $total_brown_ribbon_medium = $total_brown_ribbon_medium + $total_ribbon->material_stocks;
                                                 }
@@ -76,22 +101,32 @@
                                             $total_brown_ribbon_small = $total_brown_ribbon_small + $total_ribbon->material_stocks;
                                         }
                                     }
+                                    if(!$total_ribbon->products_id){
+                                        if($total_ribbon->name == 'BROWN_RIBBON'){
+                                            $total_brown_ribbon_deducted += $total_ribbon->material_stocks;
+                                        }
+                                        if($total_ribbon->name == 'WHITE_RIBBON'){
+                                            $total_white_ribbon_deducted += $total_ribbon->material_stocks;
+                                        }
+                                        
+                                    }
                                 }
                             }
                             
                         }
-
+                        // Get the total stocks base on the date as well as the ribbons
                         foreach ($getMaterialStocks as $stock) {
+
                             if ($stock->packaging_material_id == $material->id && $stock->date == $date->date) {
                                 if ($stock->status == 'INCOMING') {
                                     $incomingStock += $stock->total_stocks;
                                 } 
                                 if ($stock->status == 'OUTGOING') {
                                     if($stock->packaging_material_id == 19){
-                                        $outgoingStock = number_format(($total_white_ribbon_large / 20) + ($total_white_ribbon_medium / 15), 2);
+                                        $outgoingStock = $total_white_ribbon_large + $total_white_ribbon_medium + $total_white_ribbon_deducted;
                                     }
                                     else if($stock->packaging_material_id == 20){
-                                        $outgoingStock = number_format(($total_brown_ribbon_small / 15) + ($total_brown_ribbon_medium / 20), 2);
+                                        $outgoingStock = $total_brown_ribbon_small + $total_brown_ribbon_medium + $total_brown_ribbon_deducted + $total_brown_ribbon_large;
                                     }
                                     else {
                                         $outgoingStock += $stock->total_stocks;
@@ -102,13 +137,13 @@
                         $incomingStockSum += $incomingStock;
                         $outgoingStockSum += $outgoingStock;
                     @endphp
-                    <td>{{ $incomingStock }}</td>
-                    <td class="bg-red-900 text-white">{{ $outgoingStock }}</td>
+                    <td class="bg-emerald-400">{{ $incomingStock }}</td>
+                    <td class="bg-red-400">{{ $outgoingStock }}</td>
                 @endforeach
 
-                <td class="bg-emerald-500 text-white">{{ $incomingStockSum }}</td>
-                <td class="bg-red-500 text-white">{{ $outgoingStockSum }}</td>
-                <td style="color: red; font-weight: bold; text-decoration: underline;">{{ $incomingStockSum + $outgoingStockSum }}</td>
+                <td class="bg-emerald-400">{{ $incomingStockSum }}</td>
+                <td class="bg-red-400">{{ $outgoingStockSum }}</td>
+                <td class="bg-blue-400">{{ $remainingStocks }}</td>
             </tr>
         @endforeach
     </tbody>
