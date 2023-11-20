@@ -50,8 +50,8 @@
     
     <div class="flex flex-col justify-center items-center" x-data="{ open: false }">
         <button x-on:click="open = ! open ">Scan and Add</button>
-        <div x-show="open">
-            <div class="h-52 w-72 m-4" id="barcode-scanner"></div>
+        <div class="h-52 w-72 m-4" x-show="open">
+            <div class="m-4" id="barcode-scanner"></div>
         </div>
     </div>
 

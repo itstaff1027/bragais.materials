@@ -34,7 +34,7 @@ class AddStockBarcode extends Component
                 if (!is_numeric($value)) {
                     $this->is_error = true;
                     $this->errorMessage = "Unknown Barcode, Please try again!";
-                    return $this->errorMessasge;
+                    return $this->errorMessage;
                     // throw new Error("Unknown Barcode, Please try again!");
                 }
             }
@@ -44,7 +44,7 @@ class AddStockBarcode extends Component
                 if (count($barcodeArray) !== 3) {
                     $this->is_error = true;
                     $this->errorMessage = "Unknown Barcode, Please try again!";
-                    return $this->errorMessasge;
+                    return $this->errorMessage;
                     // throw new Error("Unknown Barcode, Please try again!");
                 }
             }
