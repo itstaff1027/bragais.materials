@@ -5,8 +5,11 @@ use App\Livewire\Packaging\PerDay;
 use App\Livewire\Products\Barcode;
 use App\Livewire\Products\OnStock;
 use App\Exports\MaterialLogsExport;
+use App\Livewire\Products\SalesLog;
+use Illuminate\Support\Facades\Http;
 use App\Livewire\Packaging\AddStocks;
 use Illuminate\Support\Facades\Route;
+use App\Livewire\Products\ProductLogs;
 use App\Http\Controllers\PDFController;
 use App\Livewire\Packaging\DeductStocks;
 use App\Livewire\Packaging\MaterialLogs;
@@ -92,6 +95,8 @@ Route::middleware(['auth', 'verified'])->group( function () {
     Route::get('/products/complete_packaging/{id}', CompletePackaging::class)->name('complete-packaging');
     Route::get('/products/add-outgoing_products/{id}', OutgoingProducts::class)->name('outgoing-products');
 
+    Route::get('/products/product-logs', ProductLogs::class)->name('product-logs');
+
     Route::get('/products/outgoing/summary', summaryOutgoingProducts::class)->name('summary-outgoing');
 
     Route::get('/products/details/{id}', ProductDetails::class)->name('update-product');
@@ -100,7 +105,10 @@ Route::middleware(['auth', 'verified'])->group( function () {
 
     Route::get('/products/list-barcodes', Barcode::class)->name('list-barcodes');
 
+    Route::get('/products/sales-log', SalesLog::class)->name('sales-log');
+
     Route::post('/api/add-barcode', [AddStockBarcode::class, 'handleBarcode']);
+    
 
 });
 
