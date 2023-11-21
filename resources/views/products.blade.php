@@ -7,6 +7,12 @@
             <a href="{{ route('list-barcodes') }}" class="space-x-8 sm:-my-px sm:ml-10 sm:flex">
                 {{ __('Barcodes') }}
             </a>
+            <a href="{{ route('product-logs') }}" class="space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                {{ __('Product Logs') }}
+            </a>
+            <a href="{{ route('sales-logs') }}" class="space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                {{ __('Sales Logs') }}
+            </a>
             <a href="{{ route('summary-outgoing') }}" class="space-x-8 sm:-my-px sm:ml-10 sm:flex">
                 {{ __('Summary') }}
             </a>

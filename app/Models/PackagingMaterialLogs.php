@@ -11,7 +11,7 @@ class PackagingMaterialLogs extends Model
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-    protected $table = 'packaging_materials_logs';
+    protected $table = 'packaging_material_logs';
 
      /**
      * The attributes that are mass assignable.

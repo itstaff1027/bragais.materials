@@ -137,4 +137,36 @@
             </div>
         </div>
     </x-app-layout>
+        function exportTableToCSV(tableId, filename) {
+            const table = document.getElementById(tableId);
+            const rows = table.querySelectorAll('tbody tr');
+        
+            const csvData = [];
+            
+            // Get header
+            const headerRow = table.querySelector('thead tr');
+            const headerCols = Array.from(headerRow.children).map(col => col.innerText);
+            csvData.push(headerCols.join(','));
+        
+            // Get data rows
+            rows.forEach(row => {
+                const rowData = Array.from(row.children).map(col => col.innerText);
+                csvData.push(rowData.join(','));
+            });
+        
+            // Create CSV content
+            const csvContent = csvData.join('\n');
+            
+            // Create a Blob and create a download link
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = filename;
+        
+            // Append the link to the document and trigger a click to start the download
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+        </script>
 </div>

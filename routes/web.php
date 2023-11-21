@@ -95,7 +95,7 @@ Route::middleware(['auth', 'verified'])->group( function () {
     Route::get('/products/complete_packaging/{id}', CompletePackaging::class)->name('complete-packaging');
     Route::get('/products/add-outgoing_products/{id}', OutgoingProducts::class)->name('outgoing-products');
 
-    // Route::get('/products/product-logs', ProductLogs::class)->name('product-logs');
+    Route::get('/products/product-logs', ProductLogs::class)->name('product-logs');
 
     Route::get('/products/outgoing/summary', summaryOutgoingProducts::class)->name('summary-outgoing');
 
@@ -105,7 +105,7 @@ Route::middleware(['auth', 'verified'])->group( function () {
 
     Route::get('/products/list-barcodes', Barcode::class)->name('list-barcodes');
 
-    Route::get('/products/sales-log', SalesLog::class)->name('sales-log');
+    Route::get('/products/sales-log', SalesLog::class)->name('sales-logs');
 
     Route::post('/api/add-barcode', [AddStockBarcode::class, 'handleBarcode']);
     

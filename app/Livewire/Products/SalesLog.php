@@ -21,19 +21,44 @@ class SalesLog extends Component
     public $paginatedItems;
     private $product_ids;
     private $order_number;
+    public $date_today;
 
     public function mount(){
-
+        $date_today = Date('Y-m-d');
+        // dd($date_today);
         try {
             // Make the API request
             // $response = Http::withoutVerifying()->get($apiEndpoint);
-            $response = Http::connectTimeout(3)->withoutVerifying()->get('https://shoecietyinc.com/api/sales/saleslog.php');
+            $response = Http::connectTimeout(3)->withoutVerifying()->get("https://shoecietyinc.com/api/sales/saleslog.php?dateToday={$date_today}");
             // Check if the request was successful (status code 2xx)
             if ($response->ok()) {
                 // Get the JSON response body as an associative array
                 $data = $response->body(); // Use $response->json() directly
                 $this->datas = json_decode($data, true);
+
                 
+            } else {
+                // Handle non-successful response, e.g., 4xx or 5xx status codes
+                $this->datas = []; // Set $this->datas to an empty array or handle the error as needed
+            }
+        } catch (\Exception $e) {
+            // Handle exceptions, e.g., connection errors
+            $this->datas = []; // Set $this->datas to an empty array or handle the error as needed
+        }
+    }
+
+    public function getSalesLogs(){
+        // $date_today = $this->date_today;
+        // dd($this->date_today);
+        try {
+            // Make the API request
+            // $response = Http::withoutVerifying()->get($apiEndpoint);
+            $response = Http::connectTimeout(3)->withoutVerifying()->get("https://shoecietyinc.com/api/sales/saleslog.php?dateToday={$this->date_today}");
+            // Check if the request was successful (status code 2xx)
+            if ($response->ok()) {
+                // Get the JSON response body as an associative array
+                $data = $response->body(); // Use $response->json() directly
+                $this->datas = json_decode($data, true);
             } else {
                 // Handle non-successful response, e.g., 4xx or 5xx status codes
                 $this->datas = []; // Set $this->datas to an empty array or handle the error as needed
@@ -47,16 +72,21 @@ class SalesLog extends Component
     public function addToCompletePackaging($orderNo, $orderList){
         $this->order_number = $orderNo;
 
-        $order_numberExist = PackagingMaterialLogs::where('order_number', '=', $this->order_number);
-// dd($order_numberExist);
-        // if($order_numberExist){
-        //     throw new Error('Already Added!');
-        // }
+        $order_numberExist = PackagingMaterialLogs::where('order_number', intval($orderNo))->exists();
+
+        if ($order_numberExist) {
+            // Handle the case where the order number does not exist
+            throw new Error('Already Added!');
+        }
 
         $products = $this->getProductIDs($orderList);
 
         $user_id = Auth::user()->id;
 
+        if(!$products){
+            throw new Error('Unknow Products');
+        }
+        
         foreach($products as $product){
             DB::table('product_stocks')->insert([
                 'user_id' => $user_id,
@@ -164,9 +194,22 @@ class SalesLog extends Component
             $parts = explode(' ', $list);
             // dd($parts);
             // Extract the numeric value from the last part
-            $lastPart = end($parts);
-            preg_match('/\d+/', $lastPart, $matches);
-            $numericValue = isset($matches[0]) ? $matches[0] : null;
+            if(count($parts) == 4){
+                $lastPart = end($parts);
+                preg_match('/\d+/', $lastPart, $matches);
+                $numericValue = isset($matches[0]) ? $matches[0] : null;
+            }
+            else{
+                $numericValue = 0;
+            }
+            
+            // dd($numericValue);
+            $checkProduct = DB::table('products')->where('model', '=', "{$parts[0]}")->where('color', '=', "{$parts[1]}")
+            ->exists();
+            
+            if(!$checkProduct){
+                throw new Error("Unknow Product! Please Refresh the page! {$list}");
+            }
 
             // Store the disperse orders in an associative array
             $disperseOrders = array(
@@ -175,7 +218,7 @@ class SalesLog extends Component
                 'size' => $parts[2],         // assuming '7' is the size
                 'heel_height' => $numericValue, // assuming '6' is the numeric value from the last part
             );
-
+            // dd($disperseOrders);
             $product = DB::table('products')->where('model', '=', "{$disperseOrders['model']}")
             ->where('color', '=', "{$disperseOrders['color']}")
             ->where('size', '=', $disperseOrders['size'])
