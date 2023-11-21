@@ -3,6 +3,7 @@
 use App\Livewire\Counter;
 use App\Livewire\Packaging\PerDay;
 use App\Livewire\Products\Barcode;
+use App\Livewire\Products\NewModel as NewProduct;
 use App\Livewire\Products\OnStock;
 use App\Exports\MaterialLogsExport;
 use App\Livewire\Products\SalesLog;
@@ -91,6 +92,8 @@ Route::middleware(['auth', 'verified'])->group( function () {
     Route::get('/products', function () {
         return view('products');
     })->name('products');
+
+    Route::get('/products/add_new-model', NewProduct::class)->name('product_add-model');
 
     Route::get('/products/complete_packaging/{id}', CompletePackaging::class)->name('complete-packaging');
     Route::get('/products/add-outgoing_products/{id}', OutgoingProducts::class)->name('outgoing-products');

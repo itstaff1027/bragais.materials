@@ -9,7 +9,7 @@
                 </button>
             </div>
             <div class="flex justify-between">
-                {{-- <a href="{{ route('add-new-material') }}" class="m-2">
+                <a href="{{ route('product_add-model') }}" class="m-2">
                     <button>
                         <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"
                             class="fill-green-400">
@@ -20,7 +20,7 @@
                         </svg>
                     </button>
                 </a>
-                <a href="{{ route('product-development-progress') }}" class="m-2">
+                {{-- <a href="{{ route('product-development-progress') }}" class="m-2">
                     <button>
                         <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><style>svg{fill:#fff957}</style><path d="M448 160H320V128H448v32zM48 64C21.5 64 0 85.5 0 112v64c0 26.5 21.5 48 48 48H464c26.5 0 48-21.5 48-48V112c0-26.5-21.5-48-48-48H48zM448 352v32H192V352H448zM48 288c-26.5 0-48 21.5-48 48v64c0 26.5 21.5 48 48 48H464c26.5 0 48-21.5 48-48V336c0-26.5-21.5-48-48-48H48z"/></svg>
                     </button>
