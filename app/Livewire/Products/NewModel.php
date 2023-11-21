@@ -51,7 +51,6 @@ class NewModel extends Component
                 'heel_height' => $this->product_heel_height,
                 'category' => $this->product_category,
                 'price' => $this->product_price,
-                'stocks' => 0,
                 'BatchNo' => 0
             ]);
         }
