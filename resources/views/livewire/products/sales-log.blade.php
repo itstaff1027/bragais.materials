@@ -46,7 +46,9 @@
                                             @endforeach
                                         </td>
                                         <td>
-                                            <form wire:submit.prevent="addToCompletePackaging('{{ $order['OrderNo'] }}', '{{ $order['OrderList'] }}')" >
+                                            <form wire:submit.prevent="addToCompletePackaging('{{ $order['OrderNo'] }}', '{{ $order['OrderList'] }}')" 
+                                            wire:confirm="Are you sure you want to add this to complete packaging?"
+                                            >
                                                 @csrf
                                                 <button type="submit">
                                                     <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"

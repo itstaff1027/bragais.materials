@@ -207,36 +207,34 @@ class SalesLog extends Component
             $checkProduct = DB::table('products')->where('model', '=', "{$parts[0]}")->where('color', '=', "{$parts[1]}")
             ->exists();
             
-            if(!$checkProduct){
-                throw new Error("Unknow Product! Please Refresh the page! {$list}");
+            if($checkProduct){
+                // Store the disperse orders in an associative array
+                $disperseOrders = array(
+                    'model' => $parts[0],        // assuming 'KEVIN-V2' is the model
+                    'color' => $parts[1],        // assuming 'NUDE-GLOSSY' is the color
+                    'size' => $parts[2],         // assuming '7' is the size
+                    'heel_height' => $numericValue, // assuming '6' is the numeric value from the last part
+                );
+                // dd($disperseOrders);
+                $product = DB::table('products')->where('model', '=', "{$disperseOrders['model']}")
+                ->where('color', '=', "{$disperseOrders['color']}")
+                ->where('size', '=', $disperseOrders['size'])
+                ->where('heel_height', '=', $disperseOrders['heel_height'])
+                ->first();
+            
+                // dd($product);
+
+                // Append the current order to the results array
+                $disperseOrdersArray[] = [
+                    'id' => $product->id,
+                    'product_sku' => $product->product_sku,
+                    'model' => $product->model,        
+                    'color' => $product->color,        
+                    'size' => $product->size,         
+                    'heel_height' => $product->heel_height,
+                    'category' => $product->category
+                ];
             }
-
-            // Store the disperse orders in an associative array
-            $disperseOrders = array(
-                'model' => $parts[0],        // assuming 'KEVIN-V2' is the model
-                'color' => $parts[1],        // assuming 'NUDE-GLOSSY' is the color
-                'size' => $parts[2],         // assuming '7' is the size
-                'heel_height' => $numericValue, // assuming '6' is the numeric value from the last part
-            );
-            // dd($disperseOrders);
-            $product = DB::table('products')->where('model', '=', "{$disperseOrders['model']}")
-            ->where('color', '=', "{$disperseOrders['color']}")
-            ->where('size', '=', $disperseOrders['size'])
-            ->where('heel_height', '=', $disperseOrders['heel_height'])
-            ->first();
-        
-            // dd($product);
-
-            // Append the current order to the results array
-            $disperseOrdersArray[] = [
-                'id' => $product->id,
-                'product_sku' => $product->product_sku,
-                'model' => $product->model,        
-                'color' => $product->color,        
-                'size' => $product->size,         
-                'heel_height' => $product->heel_height,
-                'category' => $product->category
-            ];
         }
 
         return $disperseOrdersArray;
