@@ -31,7 +31,7 @@
                         </div>
                         @php
                             $size_us = ['5', '6', '7', '8', '9', '10', '11', '12'];
-                            $size_euro = ['36', '37', '38', '39', '40', '41', '42', '43', '44', '45'];
+                            $size_euro = ['35', '36', '37', '38', '39', '40', '41', '42', '43', '44', '45'];
                         @endphp
                         <table class="table-auto w-full text-center divide-y-2 border-2 ">
                             <caption>
@@ -42,13 +42,16 @@
                                     <th>DATE : {{ $today }}</th>
                                 </tr>
                                 <tr class=" border-2 ">
+                                    <th>Closed Sale Date</th>
+                                    <th>Released Date</th>
                                     <th>Design</th>
                                     <th>Color</th>
-                                    <th>Heel Height</th>
                                     <th colspan="8" class="border-2">Size</th>
+                                    <th>Heel Height</th>
                                     <th>Quantity</th>
                                 </tr>
                                 <tr>
+                                    <th></th>
                                     <th></th>
                                     <th></th>
                                     <th></th>
@@ -56,18 +59,20 @@
                                         <th class=" border-2 ">{{ $sizes }}</th>
                                     @endforeach
                                     <th></th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($quantitiesUS as $key => $sizes)
                                     @php
-                                        list($model, $color, $heelHeight) = explode('-', $key);
+                                        list($model, $color, $heelHeight, $closedSaleDate) = explode(',', $key);
                                         $totalQuantityUS = 0;
                                     @endphp
                                     <tr>
+                                        <th>{{ $closedSaleDate }}</th>
+                                        <th>{{ $today }}</th>
                                         <td>{{ $model }}</td>
                                         <td>{{ $color }}</td>
-                                        <td>{{ $heelHeight }}</td>
                                         @foreach ($size_us as $size)
                                             <td class=" border-2 ">
                                                 @if(isset($sizes[$size]))
@@ -80,6 +85,7 @@
                                                 @endif
                                             </td>
                                         @endforeach
+                                        <td>{{ $heelHeight }}</td>
                                         <td>{{ $totalQuantityUS }}</td>
                                     </tr>
                                 @endforeach
@@ -89,13 +95,16 @@
                         <table class="table-auto w-full text-center divide-y-2 border-2 ">
                             <thead>
                                 <tr class=" border-2 ">
+                                    <th>Closed Sale Date</th>
+                                    <th>Released Date</th>
                                     <th>Design</th>
                                     <th>Color</th>
+                                    <th colspan="11" class="border-2">Size</th>
                                     <th>Heel Height</th>
-                                    <th colspan="10" class="border-2">Size</th>
                                     <th>Quantity</th>
                                 </tr>
                                 <tr>
+                                    <th></th>
                                     <th></th>
                                     <th></th>
                                     <th></th>
@@ -103,18 +112,20 @@
                                         <th class=" border-2 ">{{ $sizes }}</th>
                                     @endforeach
                                     <th></th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($quantitiesEURO as $key => $sizes)
                                     @php
-                                        list($model, $color, $heelHeight) = explode('-', $key);
+                                        list($model, $color, $heelHeight, $closedSaleDate) = explode(',', $key);
                                         $totalQuantityEURO = 0;
                                     @endphp
                                     <tr>
+                                        <th>{{ $closedSaleDate }}</th>
+                                        <th>{{ $today }}</th>
                                         <td>{{ $model }}</td>
                                         <td>{{ $color }}</td>
-                                        <td>{{ $heelHeight }}</td>
                                         @foreach ($size_euro as $size)
                                             <td class=" border-2 ">
                                                 @if(isset($sizes[$size]))
@@ -127,6 +138,7 @@
                                                 @endif
                                             </td>
                                         @endforeach
+                                        <td>{{ $heelHeight }}</td>
                                         <td>{{ $totalQuantityEURO }}</td>
                                     </tr>
                                 @endforeach
@@ -137,36 +149,4 @@
             </div>
         </div>
     </x-app-layout>
-        function exportTableToCSV(tableId, filename) {
-            const table = document.getElementById(tableId);
-            const rows = table.querySelectorAll('tbody tr');
-        
-            const csvData = [];
-            
-            // Get header
-            const headerRow = table.querySelector('thead tr');
-            const headerCols = Array.from(headerRow.children).map(col => col.innerText);
-            csvData.push(headerCols.join(','));
-        
-            // Get data rows
-            rows.forEach(row => {
-                const rowData = Array.from(row.children).map(col => col.innerText);
-                csvData.push(rowData.join(','));
-            });
-        
-            // Create CSV content
-            const csvContent = csvData.join('\n');
-            
-            // Create a Blob and create a download link
-            const blob = new Blob([csvContent], { type: 'text/csv' });
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = filename;
-        
-            // Append the link to the document and trigger a click to start the download
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
-        </script>
 </div>

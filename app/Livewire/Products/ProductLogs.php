@@ -14,7 +14,7 @@ class ProductLogs extends Component
         ->select(
             'product_stocks.barcode_id',
             'product_stocks.order_number',
-            'product_stocks.stocks',
+            DB::raw('SUM(product_stocks.stocks) as stocks'),
             'product_stocks.status',
             'products.model',
             'products.color',
@@ -25,7 +25,6 @@ class ProductLogs extends Component
         ->groupBy(
             'product_stocks.barcode_id',
             'product_stocks.order_number',
-            'product_stocks.stocks',
             'product_stocks.status',
             'products.model',
             'products.color',

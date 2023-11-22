@@ -261,6 +261,33 @@ class SalesLog extends Component
         return $computedDeduction;
     }
 
+    public function addDeliveredOrders($orderNumber, $orderLists, $closedSaleDate){
+
+        // dd($closedSaleDate);
+
+        $order_numberExist = DB::table('outgoing_product_logs')->where('order_number', intval($orderNumber))->exists();
+
+        if ($order_numberExist) {
+            // Handle the case where the order number does not exist
+            throw new Error('Already Added!');
+        }
+
+        $products = $this->getProductIDs($orderLists);
+
+        foreach($products as $product){
+            DB::table('outgoing_product_logs')->insert([
+                'product_id' => $product['id'],
+                'order_number' => $orderNumber,
+                'quantity' => 1,
+                'status' => 'DELIVERED',
+                'closed_sale_date' => $closedSaleDate
+            ]);
+        }
+
+        return redirect('/products');
+
+    }
+
     public function render()
     {
 

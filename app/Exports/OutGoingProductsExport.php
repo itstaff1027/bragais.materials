@@ -56,16 +56,16 @@ class OutGoingProductsExport implements FromView, ShouldAutoSize, WithStyles
         // $countDates = count($this->dates);
         
         // Apply background color to specific cells
-        $sheet->getStyle('A1:O1')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('FF00FF'); // Set header row background color to Light Salmon
+        $sheet->getStyle('A1:Q1')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('FF00FF'); // Set header row background color to Light Salmon
         
         // // Apply background color to the first column (assuming it's the date column)
-        $sheet->getStyle('A2:O2')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('FF00FF'); // Set date column background color to Yellow
+        $sheet->getStyle('A2:Q2')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('FF00FF'); // Set date column background color to Yellow
 
         // // Center the text in row 1 (header row)
-        $sheet->getStyle('A1:O1')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+        $sheet->getStyle('A1:Q1')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
         
         // // Center the text in row 2
-        $sheet->getStyle('A2:O2')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+        $sheet->getStyle('A2:Q2')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
         // $colors = ['00FF00', 'FF0000', '0000FF'];
         
         return [
@@ -95,23 +95,30 @@ class OutGoingProductsExport implements FromView, ShouldAutoSize, WithStyles
             ->whereDate(DB::raw('DATE(created_at)'), 'LIKE', '%' . $this->filter_date . '%')
             ->join('products', 'products.id', '=', 'outgoing_product_logs.product_id')
             ->select(
+                'outgoing_product_logs.closed_sale_date',
                 'products.model',
                 'products.color',
                 'products.heel_height',
-                'products.size',
-                'outgoing_product_logs.quantity as total_quantity'
+                'products.size',    
+                DB::raw('SUM(outgoing_product_logs.quantity) as total_quantity')
             )
-            ->groupBy('products.model', 'products.color', 'products.heel_height', 'products.size', 'outgoing_product_logs.quantity')
+            ->groupBy(
+                'outgoing_product_logs.closed_sale_date', 
+                'products.model', 
+                'products.color', 
+                'products.heel_height', 
+                'products.size',
+            )
             ->get();
             
-            // dd($products);
+        // dd($products);
         // Prepare an associative array to store quantities based on model, color, heel height, and size
         $quantitiesUS = [];
         $quantitiesEURO = [];
 
         foreach ($products as $product) {
             if($product->size >= 5 && $product->size <= 12){
-                $key = "{$product->model},{$product->color},{$product->heel_height}";
+                $key = "{$product->model},{$product->color},{$product->heel_height},{$product->closed_sale_date}";
                 $size = $product->size;
 
                 if (!isset($quantitiesUS[$key])) {
@@ -121,7 +128,7 @@ class OutGoingProductsExport implements FromView, ShouldAutoSize, WithStyles
                 $quantitiesUS[$key][$size] = $product->total_quantity;
             }
             if($product->size >= 35 && $product->size <= 45){
-                $key = "{$product->model}-{$product->color}-{$product->heel_height}";
+                $key = "{$product->model},{$product->color},{$product->heel_height},{$product->closed_sale_date}";
                 $size = $product->size;
 
                 if (!isset($quantitiesEURO[$key])) {

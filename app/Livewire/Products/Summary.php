@@ -41,23 +41,30 @@ class Summary extends Component
             ->whereDate(DB::raw('DATE(created_at)'), 'LIKE', '%' . $this->filter_date . '%')
             ->join('products', 'products.id', '=', 'outgoing_product_logs.product_id')
             ->select(
+                'outgoing_product_logs.closed_sale_date',
                 'products.model',
                 'products.color',
                 'products.heel_height',
-                'products.size',
-                'outgoing_product_logs.quantity as total_quantity'
+                'products.size',    
+                DB::raw('SUM(outgoing_product_logs.quantity) as total_quantity')
             )
-            ->groupBy('products.model', 'products.color', 'products.heel_height', 'products.size', 'outgoing_product_logs.quantity')
+            ->groupBy(
+                'outgoing_product_logs.closed_sale_date', 
+                'products.model', 
+                'products.color', 
+                'products.heel_height', 
+                'products.size',
+            )
             ->get();
             
-            // dd($products);
+        // dd($products);
         // Prepare an associative array to store quantities based on model, color, heel height, and size
         $quantitiesUS = [];
         $quantitiesEURO = [];
 
         foreach ($products as $product) {
             if($product->size >= 5 && $product->size <= 12){
-                $key = "{$product->model}-{$product->color}-{$product->heel_height}";
+                $key = "{$product->model},{$product->color},{$product->heel_height},{$product->closed_sale_date}";
                 $size = $product->size;
 
                 if (!isset($quantitiesUS[$key])) {
@@ -67,7 +74,7 @@ class Summary extends Component
                 $quantitiesUS[$key][$size] = $product->total_quantity;
             }
             if($product->size >= 35 && $product->size <= 45){
-                $key = "{$product->model}-{$product->color}-{$product->heel_height}";
+                $key = "{$product->model},{$product->color},{$product->heel_height},{$product->closed_sale_date}";
                 $size = $product->size;
 
                 if (!isset($quantitiesEURO[$key])) {
