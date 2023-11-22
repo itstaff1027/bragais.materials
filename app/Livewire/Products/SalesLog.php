@@ -69,8 +69,16 @@ class SalesLog extends Component
         }
     }
 
-    public function addToCompletePackaging($orderNo, $orderList){
+    public function addToCompletePackaging($orderNo, $orderList, $packagingType){
         $this->order_number = $orderNo;
+
+        if($packagingType == 'DUSTBAG ONLY'){
+            throw new Error('This order is Dustbag Only!');
+        }
+
+        if($packagingType == 'NO PACKAGING'){
+            throw new Error('This order is NO PACKAGING!');
+        }
 
         $order_numberExist = PackagingMaterialLogs::where('order_number', intval($orderNo))->exists();
 

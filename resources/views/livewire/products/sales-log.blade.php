@@ -27,6 +27,7 @@
                                         <th>Order Type</th>
                                         <th>Sale</th>
                                         <th>Order Lists</th>
+                                        <th>Package</th>
                                         {{-- <th>Released Stocks</th> --}}
                                         <th>Action</th>
                                     </tr>
@@ -45,8 +46,9 @@
                                                 <div>{{ $list }}</div>
                                             @endforeach
                                         </td>
+                                        <td>{{ $order['Packaging'] }}</td>
                                         <td>
-                                            <form wire:submit.prevent="addToCompletePackaging('{{ $order['OrderNo'] }}', '{{ $order['OrderList'] }}')" 
+                                            <form wire:submit.prevent="addToCompletePackaging('{{ $order['OrderNo'] }}', '{{ $order['OrderList'] }}', '{{ $order['Packaging'] }}')" 
                                             wire:confirm="Are you sure you want to add this to complete packaging?"
                                             >
                                                 @csrf
