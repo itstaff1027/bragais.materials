@@ -15,10 +15,12 @@
         </tr>
         <tr>
             <th style="text-align: center; font-weight: bold;">DATE : {{ $today }}</th>
+            <th style="text-align: center; font-weight: bold; color: red; text-decoration: underline;">Total Quantity : {{ $totalQuantity }}</th>
         </tr>
         <tr class=" border-2 ">
             <th style="text-align: center; font-weight: bold;">Closed Sale Date</th>
             <th style="text-align: center; font-weight: bold;">Released Date</th>
+            <th style="text-align: center; font-weight: bold;">Order Number</th>
             <th style="text-align: center; font-weight: bold;">Design</th>
             <th style="text-align: center; font-weight: bold;">Color</th>
             <th colspan="8" style="text-align: center; font-weight: bold;">Size</th> 
@@ -29,6 +31,7 @@
             <th style="text-align: center; font-weight: bold;">Quantity</th>
         </tr>
         <tr>
+            <th></th>
             <th></th>
             <th></th>
             <th></th>
@@ -46,12 +49,13 @@
     <tbody>
         @foreach ($quantitiesUS as $key => $sizes)
             @php
-                list($model, $color, $heelHeight, $closedSaleDate) = explode(',', $key);
+                list($model, $color, $heelHeight, $closedSaleDate, $orderNumber) = explode(',', $key);
                 $totalQuantityUS = 0;
             @endphp
             <tr>
                 <td style="text-align: center; font-weight: bold;">{{ $closedSaleDate }}</td>
                 <td style="text-align: center; font-weight: bold;">{{ $today }}</td>
+                <td style="text-align: center; font-weight: bold;">{{ $orderNumber }}</td>
                 <td style="text-align: center; font-weight: bold;">{{ $model }}</td>
                 <td style="text-align: center; font-weight: bold;">{{ $color }}</td>
                 @foreach ($size_us as $size)
@@ -81,6 +85,7 @@
         <tr class=" border-2 ">
             <th style="text-align: center; font-weight: bold;">Closed Sale Date</th>
             <th style="text-align: center; font-weight: bold;">Released Date</th>
+            <th style="text-align: center; font-weight: bold;">Order Number</th>
             <th style="text-align: center; font-weight: bold;">Design</th>
             <th style="text-align: center; font-weight: bold;">Color</th>
             <th colspan="11" style="text-align: center; font-weight: bold;">Size</th>
@@ -88,6 +93,7 @@
             <th style="text-align: center; font-weight: bold;">Quantity</th>
         </tr>
         <tr>
+            <th></th>
             <th></th>
             <th></th>
             <th></th>
@@ -102,12 +108,13 @@
     <tbody>
         @foreach ($quantitiesEURO as $key => $sizes)
             @php
-                list($model, $color, $heelHeight, $closedSaleDate) = explode(',', $key);
+                list($model, $color, $heelHeight, $closedSaleDate, $orderNumber) = explode(',', $key);
                 $totalQuantityEURO = 0;
             @endphp
             <tr>
                 <td style="text-align: center; font-weight: bold;">{{ $closedSaleDate }}</td>
                 <td style="text-align: center; font-weight: bold;">{{ $today }}</td>
+                <td style="text-align: center; font-weight: bold;">{{ $orderNumber }}</td>
                 <td style="text-align: center; font-weight: bold;">{{ $model }}</td>
                 <td style="text-align: center; font-weight: bold;">{{ $color }}</td>
                 @foreach ($size_euro as $size)

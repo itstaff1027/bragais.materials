@@ -69,8 +69,12 @@ class SalesLog extends Component
         }
     }
 
-    public function addToCompletePackaging($orderNo, $orderList, $packagingType){
+    public function addToCompletePackaging($orderNo, $orderList, $packagingType, $sellType){
         $this->order_number = $orderNo;
+
+        // if($sellType == 'PULLOUT'){
+        //     throw new Error("This order Type cannot be added ! {$sellType}");
+        // }
 
         if($packagingType == 'DUSTBAG ONLY'){
             throw new Error('This order is Dustbag Only!');
@@ -291,8 +295,6 @@ class SalesLog extends Component
                 'closed_sale_date' => $closedSaleDate
             ]);
         }
-
-        return redirect('/products');
 
     }
 

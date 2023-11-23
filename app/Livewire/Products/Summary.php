@@ -42,6 +42,7 @@ class Summary extends Component
             ->join('products', 'products.id', '=', 'outgoing_product_logs.product_id')
             ->select(
                 'outgoing_product_logs.closed_sale_date',
+                'outgoing_product_logs.order_number',
                 'products.model',
                 'products.color',
                 'products.heel_height',
@@ -50,6 +51,7 @@ class Summary extends Component
             )
             ->groupBy(
                 'outgoing_product_logs.closed_sale_date', 
+                'outgoing_product_logs.order_number',
                 'products.model', 
                 'products.color', 
                 'products.heel_height', 
@@ -61,10 +63,12 @@ class Summary extends Component
         // Prepare an associative array to store quantities based on model, color, heel height, and size
         $quantitiesUS = [];
         $quantitiesEURO = [];
+        $totalQuantity = 0;
 
         foreach ($products as $product) {
+            $totalQuantity++;
             if($product->size >= 5 && $product->size <= 12){
-                $key = "{$product->model},{$product->color},{$product->heel_height},{$product->closed_sale_date}";
+                $key = "{$product->model},{$product->color},{$product->heel_height},{$product->closed_sale_date},{$product->order_number}";
                 $size = $product->size;
 
                 if (!isset($quantitiesUS[$key])) {
@@ -74,7 +78,7 @@ class Summary extends Component
                 $quantitiesUS[$key][$size] = $product->total_quantity;
             }
             if($product->size >= 35 && $product->size <= 45){
-                $key = "{$product->model},{$product->color},{$product->heel_height},{$product->closed_sale_date}";
+                $key = "{$product->model},{$product->color},{$product->heel_height},{$product->closed_sale_date},{$product->order_number}";
                 $size = $product->size;
 
                 if (!isset($quantitiesEURO[$key])) {
@@ -86,6 +90,6 @@ class Summary extends Component
             
         }
 
-        return view('livewire.products.summary', compact('today', 'quantitiesUS', 'quantitiesEURO'));
+        return view('livewire.products.summary', compact('today', 'quantitiesUS', 'quantitiesEURO', 'totalQuantity'));
     }
 }

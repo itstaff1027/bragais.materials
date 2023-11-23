@@ -56,16 +56,16 @@ class OutGoingProductsExport implements FromView, ShouldAutoSize, WithStyles
         // $countDates = count($this->dates);
         
         // Apply background color to specific cells
-        $sheet->getStyle('A1:Q1')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('FF00FF'); // Set header row background color to Light Salmon
+        $sheet->getStyle('A1:R1')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('FF00FF'); // Set header row background color to Light Salmon
         
         // // Apply background color to the first column (assuming it's the date column)
-        $sheet->getStyle('A2:Q2')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('FF00FF'); // Set date column background color to Yellow
+        $sheet->getStyle('A2:R2')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('FF00FF'); // Set date column background color to Yellow
 
         // // Center the text in row 1 (header row)
-        $sheet->getStyle('A1:Q1')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+        $sheet->getStyle('A1:R1')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
         
         // // Center the text in row 2
-        $sheet->getStyle('A2:Q2')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+        $sheet->getStyle('A2:R2')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
         // $colors = ['00FF00', 'FF0000', '0000FF'];
         
         return [
@@ -96,6 +96,7 @@ class OutGoingProductsExport implements FromView, ShouldAutoSize, WithStyles
             ->join('products', 'products.id', '=', 'outgoing_product_logs.product_id')
             ->select(
                 'outgoing_product_logs.closed_sale_date',
+                'outgoing_product_logs.order_number',
                 'products.model',
                 'products.color',
                 'products.heel_height',
@@ -104,6 +105,7 @@ class OutGoingProductsExport implements FromView, ShouldAutoSize, WithStyles
             )
             ->groupBy(
                 'outgoing_product_logs.closed_sale_date', 
+                'outgoing_product_logs.order_number',
                 'products.model', 
                 'products.color', 
                 'products.heel_height', 
@@ -115,10 +117,12 @@ class OutGoingProductsExport implements FromView, ShouldAutoSize, WithStyles
         // Prepare an associative array to store quantities based on model, color, heel height, and size
         $quantitiesUS = [];
         $quantitiesEURO = [];
+        $totalQuantity = 0;
 
         foreach ($products as $product) {
+            $totalQuantity++;
             if($product->size >= 5 && $product->size <= 12){
-                $key = "{$product->model},{$product->color},{$product->heel_height},{$product->closed_sale_date}";
+                $key = "{$product->model},{$product->color},{$product->heel_height},{$product->closed_sale_date},{$product->order_number}";
                 $size = $product->size;
 
                 if (!isset($quantitiesUS[$key])) {
@@ -128,7 +132,7 @@ class OutGoingProductsExport implements FromView, ShouldAutoSize, WithStyles
                 $quantitiesUS[$key][$size] = $product->total_quantity;
             }
             if($product->size >= 35 && $product->size <= 45){
-                $key = "{$product->model},{$product->color},{$product->heel_height},{$product->closed_sale_date}";
+                $key = "{$product->model},{$product->color},{$product->heel_height},{$product->closed_sale_date},{$product->order_number}";
                 $size = $product->size;
 
                 if (!isset($quantitiesEURO[$key])) {
@@ -140,7 +144,7 @@ class OutGoingProductsExport implements FromView, ShouldAutoSize, WithStyles
             
         }
         $test =0;
-        return view('export.products.summary', compact('today', 'quantitiesUS', 'quantitiesEURO'));
+        return view('export.products.summary', compact('today', 'quantitiesUS', 'quantitiesEURO', 'totalQuantity'));
     }
 
 }

@@ -48,7 +48,7 @@
                                         </td>
                                         <td>{{ $order['Packaging'] }}</td>
                                         <td>
-                                            <form wire:submit.prevent="addToCompletePackaging('{{ $order['OrderNo'] }}', '{{ $order['OrderList'] }}', '{{ $order['Packaging'] }}')" 
+                                            <form wire:submit.prevent="addToCompletePackaging('{{ $order['OrderNo'] }}', '{{ $order['OrderList'] }}', '{{ $order['Packaging'] }}', '{{ $order['Sale'] }}')" 
                                             wire:confirm="Are you sure you want to add this to complete packaging?"
                                             >
                                                 @csrf
