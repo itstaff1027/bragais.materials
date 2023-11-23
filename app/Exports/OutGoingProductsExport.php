@@ -16,7 +16,7 @@ use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use Maatwebsite\Excel\Concerns\WithBackgroundColor;
-
+use Carbon\Carbon;
 class OutGoingProductsExport implements FromView, ShouldAutoSize, WithStyles
 {
     // FILTERS - SEARCH
@@ -97,6 +97,7 @@ class OutGoingProductsExport implements FromView, ShouldAutoSize, WithStyles
             ->select(
                 'outgoing_product_logs.closed_sale_date',
                 'outgoing_product_logs.order_number',
+                'outgoing_product_logs.created_at',
                 'products.model',
                 'products.color',
                 'products.heel_height',
@@ -106,6 +107,7 @@ class OutGoingProductsExport implements FromView, ShouldAutoSize, WithStyles
             ->groupBy(
                 'outgoing_product_logs.closed_sale_date', 
                 'outgoing_product_logs.order_number',
+                'outgoing_product_logs.created_at',
                 'products.model', 
                 'products.color', 
                 'products.heel_height', 
@@ -121,8 +123,17 @@ class OutGoingProductsExport implements FromView, ShouldAutoSize, WithStyles
 
         foreach ($products as $product) {
             $totalQuantity++;
+
+            $createdAtString = $product->created_at; // This is a string
+
+            // Convert the string to a Carbon instance
+            $createdAt = Carbon::parse($createdAtString);
+
+            // Format the created_at date as Y-m-d
+            $formattedDate = $createdAt->format('Y-m-d');
+
             if($product->size >= 5 && $product->size <= 12){
-                $key = "{$product->model},{$product->color},{$product->heel_height},{$product->closed_sale_date},{$product->order_number}";
+                $key = "{$product->model},{$product->color},{$product->heel_height},{$product->closed_sale_date},{$product->order_number},{$formattedDate}";
                 $size = $product->size;
 
                 if (!isset($quantitiesUS[$key])) {
@@ -132,7 +143,7 @@ class OutGoingProductsExport implements FromView, ShouldAutoSize, WithStyles
                 $quantitiesUS[$key][$size] = $product->total_quantity;
             }
             if($product->size >= 35 && $product->size <= 45){
-                $key = "{$product->model},{$product->color},{$product->heel_height},{$product->closed_sale_date},{$product->order_number}";
+                $key = "{$product->model},{$product->color},{$product->heel_height},{$product->closed_sale_date},{$product->order_number},{$formattedDate}";
                 $size = $product->size;
 
                 if (!isset($quantitiesEURO[$key])) {

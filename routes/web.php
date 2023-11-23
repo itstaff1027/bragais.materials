@@ -3,6 +3,7 @@
 use App\Livewire\Counter;
 use App\Livewire\Packaging\PerDay;
 use App\Livewire\Products\Barcode;
+use App\Livewire\Products\MonthlyDelivered;
 use App\Livewire\Products\NewModel as NewProduct;
 use App\Livewire\Products\OnStock;
 use App\Exports\MaterialLogsExport;
@@ -101,6 +102,7 @@ Route::middleware(['auth', 'verified'])->group( function () {
     Route::get('/products/product-logs', ProductLogs::class)->name('product-logs');
 
     Route::get('/products/outgoing/summary', summaryOutgoingProducts::class)->name('summary-outgoing');
+    Route::get('/products/monthly-outgoing/summary', MonthlyDelivered::class)->name('monthly-summary-outgoing');
 
     Route::get('/products/details/{id}', ProductDetails::class)->name('update-product');
 

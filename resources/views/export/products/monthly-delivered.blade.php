@@ -4,7 +4,7 @@
         $size_euro = ['35', '36', '37', '38', '39', '40', '41', '42', '43', '44', '45'];
     @endphp
     <caption>
-        <h1 class="font-bold text-2xl">Summary</h1>
+        <h1 class="font-bold text-2xl">Monthly Summary</h1>
     </caption>
     <thead>
         <tr>

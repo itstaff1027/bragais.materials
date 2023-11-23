@@ -2,13 +2,14 @@
 
 namespace App\Livewire\Products;
 
-use App\Exports\OutGoingProductsExport;
+use Carbon\Carbon;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
-use Carbon\Carbon;
-class Summary extends Component
+use App\Exports\MonthlyDeliveredExport;
+
+class MonthlyDelivered extends Component
 {
     use WithPagination;
 
@@ -31,14 +32,16 @@ class Summary extends Component
 
     public function export() 
     {
-        return Excel::download(new OutGoingProductsExport(), "OUTGOING_PRODUCT_{$this->getDate()}.xlsx");
+        return Excel::download(new MonthlyDeliveredExport(), "OUTGOING_PRODUCT_MONTHLY_{$this->getDate()}.xlsx");
     }
-
-    public function render(){
+    public function render()
+    {   
         $today = $this->filter_date;
-
+        $month = Date('m');
+        $year = Date('Y');
         $products = DB::table('outgoing_product_logs')
-            ->whereDate(DB::raw('DATE(created_at)'), 'LIKE', '%' . $this->filter_date . '%')
+            ->whereDate(DB::raw('MONTH(created_at)'), '=', $month)
+            ->whereDate(DB::raw('YEAR(created_at)'), '=', $year)
             ->join('products', 'products.id', '=', 'outgoing_product_logs.product_id')
             ->select(
                 'outgoing_product_logs.closed_sale_date',
@@ -98,7 +101,6 @@ class Summary extends Component
             }
             
         }
-
-        return view('livewire.products.summary', compact('today', 'quantitiesUS', 'quantitiesEURO', 'totalQuantity'));
+        return view('livewire.products.monthly-delivered', compact('today', 'quantitiesUS', 'quantitiesEURO', 'totalQuantity'));
     }
 }
