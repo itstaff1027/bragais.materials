@@ -68,7 +68,7 @@ class Summary extends Component
         $totalQuantity = 0;
 
         foreach ($products as $product) {
-            $totalQuantity++;
+            $totalQuantity += $product->total_quantity;
             $createdAtString = $product->created_at; // This is a string
 
             // Convert the string to a Carbon instance
