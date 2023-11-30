@@ -5,6 +5,7 @@ namespace App\Livewire\Products;
 use App\Livewire\Packaging\MaterialLogs;
 use App\Models\PackagingMaterialLogs;
 use Error;
+use Livewire\Attributes\Title;
 use Livewire\Component;
 use App\Models\Products;
 use PhpParser\JsonDecoder;
@@ -14,6 +15,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Pagination\LengthAwarePaginator;
 
+#[Title('Sales')]
 class SalesLog extends Component
 {
 

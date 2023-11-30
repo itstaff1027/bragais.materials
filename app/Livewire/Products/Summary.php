@@ -2,12 +2,15 @@
 
 namespace App\Livewire\Products;
 
-use App\Exports\OutGoingProductsExport;
+use Carbon\Carbon;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Livewire\Attributes\Title;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
-use Carbon\Carbon;
+use App\Exports\OutGoingProductsExport;
+
+#[Title('Outgoing-Summary')]
 class Summary extends Component
 {
     use WithPagination;

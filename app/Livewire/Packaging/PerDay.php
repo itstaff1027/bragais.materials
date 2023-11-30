@@ -4,9 +4,11 @@ namespace App\Livewire\Packaging;
 
 use Livewire\Component;
 use Livewire\WithPagination;
+use Livewire\Attributes\Title;
 use App\Models\PackagingMaterials;
 use Illuminate\Support\Facades\DB;
 
+#[Title('Per Day')]
 class PerDay extends Component
 {
     use WithPagination;

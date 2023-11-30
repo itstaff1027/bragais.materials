@@ -4,8 +4,10 @@ namespace App\Livewire\Products;
 
 use Livewire\Component;
 use App\Models\Products;
+use Livewire\Attributes\Title;
 use Illuminate\Support\Facades\DB;
 
+#[Title('Product Logs')]
 class ProductLogs extends Component
 {
     public function render()

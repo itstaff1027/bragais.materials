@@ -2,10 +2,12 @@
 
 namespace App\Livewire\Products;
 
+use Livewire\Attributes\Title;
 use Livewire\Component;
 use App\Models\Products;
 use Illuminate\Support\Facades\DB;
 
+#[Title('On Stock')]
 class OnStock extends Component
 {
     // FILTERS - SEARCH

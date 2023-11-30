@@ -2,12 +2,14 @@
 
 namespace App\Livewire\Packaging;
 
-use App\Exports\MaterialLogsExport;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Livewire\Attributes\Title;
 use Illuminate\Support\Facades\DB;
+use App\Exports\MaterialLogsExport;
 use Maatwebsite\Excel\Facades\Excel;
 
+#[Title('Materials-Summary')]
 class Summary extends Component
 {
     use WithPagination;

@@ -3,9 +3,11 @@
 namespace App\Livewire\Packaging;
 
 use Livewire\Component;
-use Illuminate\Support\Facades\DB;
 use Livewire\WithPagination;
+use Livewire\Attributes\Title;
+use Illuminate\Support\Facades\DB;
 
+#[Title('Materials')]
 class MaterialLogs extends Component
 {
     use WithPagination;

@@ -1,10 +1,12 @@
 <?php
 
 use App\Livewire\Counter;
+use App\Livewire\Products;
+use App\Livewire\Dashboard;
+use App\Livewire\Inventory;
+use App\Livewire\Packaging;
 use App\Livewire\Packaging\PerDay;
 use App\Livewire\Products\Barcode;
-use App\Livewire\Products\MonthlyDelivered;
-use App\Livewire\Products\NewModel as NewProduct;
 use App\Livewire\Products\OnStock;
 use App\Exports\MaterialLogsExport;
 use App\Livewire\Products\SalesLog;
@@ -17,12 +19,14 @@ use App\Livewire\Packaging\DeductStocks;
 use App\Livewire\Packaging\MaterialLogs;
 use App\Livewire\Products\GenerateBarcode;
 use App\Http\Controllers\ProfileController;
+use App\Livewire\Products\MonthlyDelivered;
 use App\Livewire\Products\OutgoingProducts;
 use App\Livewire\Products\CompletePackaging;
 use App\Livewire\Factory\AddTodo as FactAddTodo;
 use App\Livewire\Factory\Details as FactDetails;
 use App\Livewire\Inventory\AddTodo as InvAddTodo;
 use App\Livewire\Inventory\Details as InvDetails;
+use App\Livewire\Products\NewModel as NewProduct;
 use App\Livewire\Factory\NewModel as FactNewModel;
 use App\Livewire\Factory\Progress as FactProgress;
 use App\Livewire\Packaging\Components\GeneratePdf;
@@ -51,14 +55,10 @@ Route::get('/', function () {
 
 Route::get('/counter', Counter::class);
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', Dashboard::class)->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/inventory', function () {
-        return view('inventory');
-    })->name('inventory');
+    Route::get('/inventory', Inventory::class)->name('inventory');
 
     Route::get('/inventory/product_progress', InvProgress::class)->name('product-development-progress');
 
@@ -90,9 +90,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 Route::middleware(['auth', 'verified'])->group( function () {
-    Route::get('/products', function () {
-        return view('products');
-    })->name('products');
+    Route::get('/products', Products::class)->name('products');
 
     Route::get('/products/add_new-model', NewProduct::class)->name('product_add-model');
 
@@ -118,9 +116,7 @@ Route::middleware(['auth', 'verified'])->group( function () {
 });
 
 Route::middleware(['auth', 'verified'])->group( function () {
-    Route::get('/packaging', function () {
-        return view('packaging_materials');
-    })->name('packaging');
+    Route::get('/packaging', Packaging::class)->name('packaging');
 
     Route::get('/packaging/add-stocks/{id}', AddStocks::class)->name('add-packaging-materials');
     Route::get('/packaging/deduct-stocks/{id}', DeductStocks::class)->name('deduct-packaging-materials');

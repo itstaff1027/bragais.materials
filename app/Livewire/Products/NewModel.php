@@ -3,9 +3,11 @@
 namespace App\Livewire\Products;
 
 use Error;
+use Livewire\Attributes\Title;
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
 
+#[Title('Add New Product')]
 class NewModel extends Component
 {
 

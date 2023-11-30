@@ -2,9 +2,11 @@
 
 namespace App\Livewire\Products;
 
+use Livewire\Attributes\Title;
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
 
+#[Title('Barcodes')]
 class Barcode extends Component
 {
     public function render()

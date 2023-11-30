@@ -5,10 +5,12 @@ namespace App\Livewire\Products;
 use Carbon\Carbon;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Livewire\Attributes\Title;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\MonthlyDeliveredExport;
 
+#[Title('Monthly Outgoing Summary')]
 class MonthlyDelivered extends Component
 {
     use WithPagination;

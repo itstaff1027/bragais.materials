@@ -4,9 +4,11 @@ namespace App\Livewire\Products;
 
 use Livewire\Component;
 use App\Models\Products;
+use Livewire\Attributes\Title;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
+#[Title('Update-Details')]
 class Details extends Component
 {
 

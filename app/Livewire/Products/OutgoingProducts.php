@@ -3,11 +3,13 @@
 namespace App\Livewire\Products;
 
 use App\Exports\OutGoingProductsExport;
+use Livewire\Attributes\Title;
 use Livewire\Component;
 use App\Models\Products;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 
+#[Title('Outgoing Products')]
 class OutgoingProducts extends Component
 {
     public $product_id;
