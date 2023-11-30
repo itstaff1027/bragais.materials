@@ -2,10 +2,12 @@
 
 namespace App\Livewire\Packaging;
 
+use Livewire\Attributes\Title;
 use Livewire\Component;
 use App\Models\PackagingMaterials;
 use Illuminate\Support\Facades\DB;
 
+#[Title('Deduct Materials Stock')]
 class DeductStocks extends Component
 {
     public $material_id;

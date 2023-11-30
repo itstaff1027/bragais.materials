@@ -41,7 +41,14 @@ class SubNavigation extends Component
             ];
             
         }
-        if($title == 'Packaging' || $title == 'Per Day' || $title == 'Materials' || $title == 'Materials-Summary'){
+        if(
+            $title == 'Packaging' ||
+            $title == 'Per Day' ||
+            $title == 'Materials' || 
+            $title == 'Materials-Summary' ||
+            $title == 'Add Materials Stock' || 
+            $title == 'Deduct Materials Stock'
+            ){
             $sub_navigation = [
                 ['name' => 'Packaging', 'path' => 'packaging', 'to' => 'packaging' ],
                 ['name' => 'Per Day', 'path' => 'packaging-per-day', 'to' => 'packaging-per-day' ],
