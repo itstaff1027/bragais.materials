@@ -24,6 +24,7 @@ class SalesLog extends Component
     private $product_ids;
     private $order_number;
     public $date_today;
+    public $get_order_number;
 
     public function mount(){
         $date_today = Date('Y-m-d');
@@ -56,6 +57,28 @@ class SalesLog extends Component
             // Make the API request
             // $response = Http::withoutVerifying()->get($apiEndpoint);
             $response = Http::connectTimeout(3)->withoutVerifying()->get("https://shoecietyinc.com/api/sales/saleslog.php?dateToday={$this->date_today}");
+            // Check if the request was successful (status code 2xx)
+            if ($response->ok()) {
+                // Get the JSON response body as an associative array
+                $data = $response->body(); // Use $response->json() directly
+                $this->datas = json_decode($data, true);
+            } else {
+                // Handle non-successful response, e.g., 4xx or 5xx status codes
+                $this->datas = []; // Set $this->datas to an empty array or handle the error as needed
+            }
+        } catch (\Exception $e) {
+            // Handle exceptions, e.g., connection errors
+            $this->datas = []; // Set $this->datas to an empty array or handle the error as needed
+        }
+    }
+
+    public function getOrder(){
+        // $date_today = $this->date_today;
+        // dd($this->date_today);
+        try {
+            // Make the API request
+            // $response = Http::withoutVerifying()->get($apiEndpoint);
+            $response = Http::connectTimeout(3)->withoutVerifying()->get("https://shoecietyinc.com/api/sales/get_order.php?orderNumber={$this->get_order_number}");
             // Check if the request was successful (status code 2xx)
             if ($response->ok()) {
                 // Get the JSON response body as an associative array

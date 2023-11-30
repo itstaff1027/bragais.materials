@@ -1,9 +1,15 @@
 <div>
-
-    <form wire:submit.prevent='getSalesLogs'>
-        <input type=text wire:model='date_today' placeholder="DATE FORMAT: 1111-11-11" />
-        <button type="submit"> SEARCH </button>
-    </form>
+    <div class="flex justify-between">
+        <form class="flex flex-col" wire:submit.prevent='getSalesLogs'>
+            <input type=text wire:model='date_today' placeholder="DATE FORMAT: 1111-11-11" />
+            <button type="submit"> SEARCH </button>
+        </form>
+        <form class="flex flex-col" wire:submit.prevent='getOrder'>
+            <input type=text wire:model='get_order_number' placeholder="Order No - 1234" />
+            <button type="submit"> SEARCH </button>
+        </form>
+    </div>
+    
     
     <div class="overflow-x-auto">
         <table class="table-auto w-full text-center divide-y-2 divide-violet-400 hover:divide-pink-400">
