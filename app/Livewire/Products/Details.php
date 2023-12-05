@@ -22,8 +22,8 @@ class Details extends Component
     public $category;
     public $stocks;
 
-    public $addStocks, $reduceStocks;
-    public $addRemarks, $reduceRemarks;
+    public $addStocks, $reduceStocks, $addOutletStocks, $reduceOutletStocks;
+    public $addRemarks, $reduceRemarks, $addOutletRemarks, $reduceOutletRemarks;
 
     public function mount($id){
         $this->product_id = $id;
@@ -64,6 +64,50 @@ class Details extends Component
             'product_id' => $this->product_id,
             'stocks' => -$this->reduceStocks,
             'remarks' => $this->reduceRemarks,
+            'status' => 'OUTGOING',
+            'action' => 'REDUCE'
+        ]);
+
+        $this->reset(['reduceStocks', 'reduceRemarks']);
+
+        return redirect('/products');
+    }
+
+    public function storeAddOutletStocks(){
+
+        $this->validate([
+            'addOutletStocks' => 'required|integer|min:1',
+            'addOutletRemarks' => 'required|string|max:255'
+        ]);
+        $user_id = Auth::id();
+
+        DB::table('outlet_product_stocks')->insert([
+            'user_id' => $user_id,
+            'product_id' => $this->product_id,
+            'stocks' => $this->addOutletStocks,
+            'remarks' => $this->addOutletRemarks,
+            'status' => 'INCOMING',
+            'action' => 'ADD'
+        ]);
+
+        $this->reset(['addStocks', 'addRemarks']);
+
+        return redirect('/products');
+    }
+
+    public function reduceOutletStocks(){
+
+        $this->validate([
+            'reduceOutletStocks' => 'required|integer|min:-1',
+            'reduceOutletRemarks' => 'required|string|max:255'
+        ]);
+        $user_id = Auth::id();
+
+        DB::table('outlet_product_stocks')->insert([
+            'user_id' => $user_id,
+            'product_id' => $this->product_id,
+            'stocks' => -$this->reduceOutletStocks,
+            'remarks' => $this->reduceOutletRemarks,
             'status' => 'OUTGOING',
             'action' => 'REDUCE'
         ]);

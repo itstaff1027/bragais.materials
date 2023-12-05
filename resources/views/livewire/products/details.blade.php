@@ -175,4 +175,82 @@
             </table>
         </form>
     </div>
+    <div class="p-2 flex border-2">
+        <form wire:submit.prevent="storeAddOutletStocks" class="w-1/2 flex justify-center items-center border-2">
+            @csrf
+            <table class="w-1/2 m-2">
+                <thead>
+                    <tr>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <input type="number" wire:model="addOutletStocks"
+                                class="w-full border-2 rounded-xl" placeholder="Add Outlet Stocks" />
+                            @error('addOutletStocks')<span class="error text-red-600">{{ $message
+                                }}</span>
+                            @enderror
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <textarea wire:model="addOutletRemarks" class="w-full border-2 rounded-xl"
+                                placeholder="Outlet Remarks"></textarea>
+                            @error('addOutletRemarks')<span class="error text-red-600">{{ $message
+                                }}</span>
+                            @enderror
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button type="submit"
+                                class="w-full p-2 pl-4 pr-4 bg-emerald-600 text-white rounded-full">
+                                ADD
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+        <form wire:submit.prevent="reduceOutletStocks" class="w-1/2 flex justify-center items-center border-2">
+            @csrf
+            <table class="w-1/2 m-2" >
+                <thead>
+                    <tr>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <input type="number" wire:model="reduceOutletStocks"
+                                class="w-full border-2 rounded-xl" placeholder="Reduce Outlet Stocks" />
+                            @error('reduceOutletStocks')<span class="error text-red-600">{{ $message
+                                }}</span>
+                            @enderror
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <textarea wire:model="reduceOutletRemarks" class="w-full border-2 rounded-xl"
+                                placeholder="Outlet Remarks"></textarea>
+                            @error('reduceOutletRemarks')<span class="error text-red-600">{{ $message
+                                }}</span>
+                            @enderror
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button type="submit"
+                                class="w-full p-2 pl-4 pr-4 bg-red-600 text-white rounded-full">
+                                REDUCE
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+    </div>
 </div>

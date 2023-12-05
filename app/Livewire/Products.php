@@ -88,15 +88,39 @@ class Products extends Component
     public function render()
     {
         
-        $query = Product::select('products.id', 'products.product_sku', 'products.model', 'products.color', 'products.size', 'products.heel_height', 'products.category', DB::raw('COALESCE(product_stocks.total_stocks, 0) as product_total_stocks'))
+        $query = Product::select(
+            'products.id', 
+            'products.product_sku', 
+            'products.model', 'products.color', 
+            'products.size', 
+            'products.heel_height', 
+            'products.category', 
+            DB::raw('COALESCE(product_stocks.total_stocks, 0) as product_total_stocks'), 
+            DB::raw('COALESCE(outlet_product_stocks.total_stocks, 0) as outlet_product_total_stocks')
+        )
         ->where('products.product_sku', 'like', '%'.$this->product_sku_search.'%')
         ->where('products.model', 'like', '%'.$this->model_search.'%')
         ->where('products.color', 'like', '%'.$this->color_search.'%')
         ->where('products.size', 'like', '%'.$this->size_search.'%')
         ->where('products.heel_height', 'like', '%'.$this->heel_search.'%')
         ->where('products.category', 'like', '%'.$this->category_search.'%')
-        ->leftJoin(DB::raw('(SELECT product_id, SUM(stocks) as total_stocks FROM product_stocks GROUP BY product_id) as product_stocks'), 'products.id', '=', 'product_stocks.product_id')
-        ->groupBy('products.id', 'products.product_sku', 'products.model', 'products.color', 'products.size', 'products.heel_height', 'products.category', 'product_total_stocks')
+        ->leftJoin(
+            DB::raw('(SELECT product_id, SUM(stocks) as total_stocks FROM product_stocks GROUP BY product_id) as product_stocks'), 'products.id', '=', 'product_stocks.product_id'
+        )
+        ->leftJoin(
+            DB::raw('(SELECT product_id, SUM(stocks) as total_stocks FROM outlet_product_stocks GROUP BY product_id) as outlet_product_stocks'), 'products.id', '=', 'outlet_product_stocks.product_id'
+        )
+        ->groupBy(
+            'products.id', 
+            'products.product_sku', 
+            'products.model', 
+            'products.color', 
+            'products.size', 
+            'products.heel_height', 
+            'products.category', 
+            'product_total_stocks', 
+            'outlet_product_total_stocks'
+        )
         ->orderBy('products.id', 'asc');
 
         if ($this->filterProducts == 1) {

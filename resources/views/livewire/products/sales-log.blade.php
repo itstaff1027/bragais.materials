@@ -60,7 +60,7 @@
                                 Saving post...
                             </div>
                         </form>
-                        <form wire:submit.prevent="addDeliveredOrders('{{ $order['OrderNo'] }}', '{{ $order['OrderList'] }}', '{{ $order['ClosedSaleDate'] }}')"
+                        <form wire:submit.prevent="addDeliveredOrders('{{ $order['OrderNo'] }}', '{{ $order['OrderList'] }}', '{{ $order['ClosedSaleDate'] }}', '{{ $order['Sale'] }}')"
                         wire:confirm="Has this order already been delivered?"
                         >
                             @csrf

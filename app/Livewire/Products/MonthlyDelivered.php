@@ -23,6 +23,8 @@ class MonthlyDelivered extends Component
     public $filter_date_range_first = '';
     public $filter_date_range_second = '';
 
+    public $order_from;
+
     public function getDate(){
         $today = date('Y-m-d');
         return $today;
@@ -32,16 +34,21 @@ class MonthlyDelivered extends Component
         $this->filter_date = $this->getDate();
     }
 
+    
+    public function filterBySoldFrom($value){
+        $this->order_from = $value;
+    }
+
     public function export() 
     {
-        return Excel::download(new MonthlyDeliveredExport(), "OUTGOING_PRODUCT_MONTHLY_{$this->getDate()}.xlsx");
+        return Excel::download(new MonthlyDeliveredExport($this->order_from), "OUTGOING_PRODUCT_MONTHLY_{$this->getDate()}.xlsx");
     }
     public function render()
     {   
         $today = $this->filter_date;
         $month = Date('m');
         $year = Date('Y');
-        $products = DB::table('outgoing_product_logs')
+        $query = DB::table('outgoing_product_logs')
             ->whereDate(DB::raw('MONTH(created_at)'), '=', $month)
             ->whereDate(DB::raw('YEAR(created_at)'), '=', $year)
             ->join('products', 'products.id', '=', 'outgoing_product_logs.product_id')
@@ -63,8 +70,15 @@ class MonthlyDelivered extends Component
                 'products.color', 
                 'products.heel_height', 
                 'products.size',
-            )
-            ->get();
+            );
+
+
+        if($this->order_from){
+            $query->where('outgoing_product_logs.order_from', '=', $this->order_from);
+            // dd($products);
+        }
+
+        $products = $query->get();
             
         // dd($products);
         // Prepare an associative array to store quantities based on model, color, heel height, and size

@@ -13,12 +13,11 @@
     </div>
 
     <div class="w-full flex flex-col items-end justify-end" x-show="open" x-transition.duration.500ms>
-        <input type="text" class="w-1/4 rounded-l-md border-2 border-blue-400 m-2"  wire:model.live.debounce.500ms='filter_date_range_first' placeholder="DATE-FIRST : FORMAT [y-m-d]" />
-        <input type="text" class="w-1/4 rounded-l-md border-2 border-blue-400 m-2"  wire:model.live.debounce.500ms='filter_date_range_second' placeholder="DATE-SECOND : FORMAT [y-m-d]" />
+        <button type="button" wire:click="filterBySoldFrom('STORE')">STORE</button>
+        <button type="button" wire:click="filterBySoldFrom('ONLINE')">ONLINE</button>
+        {{-- <input type="radio" value="STORE" wire:click="filterBySoldFrom('STORE')" />
+        <input type="radio" value="ONLINE" wire:click="filterBySoldFrom('ONLINE')" /> --}}
     </div>
-    <a href={{ route('monthly-summary-outgoing') }} wire:navigate>
-        Monthly
-    </a>
     @php
         $size_us = ['5', '6', '7', '8', '9', '10', '11', '12'];
         $size_euro = ['35', '36', '37', '38', '39', '40', '41', '42', '43', '44', '45'];

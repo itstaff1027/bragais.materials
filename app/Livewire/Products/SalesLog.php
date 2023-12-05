@@ -320,7 +320,7 @@ class SalesLog extends Component
         return $computedDeduction;
     }
 
-    public function addDeliveredOrders($orderNumber, $orderLists, $closedSaleDate){
+    public function addDeliveredOrders($orderNumber, $orderLists, $closedSaleDate, $soldFrom){
 
         // dd($closedSaleDate);
 
@@ -337,6 +337,7 @@ class SalesLog extends Component
             DB::table('outgoing_product_logs')->insert([
                 'product_id' => $product['id'],
                 'order_number' => $orderNumber,
+                'order_from' => $soldFrom,
                 'quantity' => 1,
                 'status' => 'DELIVERED',
                 'closed_sale_date' => $closedSaleDate

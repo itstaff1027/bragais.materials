@@ -124,6 +124,7 @@
                 <th>Heel Height</th>
                 <th>Category</th>
                 <th>Stocks</th>
+                <th>Outlet Stocks</th>
                 <th>Action</th>
             </tr>
         </thead>
@@ -138,6 +139,7 @@
                 <td>{{ $product->heel_height }}</td>
                 <td>{{ $product->category }}</td>
                 <td>{{ $product->product_total_stocks }}</td>
+                <td>{{ $product->outlet_product_total_stocks }}</td>
                 <td>
                     <a href="{{ route('generate-barcode-product', ['id' => $product->id]) }}">
                         <button>

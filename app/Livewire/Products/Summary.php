@@ -22,6 +22,7 @@ class Summary extends Component
 
     public $filter_date_range_first = '';
     public $filter_date_range_second = '';
+    public $order_from;
 
     public function getDate(){
         $today = date('Y-m-d');
@@ -34,13 +35,17 @@ class Summary extends Component
 
     public function export() 
     {
-        return Excel::download(new OutGoingProductsExport(), "OUTGOING_PRODUCT_{$this->getDate()}.xlsx");
+        return Excel::download(new OutGoingProductsExport($this->order_from), "OUTGOING_PRODUCT_{$this->getDate()}.xlsx");
+    }
+
+    public function filterBySoldFrom($value){
+        $this->order_from = $value;
     }
 
     public function render(){
         $today = $this->filter_date;
 
-        $products = DB::table('outgoing_product_logs')
+        $query = DB::table('outgoing_product_logs')
             ->whereDate(DB::raw('DATE(created_at)'), 'LIKE', '%' . $this->filter_date . '%')
             ->join('products', 'products.id', '=', 'outgoing_product_logs.product_id')
             ->select(
@@ -61,9 +66,14 @@ class Summary extends Component
                 'products.color', 
                 'products.heel_height', 
                 'products.size',
-            )
-            ->get();
-            
+            );
+
+        if($this->order_from){
+            $query->where('outgoing_product_logs.order_from', '=', $this->order_from);
+            // dd($products);
+        }
+
+        $products = $query->get();
         // dd($products);
         // Prepare an associative array to store quantities based on model, color, heel height, and size
         $quantitiesUS = [];

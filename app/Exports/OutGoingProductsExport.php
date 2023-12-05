@@ -35,6 +35,7 @@ class OutGoingProductsExport implements FromView, ShouldAutoSize, WithStyles
     public $model;
     public $size;
     public $quantity;
+    public $sold_from;
 
 
     public $packaging_material_id;
@@ -44,8 +45,9 @@ class OutGoingProductsExport implements FromView, ShouldAutoSize, WithStyles
         return $today;
     }
 
-    public function __construct(){
+    public function __construct($soldFrom){
         $this->filter_date = $this->getDate();
+        $this->sold_from = $soldFrom;
     }
 
     public function styles(Worksheet $sheet)
@@ -91,7 +93,7 @@ class OutGoingProductsExport implements FromView, ShouldAutoSize, WithStyles
     {
         $today = $this->filter_date;
 
-        $products = DB::table('outgoing_product_logs')
+        $query = DB::table('outgoing_product_logs')
             ->whereDate(DB::raw('DATE(created_at)'), 'LIKE', '%' . $this->filter_date . '%')
             ->join('products', 'products.id', '=', 'outgoing_product_logs.product_id')
             ->select(
@@ -112,9 +114,16 @@ class OutGoingProductsExport implements FromView, ShouldAutoSize, WithStyles
                 'products.color', 
                 'products.heel_height', 
                 'products.size',
-            )
-            ->get();
-            
+            );
+
+
+        if($this->sold_from){
+            $query->where('outgoing_product_logs.order_from', '=', $this->sold_from);
+            // dd($products);
+        }
+
+        $products = $query->get();
+        
         // dd($products);
         // Prepare an associative array to store quantities based on model, color, heel height, and size
         $quantitiesUS = [];
