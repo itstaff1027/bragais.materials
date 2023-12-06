@@ -30,7 +30,8 @@ class SubNavigation extends Component
                 $title == 'Add New Product' ||
                 $title == 'On Stock' ||
                 $title == 'Outgoing Products' ||
-                $title == 'Update-Details'
+                $title == 'Update-Details' ||
+                $title == 'Delivery - Logs'
             ){
             $sub_navigation = [
                 ['name' => 'Products', 'path' => 'products', 'to' => 'products' ],
@@ -38,6 +39,7 @@ class SubNavigation extends Component
                 ['name' => 'Product Logs', 'path' => 'product-logs', 'to' => 'product-logs' ],
                 ['name' => 'Sales', 'path' => 'sales-logs', 'to' => 'sales-logs' ],
                 ['name' => 'Outgoing', 'path' => 'summary-outgoing', 'to' => 'summary-outgoing' ],
+                ['name' => 'Delivery Logs', 'path' => 'delivery-logs', 'to' => 'delivery-logs' ],
             ];
             
         }

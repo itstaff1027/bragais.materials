@@ -7,6 +7,7 @@ use App\Livewire\Inventory;
 use App\Livewire\Packaging;
 use App\Livewire\Packaging\PerDay;
 use App\Livewire\Products\Barcode;
+use App\Livewire\Products\DeliveryLog;
 use App\Livewire\Products\OnStock;
 use App\Exports\MaterialLogsExport;
 use App\Livewire\Products\SalesLog;
@@ -111,6 +112,8 @@ Route::middleware(['auth', 'verified'])->group( function () {
     Route::get('/products/sales-log', SalesLog::class)->name('sales-logs');
 
     Route::post('/api/add-barcode', [AddStockBarcode::class, 'handleBarcode']);
+
+    Route::get('/products/delivery-logs', DeliveryLog::class)->name('delivery-logs');
     
 
 });
