@@ -78,6 +78,12 @@ class DeliveryLog extends Component
 
     public function store($order){
 
+        $exist = TemporaryDeliveryLogs::where('order_number', '=', $order['OrderNo'])->first();
+
+        if($exist){
+            throw new Error('ALREADY ADDED');
+        }
+
         $customerName = $order['FName'] . ' ' . $order['LName'];
 
         TemporaryDeliveryLogs::insert([
@@ -127,7 +133,7 @@ class DeliveryLog extends Component
         }
 
         $statusOrder = TemporaryDeliveryLogs::all();
-        $shippedOrder = TemporaryDeliveryLogs::whereDate(DB::raw('DATE(created_at)'), '=', $date)->where('status', '=', 'SHIPPED')->get();
+        $shippedOrder = TemporaryDeliveryLogs::whereDate(DB::raw('DATE(updated_at)'), '=', $date)->where('status', '=', 'SHIPPED')->get();
 
         return view('livewire.products.delivery-log', [
             'table_header' => $this->table_header,
