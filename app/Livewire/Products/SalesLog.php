@@ -84,6 +84,7 @@ class SalesLog extends Component
                 // Get the JSON response body as an associative array
                 $data = $response->body(); // Use $response->json() directly
                 $this->datas = json_decode($data, true);
+                // dd($this->datas);
             } else {
                 // Handle non-successful response, e.g., 4xx or 5xx status codes
                 $this->datas = []; // Set $this->datas to an empty array or handle the error as needed
@@ -137,6 +138,9 @@ class SalesLog extends Component
 
             if($packagingType == 'DUSTBAG ONLY'){
                 if($product['category'] == 'PAGEANT'){
+                    $this->insertCompletePackagingSale(8, $product['id'], -1, 1, 'OUTGOING');
+                }
+                if($product['category'] == 'HEELS'){
                     $this->insertCompletePackagingSale(8, $product['id'], -1, 1, 'OUTGOING');
                 }
                 if($product['category'] == 'MANDIATOR'){
@@ -251,6 +255,10 @@ class SalesLog extends Component
         // dd($lists);
         foreach($lists as $list){
             $parts = explode(' ', $list);
+            // Remove empty elements
+            $parts = array_filter($parts);
+            // Optional: Re-index the array to start from index 0
+            $parts = array_values($parts);
             // dd($parts);
             // Extract the numeric value from the last part
             if(count($parts) == 4){
@@ -348,7 +356,6 @@ class SalesLog extends Component
 
     public function render()
     {
-
         return view('livewire.products.sales-log', [
             'orders' => $this->datas
         ]);
