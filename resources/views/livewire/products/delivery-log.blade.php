@@ -1,5 +1,5 @@
-<div wire:poll.60s>
-    <div class="p-0 w-full h-96 overflow-auto">
+<div>
+    <div class="p-0 w-full h-96 overflow-auto" wire:poll.30s>
         <div class="flex flex-col justify-center items-center w-full">
             <div class="flex justify-center items-center bg-black text-white w-full p-2">
                 <h1 class="text-xl font-serif">PENDING</h1>
