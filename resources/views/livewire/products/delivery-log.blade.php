@@ -1,6 +1,11 @@
 <div>
+    <form class="flex flex-col" wire:submit.prevent='getSalesLogs'>
+        <input type=text wire:model='date_today' placeholder="DATE FORMAT: 1111-11-11" />
+        <button type="submit"> SEARCH </button>
+    </form>
     <div class="p-0 w-full h-96 overflow-auto" wire:poll.keep-alive.5s>
         <div class="flex flex-col justify-center items-center w-full">
+            
             <div class="flex justify-center items-center bg-black text-white w-full p-2">
                 <h1 class="text-xl font-serif">PENDING</h1>
             </div>
