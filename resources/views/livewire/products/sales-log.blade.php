@@ -12,7 +12,7 @@
     
     
     <div class="overflow-x-auto">
-        <table class="table-auto w-full text-center divide-y-2 divide-violet-400 hover:divide-pink-400">
+        <table class="table-fixed w-full text-center divide-y-2 divide-violet-400 hover:divide-pink-400">
             <caption>
                 <h1 class="italic text-xl font-bold p-2">Sales Logs</h1>
             </caption>
@@ -23,7 +23,7 @@
                     <th>Sale</th>
                     <th>Order Lists</th>
                     <th>Package</th>
-                    {{-- <th>Released Stocks</th> --}}
+                    <th>Courier</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -42,6 +42,7 @@
                         @endforeach
                     </td>
                     <td>{{ $order['Packaging'] }}</td>
+                    <td>{{ $order['Courier'] }}</td>
                     <td>
                         <form wire:submit.prevent="addToCompletePackaging('{{ $order['OrderNo'] }}', '{{ $order['OrderList'] }}', '{{ $order['Packaging'] }}', '{{ $order['Sale'] }}')" 
                         wire:confirm="Are you sure you want to add this to complete packaging?"
@@ -60,7 +61,7 @@
                                 Saving post...
                             </div>
                         </form>
-                        <form wire:submit.prevent="addDeliveredOrders('{{ $order['OrderNo'] }}', '{{ $order['OrderList'] }}', '{{ $order['ClosedSaleDate'] }}', '{{ $order['Sale'] }}')"
+                        <form wire:submit.prevent="addDeliveredOrders('{{ $order['OrderNo'] }}', '{{ $order['OrderList'] }}', '{{ $order['ClosedSaleDate'] }}', '{{ $order['Sale'] }}', '{{ $order['Courier'] }}')"
                         wire:confirm="Has this order already been delivered?"
                         >
                             @csrf

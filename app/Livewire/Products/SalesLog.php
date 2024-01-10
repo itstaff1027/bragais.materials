@@ -328,7 +328,7 @@ class SalesLog extends Component
         return $computedDeduction;
     }
 
-    public function addDeliveredOrders($orderNumber, $orderLists, $closedSaleDate, $soldFrom){
+    public function addDeliveredOrders($orderNumber, $orderLists, $closedSaleDate, $soldFrom, $courier){
 
         // dd($closedSaleDate);
 
@@ -348,7 +348,8 @@ class SalesLog extends Component
                 'order_from' => $soldFrom,
                 'quantity' => 1,
                 'status' => 'DELIVERED',
-                'closed_sale_date' => $closedSaleDate
+                'closed_sale_date' => $closedSaleDate,
+                'courier' => $courier
             ]);
         }
 

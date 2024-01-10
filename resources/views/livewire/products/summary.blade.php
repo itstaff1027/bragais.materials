@@ -40,6 +40,7 @@
                 <th>Closed Sale Date</th>
                 <th>Released Date</th>
                 <th>Order Number</th>
+                <th>Courier</th>
                 <th>Design</th>
                 <th>Color</th>
                 <th colspan="8" class="border-2">Size</th>
@@ -47,6 +48,7 @@
                 <th>Quantity</th>
             </tr>
             <tr>
+                <th></th>
                 <th></th>
                 <th></th>
                 <th></th>
@@ -62,13 +64,14 @@
         <tbody>
             @foreach ($quantitiesUS as $key => $sizes)
                 @php
-                    list($model, $color, $heelHeight, $closedSaleDate, $orderNumber, $created_at) = explode(',', $key);
+                    list($model, $color, $heelHeight, $closedSaleDate, $orderNumber, $created_at, $courier) = explode(',', $key);
                     $totalQuantityUS = 0;
                 @endphp
                 <tr>
                     <td>{{ $closedSaleDate }}</td>
                     <td>{{ $created_at }}</td>
                     <td>{{ $orderNumber }}</td>
+                    <td>{{ $courier }}</td>
                     <td>{{ $model }}</td>
                     <td>{{ $color }}</td>
                     @foreach ($size_us as $size)
@@ -96,6 +99,7 @@
                 <th>Closed Sale Date</th>
                 <th>Released Date</th>
                 <th>Order Number</th>
+                <th>Courier</th>
                 <th>Design</th>
                 <th>Color</th>
                 <th colspan="11" class="border-2">Size</th>
@@ -103,6 +107,7 @@
                 <th>Quantity</th>
             </tr>
             <tr>
+                <th></th>
                 <th></th>
                 <th></th>
                 <th></th>
@@ -118,13 +123,14 @@
         <tbody>
             @foreach ($quantitiesEURO as $key => $sizes)
                 @php
-                    list($model, $color, $heelHeight, $closedSaleDate, $orderNumber, $created_at) = explode(',', $key);
+                    list($model, $color, $heelHeight, $closedSaleDate, $orderNumber, $created_at, $courier) = explode(',', $key);
                     $totalQuantityEURO = 0;
                 @endphp
                 <tr>
                     <td>{{ $closedSaleDate }}</td>
                     <td>{{ $created_at }}</td>
                     <td>{{ $orderNumber }}</td>
+                    <td>{{ $courier }}</td>
                     <td>{{ $model }}</td>
                     <td>{{ $color }}</td>
                     @foreach ($size_euro as $size)

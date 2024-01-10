@@ -17,7 +17,7 @@ use Maatwebsite\Excel\Concerns\WithColumnWidths;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use Maatwebsite\Excel\Concerns\WithBackgroundColor;
 use Carbon\Carbon;
-class OutGoingProductsExport implements FromView, ShouldAutoSize, WithStyles
+class OutletLogExport implements FromView, ShouldAutoSize, WithStyles
 {
     // FILTERS - SEARCH
     public $filter_date;
@@ -100,7 +100,6 @@ class OutGoingProductsExport implements FromView, ShouldAutoSize, WithStyles
                 'outgoing_product_logs.closed_sale_date',
                 'outgoing_product_logs.order_number',
                 'outgoing_product_logs.created_at',
-                'outgoing_product_logs.courier',
                 'products.model',
                 'products.color',
                 'products.heel_height',
@@ -111,7 +110,6 @@ class OutGoingProductsExport implements FromView, ShouldAutoSize, WithStyles
                 'outgoing_product_logs.closed_sale_date', 
                 'outgoing_product_logs.order_number',
                 'outgoing_product_logs.created_at',
-                'outgoing_product_logs.courier',
                 'products.model', 
                 'products.color', 
                 'products.heel_height', 
@@ -144,7 +142,7 @@ class OutGoingProductsExport implements FromView, ShouldAutoSize, WithStyles
             $formattedDate = $createdAt->format('Y-m-d');
 
             if($product->size >= 5 && $product->size <= 12){
-                $key = "{$product->model},{$product->color},{$product->heel_height},{$product->closed_sale_date},{$product->order_number},{$formattedDate},{$product->courier}";
+                $key = "{$product->model},{$product->color},{$product->heel_height},{$product->closed_sale_date},{$product->order_number},{$formattedDate}";
                 $size = $product->size;
 
                 if (!isset($quantitiesUS[$key])) {
@@ -154,7 +152,7 @@ class OutGoingProductsExport implements FromView, ShouldAutoSize, WithStyles
                 $quantitiesUS[$key][$size] = $product->total_quantity;
             }
             if($product->size >= 35 && $product->size <= 45){
-                $key = "{$product->model},{$product->color},{$product->heel_height},{$product->closed_sale_date},{$product->order_number},{$formattedDate},{$product->courier}";
+                $key = "{$product->model},{$product->color},{$product->heel_height},{$product->closed_sale_date},{$product->order_number},{$formattedDate}";
                 $size = $product->size;
 
                 if (!isset($quantitiesEURO[$key])) {
