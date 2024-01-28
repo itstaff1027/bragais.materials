@@ -124,7 +124,7 @@ class Products extends Component
         ->orderBy('products.id', 'asc');
 
         if ($this->filterProducts == 1) {
-            $query->where('product_stocks.total_stocks', '>=', 0);
+            $query->where('product_stocks.total_stocks', '>', 0)->where('product_stocks.total_stocks', '!=', 0);
         }
 
         $products = $query->paginate(25);
