@@ -673,8 +673,8 @@ class Products extends Component
             $query->where('product_stocks.total_stocks', '>', 0)->where('product_stocks.total_stocks', '!=', 0);
         }
 
-        if ($this->filterProducts == 1) {
-            $query->where('product_stocks.total_stocks', '>', 0)->where('product_stocks.total_stocks', '!=', 0);
+        if ($this->filterProducts == -1) {
+            $query->where('product_stocks.total_stocks', '<', 0)->where('product_stocks.total_stocks', '!=', 0);
         }
 
         $products = $query->paginate(25);
