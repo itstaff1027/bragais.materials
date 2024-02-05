@@ -33,7 +33,7 @@ class ProductLogs extends Component
             'products.size',
             'products.heel_height'
         )
-        ->orderBy('product_stocks.order_number', 'desc')
+        ->orderBy('product_stocks.id', 'desc')
         ->paginate(10);
 
         return view('livewire.products.product-logs', [
