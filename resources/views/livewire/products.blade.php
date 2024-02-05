@@ -187,11 +187,11 @@
 
     <livewire:components.products.add-stock-barcode />
     
-    <div>
+    {{-- <div>
         <h1> DO NOT THIS CLICK THIS BUTTON IT WILL TEAR APART THE SYSTEM THANKS!!!!</h1>
         <h1>PROMISE!</h1>
         <button wire:click="addThisStocks">
             ADD THIS STOCKS
         </button>
-    </div>
+    </div> --}}
 </div>
