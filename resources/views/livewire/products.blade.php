@@ -97,7 +97,8 @@
                     wire:model.live.debounce.500ms='product_sku_search' placeholder="Search Stock [Product SKU]" />
                 <button class="border-2 border-violet-700 rounded-md p-2 m-0" @click="open = ! open">Filter</button>
                 <button class="border-2 border-violet-700 rounded-md p-2 m-0" wire:click="filterStocks(0)">All</button>
-                <button class="border-2 border-violet-700 rounded-l-md rounded-r-full p-2 m-0" wire:click="filterStocks(1)">Stocks</button>
+                <button class="border-2 border-violet-700 rounded-l-md p-2 m-0" wire:click="filterStocks(1)">Stocks</button>
+                <button class="border-2 border-violet-700 rounded-l-md rounded-r-full p-2 m-0" wire:click="filterStocks(-1)">-Stocks</button>
                 {{-- FILTER --}}
                 <div class="m-2" x-show="open" x-transition.duration.500ms>
                     <input class="border-2 border-violet-700 rounded-full w-1/4 m-2"
@@ -186,4 +187,11 @@
 
     <livewire:components.products.add-stock-barcode />
     
+    <div>
+        <h1> DO NOT THIS CLICK THIS BUTTON IT WILL TEAR APART THE SYSTEM THANKS!!!!</h1>
+        <h1>PROMISE!</h1>
+        <button wire:click="addThisStocks">
+            ADD THIS STOCKS
+        </button>
+    </div>
 </div>
