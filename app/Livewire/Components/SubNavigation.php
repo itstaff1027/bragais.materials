@@ -31,7 +31,10 @@ class SubNavigation extends Component
                 $title == 'On Stock' ||
                 $title == 'Outgoing Products' ||
                 $title == 'Update-Details' ||
-                $title == 'Delivery - Logs'
+                $title == 'Delivery - Logs' ||
+                // $title == 'Sold' ||
+                // $title == 'Product Summary' ||
+                $title == 'Lara'
             ){
             $sub_navigation = [
                 ['name' => 'Products', 'path' => 'products', 'to' => 'products' ],
@@ -40,6 +43,9 @@ class SubNavigation extends Component
                 ['name' => 'Sales', 'path' => 'sales-logs', 'to' => 'sales-logs' ],
                 ['name' => 'Outgoing', 'path' => 'summary-outgoing', 'to' => 'summary-outgoing' ],
                 ['name' => 'Delivery Logs', 'path' => 'delivery-logs', 'to' => 'delivery-logs' ],
+                // ['name' => 'Sold', 'path' => 'products.sold_per_day', 'to' => 'products.sold_per_day' ],
+                // ['name' => 'Product Summary', 'path' => 'products.summary_stocks', 'to' => 'products.summary_stocks' ],
+                ['name' => 'Lara', 'path' => 'products.lara', 'to' => 'products.lara' ],
             ];
             
         }
@@ -59,12 +65,19 @@ class SubNavigation extends Component
             ];
             
         }
-        if($title == 'Inventory' ){
+        if($title == 'Inventory'){
             $sub_navigation = [
                 ['name' => 'Inventory', 'path' => 'inventory', 'to' => 'inventory' ]
             ];
             
         }
+        // if($title == 'Users' || $title == 'Create User' || $title == 'Create Roles'){
+        //     $sub_navigation = [
+        //         ['name' => 'Create User', 'path' => 'create-user', 'to' => 'create-user' ],
+        //         ['name' => 'Create Roles', 'path' => 'create-roles', 'to' => 'create-roles' ]
+        //     ];
+            
+        // }
         // dd($sub_navigation);
 
         return view('livewire.components.sub-navigation', [

@@ -5,19 +5,25 @@ use App\Livewire\Products;
 use App\Livewire\Dashboard;
 use App\Livewire\Inventory;
 use App\Livewire\Packaging;
+use App\Livewire\ListOfUsers;
+use App\Livewire\Products\Lara;
+use App\Livewire\Products\Sold;
 use App\Livewire\Packaging\PerDay;
 use App\Livewire\Products\Barcode;
-use App\Livewire\Products\DeliveryLog;
 use App\Livewire\Products\OnStock;
 use App\Exports\MaterialLogsExport;
 use App\Livewire\Products\SalesLog;
 use Illuminate\Support\Facades\Http;
 use App\Livewire\Packaging\AddStocks;
 use Illuminate\Support\Facades\Route;
+use App\Livewire\Products\DeliveryLog;
 use App\Livewire\Products\ProductLogs;
+use App\Livewire\Technical\CreateUser;
 use App\Http\Controllers\PDFController;
+use App\Livewire\Technical\CreateRoles;
 use App\Livewire\Packaging\DeductStocks;
 use App\Livewire\Packaging\MaterialLogs;
+use App\Livewire\Products\ProductSummary;
 use App\Livewire\Products\GenerateBarcode;
 use App\Http\Controllers\ProfileController;
 use App\Livewire\Products\MonthlyDelivered;
@@ -69,25 +75,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/inventory/add-todo', InvAddTodo::class)->name('add_to-do');
 
-    // Route::get('/inventory/add-outlet_stocks/{id}', AddOutletStocks::class)->name('add-outlet_stocks');
-
-    // Route::get('/inventory/add-display_stocks/{id}', AddDisplayStocks::class)->name('add-display_stocks');
-
-    // Route::get('/inventory/edit-model/{id}', EditModel::class)->name('edit-model');
-
-    // Route::get('/inventory/add-new-model', AddNewModel::class)->name('add-new-model');
-
-    // Route::get('/inventory/stocks', Stocks::class)->name('stocks');
-
-    // Route::get('/inventory/display', Display::class)->name('display');
-
-    // Route::get('/inventory/outlet', Outlet::class)->name('outlet');
-
-    // Route::get('/inventory/displays', Displays::class)->name('displays');
-
-    // Route::get('/inventory/outlets', Outlets::class)->name('outlets');
-
-    // Route::get('/inventory/new_model', NewModel::class)->name('new_model');
 });
 
 Route::middleware(['auth', 'verified'])->group( function () {
@@ -103,6 +90,8 @@ Route::middleware(['auth', 'verified'])->group( function () {
     Route::get('/products/outgoing/summary', summaryOutgoingProducts::class)->name('summary-outgoing');
     Route::get('/products/monthly-outgoing/summary', MonthlyDelivered::class)->name('monthly-summary-outgoing');
 
+    // Route::get('/products/sold/per_day', Sold::class)->name('products.sold_per_day');
+
     Route::get('/products/details/{id}', ProductDetails::class)->name('update-product');
 
     Route::get('/products/generate-barcode/{id}', GenerateBarcode::class)->name('generate-barcode-product');
@@ -114,7 +103,11 @@ Route::middleware(['auth', 'verified'])->group( function () {
     Route::post('/api/add-barcode', [AddStockBarcode::class, 'handleBarcode']);
 
     Route::get('/products/delivery-logs', DeliveryLog::class)->name('delivery-logs');
-    
+
+    // Route::get('/products/product_stocks-summary', ProductSummary::class)->name('products.summary_stocks');
+
+    Route::get('/products/lara', Lara::class)->name('products.lara');
+
 
 });
 
@@ -131,7 +124,7 @@ Route::middleware(['auth', 'verified'])->group( function () {
 
     Route::get('/packaging/per-day/generate_pdf_today_report', GeneratePdf::class)->name('generate-pdf');
     Route::get('/generate-pdf', [GeneratePdf::class, 'render']);
-    
+
 });
 
 Route::middleware(['auth', 'verified'])->group( function () {
@@ -149,8 +142,15 @@ Route::middleware(['auth', 'verified'])->group( function () {
 
     Route::get('/factory/add-todo', FactAddTodo::class)->name('factory-add_to-do');
 
-    
+
 });
+
+// Route::middleware(['auth', 'verified'])->group( function () {
+//     Route::get('/users', ListOfUsers::class)->name('users');
+
+//     Route::get('/create-user', CreateUser::class)->name('create-user');
+//     Route::get('/create-roles', CreateRoles::class)->name('create-roles');
+// });
 
 // Route::get('/generate-pdf', [PDFController::class, 'generatePDF']);
 
