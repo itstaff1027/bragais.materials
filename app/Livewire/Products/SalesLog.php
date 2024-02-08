@@ -452,11 +452,11 @@ class SalesLog extends Component
         return Excel::download(new SalesLogExport($data, $this->year), "$this->year.xlsx");
     }
     
-    public function addToCompletePackaging($orderNo, $orderList, $packagingType, $sellType){
+    public function addToCompletePackaging($orderNo, $orderList, $packagingType, $soldFrom){
         $this->order_number = $orderNo;
 
-        // if($sellType == 'PULLOUT'){
-        //     throw new Error("This order Type cannot be added ! {$sellType}");
+        // if($soldFrom == 'PULLOUT'){
+        //     throw new Error("This order Type cannot be added ! {$soldFrom}");
         // }
 
         // if($packagingType == 'DUSTBAG ONLY'){
@@ -482,6 +482,7 @@ class SalesLog extends Component
             throw new Error('Unknow Products');
         }
         
+        // ADD COLUMN IN PRODUCTION ORDER TYPE
         foreach($products as $product){
             DB::table('product_stocks')->insert([
                 'user_id' => $user_id,
@@ -490,7 +491,8 @@ class SalesLog extends Component
                 'stocks' => -1,
                 'remarks' => "DEDUCT - {$packagingType}",
                 'status' => 'OUTGOING',
-                'action' => 'DEDUCT'
+                'action' => 'DEDUCT',
+                'order_from' => $soldFrom
             ]);
 
             if($packagingType == 'DUSTBAG ONLY'){
