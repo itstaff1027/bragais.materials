@@ -63,7 +63,7 @@ class LaraExport implements FromView, ShouldAutoSize
                 'products.heel_height',
                 'products.size',
                 'product_stocks.order_from',
-                DB::raw('SUM(product_stocks.stocks) as total_quantity')
+                DB::raw('SUM(ABS(product_stocks.stocks)) as total_quantity')
             )
             ->groupBy(
                 'products.model',

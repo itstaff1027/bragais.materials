@@ -49,7 +49,7 @@
             </thead>
             <tbody>
                 @foreach ($orders as $order)
-                <tr class="hover:bg-violet-900 hover:text-white odd:bg-gray-200" wire:key:='{{ $order['OrderNo'] }}'>
+                <tr class="hover:bg-violet-900 hover:text-white odd:bg-gray-200 {{ $order['is_replacement'] ? 'bg-emerald-700 text-white' : '' }} {{ $order['Sale'] == 'PULLOUT' ? 'bg-slate-700 text-white' : '' }}" wire:key:='{{ $order['OrderNo'] }}'>
                     <td class="p-2">{{ $order['OrderNo'] }}</td>
                     <td>{{ $order['OrderType'] }}</td>
                     <td>{{ $order['Sale'] }}</td>
@@ -64,7 +64,7 @@
                     <td>{{ $order['Packaging'] }}</td>
                     <td>{{ $order['Courier'] }}</td>
                     <td>
-                        <form wire:submit.prevent="addToCompletePackaging('{{ $order['OrderNo'] }}', '{{ $order['OrderList'] }}', '{{ $order['Packaging'] }}', '{{ $order['Sale'] }}')"
+                        <form wire:submit.prevent="addToCompletePackaging('{{ $order['OrderNo'] }}', '{{ $order['OrderList'] }}', '{{ $order['Packaging'] }}', '{{ $order['Sale'] }}', '{{ $order['is_replacement'] }}')"
                         wire:confirm="Are you sure you want to add this to complete packaging?"
                         >
                             @csrf

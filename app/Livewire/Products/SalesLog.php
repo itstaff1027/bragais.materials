@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Http;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Models\PackagingMaterialLogs;
 use App\Livewire\Packaging\MaterialLogs;
+use App\Models\ProductStocks;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 #[Title('Sales')]
@@ -452,8 +453,9 @@ class SalesLog extends Component
         return Excel::download(new SalesLogExport($data, $this->year), "$this->year.xlsx");
     }
     
-    public function addToCompletePackaging($orderNo, $orderList, $packagingType, $soldFrom){
+    public function addToCompletePackaging($orderNo, $orderList, $packagingType, $soldFrom, $is_replacement){
         $this->order_number = $orderNo;
+        $order_numberExist = '';
 
         // if($soldFrom == 'PULLOUT'){
         //     throw new Error("This order Type cannot be added ! {$soldFrom}");
@@ -467,7 +469,25 @@ class SalesLog extends Component
         //     throw new Error('This order is NO PACKAGING!');
         // }
 
-        $order_numberExist = PackagingMaterialLogs::where('order_number', intval($orderNo))->exists();
+        if(!$is_replacement){
+            $order_numberExist = PackagingMaterialLogs::where('order_number', intval($orderNo))->exists();
+        }
+
+        // ADD COLUMN IN DATABSE is_replacement in product_stocks
+        if($is_replacement){
+            $order_numberExist = DB::table('product_stocks')->where('order_number', intval($orderNo))->where('is_replacement', '=', 'YES')->exists();
+            if(!$order_numberExist){
+                $products = ProductStocks::where('order_number', intval($orderNo))->where('is_replacement', '<>', 'YES')->get();
+                // dd($products);
+                foreach($products as $product){
+                    $product->status = 'INCOMING';
+                    $product->stocks = -($product->stocks);
+                    $product->is_replacement = 'YES';
+                    $product->save();
+                }
+                
+            }
+        }
 
         if ($order_numberExist) {
             // Handle the case where the order number does not exist
@@ -492,8 +512,10 @@ class SalesLog extends Component
                 'remarks' => "DEDUCT - {$packagingType}",
                 'status' => 'OUTGOING',
                 'action' => 'DEDUCT',
-                'order_from' => $soldFrom
+                'order_from' => $soldFrom,
+                'is_replacement' => $is_replacement ? 'YES' : ''
             ]);
+            
 
             if($packagingType == 'DUSTBAG ONLY'){
                 if($product['category'] == 'PAGEANT'){

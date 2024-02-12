@@ -62,9 +62,6 @@
                     $totalQuantityUS = 0;
                 @endphp
                 @if ($order_from == 'ONLINE')
-                    @php
-                        $totalQuantityOnlineUS++
-                    @endphp
                     <tr>
                         <td>{{ $model }}</td>
                         <td>{{ $color }}</td>
@@ -74,6 +71,7 @@
                                     {{ $sizes[$size] }}
                                     @php
                                         $totalQuantityUS += $sizes[$size];
+                                        $totalQuantityOnlineUS += $sizes[$size]
                                     @endphp
                                 @else
                                     0
@@ -121,9 +119,6 @@
                     $totalQuantityEURO = 0;
                 @endphp
                 @if ($order_from == 'ONLINE')
-                    @php
-                        $totalQuantityOnlineEURO++
-                    @endphp
                     <tr>
                         <td>{{ $model }}</td>
                         <td>{{ $color }}</td>
@@ -133,6 +128,7 @@
                                     {{ $sizes[$size] }}
                                     @php
                                         $totalQuantityEURO += $sizes[$size];
+                                        $totalQuantityOnlineEURO += $sizes[$size];
                                     @endphp
                                 @else
                                     0
@@ -189,9 +185,6 @@
                     $totalQuantityUS = 0;
                 @endphp
                 @if ($order_from == 'STORE')
-                    @php
-                        $totalQuantityStoreUS++
-                    @endphp
                     <tr>
                         <td>{{ $model }}</td>
                         <td>{{ $color }}</td>
@@ -201,6 +194,7 @@
                                     {{ $sizes[$size] }}
                                     @php
                                         $totalQuantityUS += $sizes[$size];
+                                        $totalQuantityStoreUS += $sizes[$size];
                                     @endphp
                                 @else
                                     0
@@ -249,9 +243,6 @@
                     $totalQuantityEURO = 0;
                 @endphp
                 @if ($order_from == 'STORE')
-                    @php
-                        $totalQuantityStoreEURO++
-                    @endphp
                     <tr>
                         <td>{{ $model }}</td>
                         <td>{{ $color }}</td>
@@ -261,6 +252,7 @@
                                     {{ $sizes[$size] }}
                                     @php
                                         $totalQuantityEURO += $sizes[$size];
+                                        $totalQuantityStoreEURO += $sizes[$size]
                                     @endphp
                                 @else
                                     0
