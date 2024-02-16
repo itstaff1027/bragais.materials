@@ -18,10 +18,9 @@
         {{-- <input type="radio" value="STORE" wire:click="filterBySoldFrom('STORE')" />
         <input type="radio" value="ONLINE" wire:click="filterBySoldFrom('ONLINE')" /> --}}
     </div>
-    
-    <a href={{ route('lara-monthly') }} wire:navigate>
-        Monthly
-    </a>
+
+    <input type="text" class="rounded-l-md border-2" wire:model.live='year' placeholder="Year" />
+    <input type="text" class="rounded-l-md border-2" wire:model.live='month' placeholder="Month" />
         
     @php
         $size_us = ['5', '6', '7', '8', '9', '10', '11', '12'];
