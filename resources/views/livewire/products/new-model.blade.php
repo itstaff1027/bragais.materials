@@ -19,6 +19,8 @@
             <input type="radio" value="US" wire:model="size_type" /> 
             <label>EURO</label>
             <input type="radio" value="EURO" wire:model="size_type" />
+            <label>BELT</label>
+            <input type="radio" value="BELT" wire:model="size_type" />
 
             @if ($errors->has('size_type')) <!-- Fixed this line -->
             <span class="error text-red-600">{{ $errors->first('size_type') }}</span> <!-- Fixed this line -->

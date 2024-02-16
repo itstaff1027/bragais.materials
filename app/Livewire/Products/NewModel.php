@@ -40,13 +40,18 @@ class NewModel extends Component
             $sizes = ['35', '36', '37', '38', '39', '40', '41', '42', '43', '44', '45'];
         }
 
+        if($this->size_type == 'BELT'){
+            $sizes = ['80', '85', '90', '95', '100', '105', '110'];
+        }
+
         if(!$this->size_type){
             throw new Error('Unkown data!');
         }
 
+
         foreach($sizes as $size){
             DB::table('products')->insert([
-                'product_sku' => "{$this->product_sku}{$size}N{$this->product_heel_height}",
+                'product_sku' => $this->size_type == 'US' || $this->size_type == 'EURO' ? "{$this->product_sku}{$size}N{$this->product_heel_height}" : "{$this->product_sku}S{$size}",
                 'model' => $this->product_model,
                 'color' => $this->product_color,
                 'size' => $size,
