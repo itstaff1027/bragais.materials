@@ -18,6 +18,10 @@
         {{-- <input type="radio" value="STORE" wire:click="filterBySoldFrom('STORE')" />
         <input type="radio" value="ONLINE" wire:click="filterBySoldFrom('ONLINE')" /> --}}
     </div>
+
+    <input type="text" class="rounded-l-md border-2"  wire:model.live='year' placeholder="Year" />
+    <input type="text" class="rounded-l-md border-2"  wire:model.live='month' placeholder="Month" />
+
     @php
         $size_us = ['5', '6', '7', '8', '9', '10', '11', '12'];
         $size_euro = ['35', '36', '37', '38', '39', '40', '41', '42', '43', '44', '45'];

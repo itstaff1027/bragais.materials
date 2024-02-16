@@ -25,6 +25,9 @@ class MonthlyDelivered extends Component
 
     public $order_from;
 
+    public $year;
+    public $month;
+
     public function getDate(){
         $today = date('Y-m-d');
         return $today;
@@ -41,16 +44,13 @@ class MonthlyDelivered extends Component
 
     public function export() 
     {
-        return Excel::download(new MonthlyDeliveredExport($this->order_from), "OUTGOING_PRODUCT_MONTHLY_{$this->getDate()}.xlsx");
+        return Excel::download(new MonthlyDeliveredExport($this->order_from, $this->year, $this->month), "OUTGOING_PRODUCT_MONTHLY_{$this->getDate()}.xlsx");
     }
     public function render()
     {   
         $today = $this->filter_date;
-        $month = Date('m');
-        $year = Date('Y');
         $query = DB::table('outgoing_product_logs')
-            ->whereDate(DB::raw('MONTH(created_at)'), '=', $month)
-            ->whereDate(DB::raw('YEAR(created_at)'), '=', $year)
+            ->whereYear('created_at', '=', $this->year)
             ->join('products', 'products.id', '=', 'outgoing_product_logs.product_id')
             ->select(
                 'outgoing_product_logs.closed_sale_date',
@@ -78,6 +78,10 @@ class MonthlyDelivered extends Component
         if($this->order_from){
             $query->where('outgoing_product_logs.order_from', '=', $this->order_from);
             // dd($products);
+        }
+
+        if($this->month){
+            $query->whereMonth('created_at', '=', $this->month);
         }
 
         $products = $query->get();

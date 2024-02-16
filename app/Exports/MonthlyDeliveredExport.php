@@ -38,6 +38,9 @@ class MonthlyDeliveredExport implements FromView, ShouldAutoSize, WithStyles
     public $quantity;
     public $sold_from;
 
+    public $year;
+    public $month;
+
 
     public $packaging_material_id;
 
@@ -46,9 +49,11 @@ class MonthlyDeliveredExport implements FromView, ShouldAutoSize, WithStyles
         return $today;
     }
 
-    public function __construct($soldFrom){
+    public function __construct($soldFrom, $year, $month){
         $this->filter_date = $this->getDate();
         $this->sold_from = $soldFrom;
+        $this->year = $year;
+        $this->month = $month;
     }
 
     public function styles(Worksheet $sheet)
@@ -96,8 +101,8 @@ class MonthlyDeliveredExport implements FromView, ShouldAutoSize, WithStyles
         $month = Date('m');
         $year = Date('Y');
         $query = DB::table('outgoing_product_logs')
-            ->whereDate(DB::raw('MONTH(created_at)'), '=', $month)
-            ->whereDate(DB::raw('YEAR(created_at)'), '=', $year)
+
+            ->whereYear('created_at', '=', $this->year)
             ->join('products', 'products.id', '=', 'outgoing_product_logs.product_id')
             ->select(
                 'outgoing_product_logs.closed_sale_date',
@@ -123,10 +128,13 @@ class MonthlyDeliveredExport implements FromView, ShouldAutoSize, WithStyles
 
 
             if($this->sold_from){
-                $query->where('outgoing_product_logs.order_from', '=', $this->sold_from);
+                // $query->where('outgoing_product_logs.order_from', '=', $this->sold_from);
                 // dd($products);
             }
-    
+            if($this->month){
+                $query->whereMonth('created_at', '=', $this->month);
+            }
+                
             $products = $query->get();
             
         // dd($products);
