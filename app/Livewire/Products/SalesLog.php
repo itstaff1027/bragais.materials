@@ -47,7 +47,7 @@ class SalesLog extends Component
                 $data = $response->body(); // Use $response->json() directly
                 $this->datas = json_decode($data, true);
 
-                
+
             } else {
                 // Handle non-successful response, e.g., 4xx or 5xx status codes
                 $this->datas = []; // Set $this->datas to an empty array or handle the error as needed
@@ -105,15 +105,15 @@ class SalesLog extends Component
 
     public function getDataMonthly(){
         $this->dataMonthly = [];
-    
+
         try {
             $response = Http::connectTimeout(3)->withoutVerifying()->get("https://shoecietyinc.com/api/sales/get_sales_monthly.php?year={$this->year}&month={$this->month}");
-    
+
             if ($response->ok()) {
                 $data = $response->body();
                 error_log("Response Body: " . $data);
                 $dataMonthly = json_decode($data, true);
-    
+
                 if ($dataMonthly !== null && json_last_error() === JSON_ERROR_NONE) {
                     $itemList = [];
                     $bus = 0;
@@ -124,7 +124,7 @@ class SalesLog extends Component
                     $storePickUp = 0;
                     $storeSales = 0;
                     $lalamove = 0;
-    
+
                     foreach ($dataMonthly as $item) {
 
                         // Use associative keys to access values
@@ -182,7 +182,7 @@ class SalesLog extends Component
                         }
                     }
 
-    
+
                     $itemList[] = [
                         'BUS' => $bus,
                         'FEDEX' => $fedex,
@@ -193,7 +193,7 @@ class SalesLog extends Component
                         'STORE PICKUP' => $storePickUp,
                         'STORE SALES' => $storeSales
                     ];
-    
+
                     $this->dataMonthly = $itemList;
                     dd($itemList);
                 } else {
@@ -214,16 +214,16 @@ class SalesLog extends Component
     //     $this->dataMonthly = [];
     //     try {
     //         $response = Http::connectTimeout(3)->withoutVerifying()->get("https://shoecietyinc.com/api/sales/get_sales_monthly.php?year={$this->year}&month={$this->month}");
-    
+
     //         if ($response->ok()) {
     //             $data = $response->body();
     //             error_log("Response Body: " . $data);
     //             $dataMonthly = json_decode($data, true);
-    
+
     //             if ($dataMonthly !== null && json_last_error() === JSON_ERROR_NONE) {
     //                 $itemCounts = [];
     //                 $totalItemCount = 0;
-    
+
     //                 foreach ($dataMonthly as $item) {
     //                     $orderList = explode(',', $item['OrderList']);
     //                     $cleanOrderList = array_filter($orderList);
@@ -239,12 +239,12 @@ class SalesLog extends Component
     //                     }
     //                 }
     //                 dd($itemCounts);
-    
+
     //                 // Output item counts
     //                 foreach ($itemCounts as $itemName => $count) {
     //                     error_log("Item: $itemName, Count: $count");
     //                 }
-    
+
     //                 // Output total count
     //                 error_log("Total Count of All Items: $totalItemCount");
     //             } else {
@@ -265,16 +265,16 @@ class SalesLog extends Component
     //     $this->dataMonthly = [];
     //     try {
     //         $response = Http::connectTimeout(3)->withoutVerifying()->get("https://shoecietyinc.com/api/sales/get_sales_monthly.php?year={$this->year}&month={$this->month}");
-    
+
     //         if ($response->ok()) {
     //             $data = $response->body();
     //             error_log("Response Body: " . $data);
     //             $dataMonthly = json_decode($data, true);
-    
+
     //             if ($dataMonthly !== null && json_last_error() === JSON_ERROR_NONE) {
     //                 $itemCounts = [];
     //                 $totalItemCount = 0;
-    
+
     //                 foreach ($dataMonthly as $item) {
     //                     $orderList = explode(',', $item['OrderList']);
     //                     $cleanOrderList = array_filter($orderList);
@@ -299,7 +299,7 @@ class SalesLog extends Component
     //                 foreach ($itemCounts as $design => $count) {
     //                     error_log("Design: $design, Count: $count");
     //                 }
-    
+
     //                 // Output total count
     //                 error_log("Total Count of All Designs: $totalItemCount");
     //             } else {
@@ -320,15 +320,15 @@ class SalesLog extends Component
         $this->dataMonthly = [];
         try {
             $response = Http::connectTimeout(3)->withoutVerifying()->get("https://shoecietyinc.com/api/sales/get_sales_monthly.php?year={$this->year}&month={$this->month}");
-    
+
             if ($response->ok()) {
                 $data = $response->body();
                 error_log("Response Body: " . $data);
                 $dataMonthly = json_decode($data, true);
-    
+
                 if ($dataMonthly !== null && json_last_error() === JSON_ERROR_NONE) {
                     $itemCounts = [];
-    
+
                     foreach ($dataMonthly as $item) {
                         $orderList = explode(',', $item['OrderList']);
                         $cleanOrderList = array_filter($orderList);
@@ -375,12 +375,12 @@ class SalesLog extends Component
         $this->dataMonthly = [];
         try {
             $response = Http::connectTimeout(3)->withoutVerifying()->get("https://shoecietyinc.com/api/sales/get_sales_with_customer.php?year={$this->year}");
-    
+
             if ($response->ok()) {
                 $data = $response->body();
                 error_log("Response Body: " . $data);
                 $dataMonthly = json_decode($data, true);
-    
+
                 if ($dataMonthly !== null && json_last_error() === JSON_ERROR_NONE) {
                     $items = [];
                     foreach ($dataMonthly as $item) {
@@ -427,7 +427,7 @@ class SalesLog extends Component
                     // dd($items);
                     // $this->dataMonthly = $items;
                     return $items;
-    
+
                     // Output item counts
                     // foreach ($itemCounts as $itemName => $count) {
                     //     error_log("Item: $itemName, Count: $count");
@@ -452,10 +452,19 @@ class SalesLog extends Component
         // dd($data);
         return Excel::download(new SalesLogExport($data, $this->year), "$this->year.xlsx");
     }
-    
+
     public function addToCompletePackaging($orderNo, $orderList, $packagingType, $soldFrom, $is_replacement){
         $this->order_number = $orderNo;
         $order_numberExist = '';
+        // dd($packagingType);
+        if ($packagingType != "COMPLETE PACKAGING" && $packagingType != "DUTBAG ONLY") {
+            $products = ProductStocks::where('order_number', intval($orderNo))->where('is_replacement', '<>', 'YES')->get();
+            // dd($products);
+            if ($products->isNotEmpty()) {
+                throw new Error('Already Added!');
+            }
+        }
+        
 
         // if($soldFrom == 'PULLOUT'){
         //     throw new Error("This order Type cannot be added ! {$soldFrom}");
@@ -485,9 +494,10 @@ class SalesLog extends Component
                     $product->is_replacement = 'YES';
                     $product->save();
                 }
-                
+
             }
         }
+
 
         if ($order_numberExist) {
             // Handle the case where the order number does not exist
@@ -501,9 +511,10 @@ class SalesLog extends Component
         if(!$products){
             throw new Error('Unknow Products');
         }
-        
+
         // ADD COLUMN IN PRODUCTION ORDER TYPE
         foreach($products as $product){
+
             DB::table('product_stocks')->insert([
                 'user_id' => $user_id,
                 'product_id' => $product['id'],
@@ -515,7 +526,6 @@ class SalesLog extends Component
                 'order_from' => $soldFrom,
                 'is_replacement' => $is_replacement ? 'YES' : ''
             ]);
-            
 
             if($packagingType == 'DUSTBAG ONLY'){
                 if($product['category'] == 'PAGEANT'){
@@ -534,92 +544,19 @@ class SalesLog extends Component
                 }
             }
 
-            if($packagingType == 'ORDINARY PACKAGING NO DUSTBAG'){
-                if($product['category'] === "PAGEANT"){
-                
-                    // TISSUE
-                    $this->insertCompletePackagingSale(18, $product['id'], -1, 1, 'OUTGOING');
-        
-                    if($product['model'] == 'KEVIN-V2'){
-                        // PILLON
-                        $this->insertCompletePackagingSale(1, $product['id'], -2, 1, 'OUTGOING');
-        
-                        if($product['size'] >= 9 && $product['size'] <= 12){
-                            // Box
-                            $this->insertCompletePackagingSale(11, $product['id'], -1, 1, 'OUTGOING');
-                            // RIBBON
-                            $this->insertCompletePackagingSale(19, $product['id'], (-1/15), 1, 'OUTGOING');
-                        }
-                        else{
-                            // Box
-                            $this->insertCompletePackagingSale(10, $product['id'], -1, 1, 'OUTGOING');
-                            // RIBBON
-                            $this->insertCompletePackagingSale(19, $product['id'], (-1/20), 1, 'OUTGOING');
-                        }
-                    }
-                    else{
-                        if($product['heel_height'] >= 8 and $product['heel_height'] <= 12){
-                            // Box
-                            $this->insertCompletePackagingSale(16, $product['id'], -1, 1, 'OUTGOING');
-                            // PILON
-                            $this->insertCompletePackagingSale(2, $product['id'], -2, 1, 'OUTGOING');
-                            // RIBBON
-                            $this->insertCompletePackagingSale(20, $product['id'], (-1/15), 1, 'OUTGOING');
-                        }
-                        else {
-                            // Box
-                            $this->insertCompletePackagingSale(16, $product['id'], -1, 1, 'OUTGOING');
-                            // PILON
-                            $this->insertCompletePackagingSale(2, $product['id'], -2, 1, 'OUTGOING');
-                            // RIBBON
-                            $this->insertCompletePackagingSale(20, $product['id'], (-1/20), 1, 'OUTGOING');
-                        }
-                        
-                    }
-                }
-        
-                if($product['category'] === "HEELS"){
-                    // Box
-                    $this->insertCompletePackagingSale(15, $product['id'], -1, 1, 'OUTGOING');
-                    // PILON
-                    $this->insertCompletePackagingSale(3, $product['id'], -2, 1, 'OUTGOING');
-                    // RIBBON
-                    $this->insertCompletePackagingSale(20, $product['id'], (-1/20), 1, 'OUTGOING');
-                    // TISSUE
-                    $this->insertCompletePackagingSale(18, $product['id'], -1, 1, 'OUTGOING');
-                }
-        
-                if($product['category'] === "MANDIATOR"){
-                    // Box
-                    $this->insertCompletePackagingSale(21, $product['id'], -1, 1, 'OUTGOING');
-                    // LL PILON
-                    $this->insertCompletePackagingSale(4, $product['id'], -1, 1, 'OUTGOING');
-                    // TISSUE
-                    $this->insertCompletePackagingSale(18, $product['id'], -1, 1, 'OUTGOING');
-                }
-        
-                if($product['category'] === "WONDIATOR"){
-                    // Box
-                    $this->insertCompletePackagingSale(22, $product['id'], -1, 1, 'OUTGOING');
-                    // LL PILON
-                    $this->insertCompletePackagingSale(4, $product['id'], -1, 1, 'OUTGOING');
-                    // TISSUE
-                    $this->insertCompletePackagingSale(18, $product['id'], -1, 1, 'OUTGOING');
-                }
-            }
 
             if($packagingType == 'COMPLETE PACKAGING'){
                 if($product['category'] === "PAGEANT"){
-                
+
                     // TISSUE
                     $this->insertCompletePackagingSale(18, $product['id'], -1, 1, 'OUTGOING');
                     // DUST BAG
                     $this->insertCompletePackagingSale(8, $product['id'], -1, 1, 'OUTGOING');
-        
+
                     if($product['model'] == 'KEVIN-V2'){
                         // PILLON
                         $this->insertCompletePackagingSale(1, $product['id'], -2, 1, 'OUTGOING');
-        
+
                         if($product['size'] >= 9 && $product['size'] <= 12){
                             // Box
                             $this->insertCompletePackagingSale(11, $product['id'], -1, 1, 'OUTGOING');
@@ -650,10 +587,10 @@ class SalesLog extends Component
                             // RIBBON
                             $this->insertCompletePackagingSale(20, $product['id'], (-1/20), 1, 'OUTGOING');
                         }
-                        
+
                     }
                 }
-        
+
                 if($product['category'] === "HEELS"){
                     // Box
                     $this->insertCompletePackagingSale(15, $product['id'], -1, 1, 'OUTGOING');
@@ -666,7 +603,7 @@ class SalesLog extends Component
                     // DUST BAG
                     $this->insertCompletePackagingSale(8, $product['id'], -1, 1, 'OUTGOING');
                 }
-        
+
                 if($product['category'] === "MANDIATOR"){
                     // Box
                     $this->insertCompletePackagingSale(21, $product['id'], -1, 1, 'OUTGOING');
@@ -677,7 +614,7 @@ class SalesLog extends Component
                     // ll DUST BAG
                     $this->insertCompletePackagingSale(6, $product['id'], -1, 1, 'OUTGOING');
                 }
-        
+
                 if($product['category'] === "WONDIATOR"){
                     // Box
                     $this->insertCompletePackagingSale(22, $product['id'], -1, 1, 'OUTGOING');
@@ -692,7 +629,7 @@ class SalesLog extends Component
 
 
         }
-        
+
     }
 
     private function getProductIDs($orderList){
@@ -707,7 +644,7 @@ class SalesLog extends Component
         $lists = array_values($lists);
 
         $disperseOrdersArray = array();
-        
+
         // dd($lists);
         foreach($lists as $list){
             $parts = explode(' ', $list);
@@ -725,11 +662,11 @@ class SalesLog extends Component
             else{
                 $numericValue = 0;
             }
-            
+
             // dd($numericValue);
             $checkProduct = DB::table('products')->where('model', '=', "{$parts[0]}")->where('color', '=', "{$parts[1]}")
             ->exists();
-            
+
             if($checkProduct){
                 // Store the disperse orders in an associative array
                 $disperseOrders = array(
@@ -744,16 +681,16 @@ class SalesLog extends Component
                 ->where('size', '=', $disperseOrders['size'])
                 ->where('heel_height', '=', $disperseOrders['heel_height'])
                 ->first();
-            
+
                 // dd($product);
 
                 // Append the current order to the results array
                 $disperseOrdersArray[] = [
                     'id' => $product->id,
                     'product_sku' => $product->product_sku,
-                    'model' => $product->model,        
-                    'color' => $product->color,        
-                    'size' => $product->size,         
+                    'model' => $product->model,
+                    'color' => $product->color,
+                    'size' => $product->size,
                     'heel_height' => $product->heel_height,
                     'category' => $product->category
                 ];
@@ -811,7 +748,7 @@ class SalesLog extends Component
 
     }
 
-    
+
 
     public function render()
     {
@@ -825,5 +762,5 @@ class SalesLog extends Component
             // 'orders_saleslog' => $data,
         ]);
     }
-    
+
 }
