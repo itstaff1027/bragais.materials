@@ -7,6 +7,7 @@ use App\Livewire\Inventory;
 use App\Livewire\Packaging;
 use App\Livewire\ListOfUsers;
 use App\Livewire\Products\Lara;
+use App\Livewire\Products\LaraMonthly;
 use App\Livewire\Products\Sold;
 use App\Livewire\Packaging\PerDay;
 use App\Livewire\Products\Barcode;
@@ -90,7 +91,7 @@ Route::middleware(['auth', 'verified'])->group( function () {
     Route::get('/products/outgoing/summary', summaryOutgoingProducts::class)->name('summary-outgoing');
     Route::get('/products/monthly-outgoing/summary', MonthlyDelivered::class)->name('monthly-summary-outgoing');
 
-    // Route::get('/products/sold/per_day', Sold::class)->name('products.sold_per_day');
+    Route::get('/products/sold/per_day', Sold::class)->name('products.sold_per_day');
 
     Route::get('/products/details/{id}', ProductDetails::class)->name('update-product');
 
@@ -104,9 +105,10 @@ Route::middleware(['auth', 'verified'])->group( function () {
 
     Route::get('/products/delivery-logs', DeliveryLog::class)->name('delivery-logs');
 
-    // Route::get('/products/product_stocks-summary', ProductSummary::class)->name('products.summary_stocks');
+    Route::get('/products/product_stocks-summary', ProductSummary::class)->name('products.summary_stocks');
 
     Route::get('/products/lara', Lara::class)->name('products.lara');
+    Route::get('/products/lara-monthly', LaraMonthly::class)->name('lara-monthly');
 
 
 });
@@ -145,12 +147,12 @@ Route::middleware(['auth', 'verified'])->group( function () {
 
 });
 
-// Route::middleware(['auth', 'verified'])->group( function () {
-//     Route::get('/users', ListOfUsers::class)->name('users');
+Route::middleware(['auth', 'verified'])->group( function () {
+    Route::get('/users', ListOfUsers::class)->name('users');
 
-//     Route::get('/create-user', CreateUser::class)->name('create-user');
-//     Route::get('/create-roles', CreateRoles::class)->name('create-roles');
-// });
+    Route::get('/create-user', CreateUser::class)->name('create-user');
+    Route::get('/create-roles', CreateRoles::class)->name('create-roles');
+});
 
 // Route::get('/generate-pdf', [PDFController::class, 'generatePDF']);
 
