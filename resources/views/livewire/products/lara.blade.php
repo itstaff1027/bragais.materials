@@ -26,6 +26,7 @@
     @php
         $size_us = ['5', '6', '7', '8', '9', '10', '11', '12'];
         $size_euro = ['35', '36', '37', '38', '39', '40', '41', '42', '43', '44', '45'];
+        $size_belt = ['80', '85', '90', '95', '100', '105', '110'];
     @endphp
     <table class="table-auto w-full text-center divide-y-2 border-2 ">
         <caption>
@@ -151,6 +152,66 @@
     <br><br>
 
     <table class="table-auto w-full text-center divide-y-2 border-2 ">
+        <thead>
+            <tr class=" border-2 ">
+                <th>Design</th>
+                <th>Color</th>
+                <th colspan="7" class="border-2">Size</th>
+                <th>Heel Height</th>
+                <th>Quantity</th>
+            </tr>
+            <tr>
+                <th></th>
+                <th></th>
+                @foreach ($size_belt as $sizes)
+                    <th class=" border-2 ">{{ $sizes }}</th>
+                @endforeach
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @php
+                $totalQuantityOnlineBELT = 0
+            @endphp
+            @foreach ($quantitiesBELT as $key => $sizes)
+                @php
+                    list($model, $color, $heelHeight, $order_from) = explode(',', $key);
+                    $totalQuantityBELT = 0;
+                @endphp
+                @if ($order_from == 'ONLINE')
+                    <tr>
+                        <td>{{ $model }}</td>
+                        <td>{{ $color }}</td>
+                        @foreach ($size_belt as $size)
+                            <td class=" border-2 ">
+                                @if(isset($sizes[$size]))
+                                    {{ $sizes[$size] }}
+                                    @php
+                                        $totalQuantityBELT += $sizes[$size];
+                                        $totalQuantityOnlineBELT += $sizes[$size];
+                                    @endphp
+                                @else
+                                    0
+                                @endif
+                            </td>
+                        @endforeach
+                        <td>{{ $heelHeight }}</td>
+                        <td>{{ $totalQuantityBELT }}</td>
+                    </tr>
+                @endif
+                
+            @endforeach
+            <tr>
+                <td  class=" border-2 ">Total Quantity: {{ $totalQuantityOnlineBELT }}</td>
+                
+            </tr>
+        </tbody>
+    </table>
+
+    <br><br>
+
+    <table class="table-auto w-full text-center divide-y-2 border-2 ">
         <caption>
             <h1 class="font-bold text-2xl">Summary - STORE</h1>
         </caption>
@@ -267,6 +328,66 @@
             @endforeach
             <tr>
                 <td  class=" border-2 ">Total Quantity: {{ $totalQuantityStoreEURO }}</td>
+                
+            </tr>
+        </tbody>
+    </table>
+
+    <br><br>
+
+    <table class="table-auto w-full text-center divide-y-2 border-2 ">
+        <thead>
+            <tr class=" border-2 ">
+                <th>Design</th>
+                <th>Color</th>
+                <th colspan="7" class="border-2">Size</th>
+                <th>Heel Height</th>
+                <th>Quantity</th>
+            </tr>
+            <tr>
+                <th></th>
+                <th></th>
+                @foreach ($size_belt as $sizes)
+                    <th class=" border-2 ">{{ $sizes }}</th>
+                @endforeach
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @php
+                $totalQuantityStoreBELT = 0
+            @endphp
+            @foreach ($quantitiesBELT as $key => $sizes)
+                @php
+                    list($model, $color, $heelHeight, $order_from) = explode(',', $key);
+                    $totalQuantityBELT = 0;
+                @endphp
+                @if ($order_from == 'STORE')
+                    <tr>
+                        <td>{{ $model }}</td>
+                        <td>{{ $color }}</td>
+                        @foreach ($size_belt as $size)
+                            <td class=" border-2 ">
+                                @if(isset($sizes[$size]))
+                                    {{ $sizes[$size] }}
+                                    @php
+                                        $totalQuantityBELT += $sizes[$size];
+                                        $totalQuantityStoreBELT += $sizes[$size];
+                                    @endphp
+                                @else
+                                    0
+                                @endif
+                            </td>
+                        @endforeach
+                        <td>{{ $heelHeight }}</td>
+                        <td>{{ $totalQuantityBELT }}</td>
+                    </tr>
+                @endif
+                
+            @endforeach
+            <tr>
+                <td  class=" border-2 ">Total Quantity: {{ $totalQuantityStoreBELT }}</td>
                 
             </tr>
         </tbody>

@@ -82,6 +82,7 @@ class LaraMonthly extends Component
         // Prepare an associative array to store quantities based on model, color, heel height, and size
         $quantitiesUS = [];
         $quantitiesEURO = [];
+        $quantitiesBELT = [];
         $totalQuantity = 0;
         // dd($products);
         foreach ($products as $product) {
@@ -114,9 +115,19 @@ class LaraMonthly extends Component
                 // If there's no quantity recorded for a size, it defaults to 0
                 $quantitiesEURO[$key][$size] = $product->total_quantity;
             }
+            if($product->size >= 80 && $product->size <= 110){
+                $key = "{$product->model},{$product->color},{$product->heel_height},{$product->order_from}";
+                $size = $product->size;
+
+                if (!isset($quantitiesBELT[$key])) {
+                    $quantitiesBELT[$key] = [];
+                }
+                // If there's no quantity recorded for a size, it defaults to 0
+                $quantitiesBELT[$key][$size] = $product->total_quantity;
+            }
 
         }       
         
-        return view('livewire.products.lara-monthly', compact('today', 'quantitiesUS', 'quantitiesEURO', 'totalQuantity'));
+        return view('livewire.products.lara-monthly', compact('today', 'quantitiesUS', 'quantitiesEURO', 'quantitiesBELT', 'totalQuantity'));
     }
 }

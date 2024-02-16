@@ -84,6 +84,7 @@ class LaraExport implements FromView, ShouldAutoSize
         // Prepare an associative array to store quantities based on model, color, heel height, and size
         $quantitiesUS = [];
         $quantitiesEURO = [];
+        $quantitiesBELT = [];
         $totalQuantity = 0;
 
         foreach ($products as $product) {
@@ -117,10 +118,21 @@ class LaraExport implements FromView, ShouldAutoSize
                 // If there's no quantity recorded for a size, it defaults to 0
                 $quantitiesEURO[$key][$size] = $product->total_quantity;
             }
+
+            if($product->size >= 80 && $product->size <= 110){
+                $key = "{$product->model},{$product->color},{$product->heel_height},{$product->order_from}";
+                $size = $product->size;
+
+                if (!isset($quantitiesBELT[$key])) {
+                    $quantitiesBELT[$key] = [];
+                }
+                // If there's no quantity recorded for a size, it defaults to 0
+                $quantitiesBELT[$key][$size] = $product->total_quantity;
+            }
             
         }
         $test =0;
-        return view('export.products.lara', compact('today', 'quantitiesUS', 'quantitiesEURO', 'totalQuantity'));
+        return view('export.products.lara', compact('today', 'quantitiesUS', 'quantitiesEURO', 'quantitiesBELT', 'totalQuantity'));
     }
 
 }
