@@ -149,12 +149,13 @@ Route::middleware(['auth', 'verified'])->group( function () {
 
 });
 
-Route::middleware(['auth', 'verified'])->group( function () {
-    Route::get('/users', ListOfUsers::class)->name('users');
+// UNFINISHED
+// Route::middleware(['auth', 'verified'])->group( function () {
+//     Route::get('/users', ListOfUsers::class)->name('users');
 
-    Route::get('/create-user', CreateUser::class)->name('create-user');
-    Route::get('/create-roles', CreateRoles::class)->name('create-roles');
-});
+//     Route::get('/create-user', CreateUser::class)->name('create-user');
+//     Route::get('/create-roles', CreateRoles::class)->name('create-roles');
+// });
 
 // Route::get('/generate-pdf', [PDFController::class, 'generatePDF']);
 
