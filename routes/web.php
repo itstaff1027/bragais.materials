@@ -91,8 +91,6 @@ Route::middleware(['auth', 'verified'])->group( function () {
     Route::get('/products/outgoing/summary', summaryOutgoingProducts::class)->name('summary-outgoing');
     Route::get('/products/monthly-outgoing/summary', MonthlyDelivered::class)->name('monthly-summary-outgoing');
 
-    Route::get('/products/sold/per_day', Sold::class)->name('products.sold_per_day');
-
     Route::get('/products/details/{id}', ProductDetails::class)->name('update-product');
 
     Route::get('/products/generate-barcode/{id}', GenerateBarcode::class)->name('generate-barcode-product');
@@ -109,6 +107,9 @@ Route::middleware(['auth', 'verified'])->group( function () {
 
     Route::get('/products/lara', Lara::class)->name('products.lara');
     Route::get('/products/lara-monthly', LaraMonthly::class)->name('lara-monthly');
+
+    // UNFINISHED 
+    // Route::get('/products/sold/per_day', Sold::class)->name('products.sold_per_day');
 
 
 });
