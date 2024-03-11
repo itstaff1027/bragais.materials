@@ -105,12 +105,12 @@ Route::middleware(['auth', 'verified'])->group( function () {
 
 
 
-    Route::get('/products/lara', Lara::class)->name('products.lara');
+    Route::get('/products/lara', Lara::class)->name('products.lara')->lazy();
     Route::get('/products/lara-monthly', LaraMonthly::class)->name('lara-monthly');
 
     // UNFINISHED 
     // Route::get('/products/sold/per_day', Sold::class)->name('products.sold_per_day');
-    // Route::get('/products/product_stocks-summary', ProductSummary::class)->name('products.summary_stocks');
+    Route::get('/products/product_stocks-summary', ProductSummary::class)->name('products.summary_stocks')->lazy();
 
 
 });

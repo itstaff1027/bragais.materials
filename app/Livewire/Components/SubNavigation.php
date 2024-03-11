@@ -33,7 +33,7 @@ class SubNavigation extends Component
                 $title == 'Update-Details' ||
                 $title == 'Delivery - Logs' ||
                 // $title == 'Sold' ||
-                // $title == 'Product Summary' ||
+                $title == 'Product Summary' ||
                 $title == 'Lara' ||
                 $title == 'Lara Monthly'
             ){
@@ -45,7 +45,7 @@ class SubNavigation extends Component
                 ['name' => 'Outgoing', 'path' => 'summary-outgoing', 'to' => 'summary-outgoing' ],
                 ['name' => 'Delivery Logs', 'path' => 'delivery-logs', 'to' => 'delivery-logs' ],
                 // ['name' => 'Sold', 'path' => 'products.sold_per_day', 'to' => 'products.sold_per_day' ],
-                // ['name' => 'Product Summary', 'path' => 'products.summary_stocks', 'to' => 'products.summary_stocks' ],
+                ['name' => 'Product Summary', 'path' => 'products.summary_stocks', 'to' => 'products.summary_stocks' ],
                 ['name' => 'Lara', 'path' => 'products.lara', 'to' => 'products.lara' ],
             ];
             
