@@ -109,7 +109,7 @@ Route::middleware(['auth', 'verified'])->group( function () {
     Route::get('/products/lara-monthly', LaraMonthly::class)->name('lara-monthly');
 
     // UNFINISHED 
-    Route::get('/products/sold/per_day', Sold::class)->name('products.sold_per_day');
+    // Route::get('/products/sold/per_day', Sold::class)->name('products.sold_per_day');
     Route::get('/products/product_stocks-summary', ProductSummary::class)->name('products.summary_stocks');
 
 
