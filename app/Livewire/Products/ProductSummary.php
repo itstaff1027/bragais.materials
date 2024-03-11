@@ -121,16 +121,16 @@ class ProductSummary extends Component
         $datesQuery = DB::table('product_stocks')
         ->select(
             DB::raw('DATE(created_at) as date')
-        )
-        ->whereBetween(DB::raw('DATE(created_at)'), [$this->first_range_date, $this->second_range_date]);
+        );
+        // ->whereBetween(DB::raw('DATE(created_at)'), [$this->first_range_date, $this->second_range_date])
 
         $stocksQuery = ProductStocks::select(
             DB::raw('DATE(created_at) as date'),
             'product_id',
             DB::raw('SUM(stocks) as stocks' ),
             'status'
-        )
-        ->whereBetween(DB::raw('DATE(created_at)'), [$this->first_range_date, $this->second_range_date]);
+        );
+        // ->whereBetween(DB::raw('DATE(created_at)'), [$this->first_range_date, $this->second_range_date])
 
 
         $productsQuery = ProductStocks::select(
@@ -147,7 +147,7 @@ class ProductSummary extends Component
             'products.product_sku',
             'products.heel_height',
         )
-        ->paginate(25);
+        ->paginate(10);
 
         $dates = $datesQuery->groupBy(
             DB::raw('DATE(created_at)')
@@ -158,9 +158,6 @@ class ProductSummary extends Component
             'product_id',
             'status'
         )->get();
-
-        // dd($dates);
-        // dd($stocks);
 
         $this->dates = $dates;
         $this->stocks = $stocks;

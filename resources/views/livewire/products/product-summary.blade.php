@@ -31,14 +31,14 @@
                     <th colspan="3"  class="bg-gray-500 w-40">Total</th>
                 </tr>
                 <tr>
-                    <th class="w-36">Names</th>
+                    <th class="w-50">Names</th>
                     @foreach ($dates as $date)
-                        <th class="bg-emerald-500">+</th>
-                        <th class="bg-red-500">-</th>
+                        <th class="bg-emerald-500 w-28">+</th>
+                        <th class="bg-red-500 w-28">-</th>
                     @endforeach
-                    <th class="bg-emerald-500">+</th>
-                    <th class="bg-red-500">-</th>
-                    <th class="bg-blue-500">+-</th>
+                    <th class="bg-emerald-500 w-28">+</th>
+                    <th class="bg-red-500 w-28">-</th>
+                    <th class="bg-blue-500 w-28">+-</th>
                 </tr>
             </thead>
             <tbody>
