@@ -8,7 +8,7 @@
         <button class="border-2 p-2 mr-2 rounded-md border-blue-400" wire:click='export'> CSV </button>
         <input type="text" class="w-full rounded-l-md border-2 border-blue-400 m-2"  wire:model.live.debounce.500ms='first_range_date' placeholder="DATE-FIRST : FORMAT [y-m-d]" />
         <input type="text" class="w-full rounded-l-md border-2 border-blue-400 m-2"  wire:model.live.debounce.500ms='second_range_date' placeholder="DATE-SECOND : FORMAT [y-m-d]" />
-
+        <input type="text" class="w-full rounded-l-md border-2 border-blue-400 m-2"  wire:model.live.debounce.500ms='month' placeholder="MONTH: FORMAT [1 or 01]" />
         <button class="rounded-r-md border-2 border-blue-400 border-l-1 p-2" @click="open = ! open">Range</button>
 
     </div>

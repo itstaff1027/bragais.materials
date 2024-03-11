@@ -24,6 +24,7 @@ class ProductSummary extends Component
     public $first_range_date = '';
     public $second_range_date = '';
     public $filter_date;
+    public $month = 0;
 
     public function mount(){
         // $this->year = DATE('Y');
@@ -121,7 +122,7 @@ class ProductSummary extends Component
         $datesQuery = DB::table('product_stocks')
         ->select(
             DB::raw('DATE(created_at) as date')
-        );
+        )->whereMonth(DB::raw('created_at'), '=', $this->month);
         // ->whereBetween(DB::raw('DATE(created_at)'), [$this->first_range_date, $this->second_range_date])
 
         $stocksQuery = ProductStocks::select(
@@ -129,7 +130,7 @@ class ProductSummary extends Component
             'product_id',
             DB::raw('SUM(stocks) as stocks' ),
             'status'
-        );
+        )->whereMonth(DB::raw('created_at'), '=', $this->month);
         // ->whereBetween(DB::raw('DATE(created_at)'), [$this->first_range_date, $this->second_range_date])
 
 
