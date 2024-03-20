@@ -30,7 +30,7 @@ class SalesLog extends Component
     public $date_today;
     public $get_order_number;
     public $year = '2024';
-    public $month = 1;
+    public $month = 2;
 
     public $dataMonthly;
 
@@ -630,6 +630,399 @@ class SalesLog extends Component
 
         }
 
+    }
+
+    public function addToSponsorShip($agentNo, $orderNo, $customerDetails, $orderList, $packagingType, $soldDate, $remarks, $notes, $is_replacement){
+        $this->order_number = $orderNo;
+        $order_numberExist = '';
+        
+        DB::table('sponsorships')->insert([
+            'agent_number' => $agentNo,
+            'order_number' => $orderNo,
+            'customer_details' => $customerDetails,
+            'order_lists' => $orderList,
+            'packaging_type' => $packagingType,
+            'sold_date' => $soldDate,
+            'remarks' => $remarks,
+            'notes' => $notes,
+            'is_replacement' => 0
+        ]);
+
+        if ($packagingType != "COMPLETE PACKAGING" && $packagingType != "DUTBAG ONLY") {
+            $products = ProductStocks::where('order_number', intval($orderNo))->where('is_replacement', '<>', 'YES')->get();
+            // dd($products);
+            if ($products->isNotEmpty()) {
+                throw new Error('Already Added!');
+            }
+        }
+
+        if(!$is_replacement){
+            $order_numberExist = PackagingMaterialLogs::where('order_number', intval($orderNo))->exists();
+        }
+
+        // ADD COLUMN IN DATABSE is_replacement in product_stocks
+        if($is_replacement){
+            $order_numberExist = DB::table('product_stocks')->where('order_number', intval($orderNo))->where('is_replacement', '=', 'YES')->exists();
+            if(!$order_numberExist){
+                $products = ProductStocks::where('order_number', intval($orderNo))->where('is_replacement', '<>', 'YES')->get();
+
+                foreach($products as $product){
+                    $product->status = 'INCOMING';
+                    $product->stocks = -($product->stocks);
+                    $product->is_replacement = 'YES';
+                    $product->save();
+                }
+
+            }
+        }
+
+        if ($order_numberExist) {
+            // Handle the case where the order number does not exist
+            throw new Error('Already Added!');
+        }
+
+        $products = $this->getProductIDs($orderList);
+
+        $user_id = Auth::user()->id;
+
+        if(!$products){
+            throw new Error('Unknow Products');
+        }
+
+        // ADD COLUMN IN PRODUCTION ORDER TYPE
+        foreach($products as $product){
+
+            DB::table('product_stocks')->insert([
+                'user_id' => $user_id,
+                'product_id' => $product['id'],
+                'order_number' => $orderNo,
+                'stocks' => -1,
+                'remarks' => "DEDUCT - {$packagingType}",
+                'status' => 'OUTGOING',
+                'action' => 'DEDUCT',
+                'order_from' => 'SPONSORSHIP',
+                'is_replacement' => $is_replacement ? 'YES' : ''
+            ]);
+
+            if($packagingType == 'DUSTBAG ONLY'){
+                if($product['category'] == 'PAGEANT'){
+                    $this->insertCompletePackagingSale(8, $product['id'], -1, 1, 'OUTGOING');
+                }
+                if($product['category'] == 'HEELS'){
+                    $this->insertCompletePackagingSale(8, $product['id'], -1, 1, 'OUTGOING');
+                }
+                if($product['category'] == 'MANDIATOR'){
+                    // ll DUST BAG
+                    $this->insertCompletePackagingSale(6, $product['id'], -1, 1, 'OUTGOING');
+                }
+                if($product['category'] == 'WONDIATOR'){
+                    // ll DUST BAG
+                    $this->insertCompletePackagingSale(7, $product['id'], -1, 1, 'OUTGOING');
+                }
+            }
+
+            if($packagingType == 'COMPLETE PACKAGING'){
+                if($product['category'] === "PAGEANT"){
+
+                    // TISSUE
+                    $this->insertCompletePackagingSale(18, $product['id'], -1, 1, 'OUTGOING');
+                    // DUST BAG
+                    $this->insertCompletePackagingSale(8, $product['id'], -1, 1, 'OUTGOING');
+
+                    if($product['model'] == 'KEVIN-V2'){
+                        // PILLON
+                        $this->insertCompletePackagingSale(1, $product['id'], -2, 1, 'OUTGOING');
+
+                        if($product['size'] >= 9 && $product['size'] <= 12){
+                            // Box
+                            $this->insertCompletePackagingSale(11, $product['id'], -1, 1, 'OUTGOING');
+                            // RIBBON
+                            $this->insertCompletePackagingSale(19, $product['id'], (-1/15), 1, 'OUTGOING');
+                        }
+                        else{
+                            // Box
+                            $this->insertCompletePackagingSale(10, $product['id'], -1, 1, 'OUTGOING');
+                            // RIBBON
+                            $this->insertCompletePackagingSale(19, $product['id'], (-1/20), 1, 'OUTGOING');
+                        }
+                    }
+                    else{
+                        if($product['heel_height'] >= 8 and $product['heel_height'] <= 12){
+                            // Box
+                            $this->insertCompletePackagingSale(16, $product['id'], -1, 1, 'OUTGOING');
+                            // PILON
+                            $this->insertCompletePackagingSale(2, $product['id'], -2, 1, 'OUTGOING');
+                            // RIBBON
+                            $this->insertCompletePackagingSale(20, $product['id'], (-1/15), 1, 'OUTGOING');
+                        }
+                        else {
+                            // Box
+                            $this->insertCompletePackagingSale(16, $product['id'], -1, 1, 'OUTGOING');
+                            // PILON
+                            $this->insertCompletePackagingSale(2, $product['id'], -2, 1, 'OUTGOING');
+                            // RIBBON
+                            $this->insertCompletePackagingSale(20, $product['id'], (-1/20), 1, 'OUTGOING');
+                        }
+
+                    }
+                }
+
+                if($product['category'] === "HEELS"){
+                    // Box
+                    $this->insertCompletePackagingSale(15, $product['id'], -1, 1, 'OUTGOING');
+                    // PILON
+                    $this->insertCompletePackagingSale(3, $product['id'], -2, 1, 'OUTGOING');
+                    // RIBBON
+                    $this->insertCompletePackagingSale(20, $product['id'], (-1/20), 1, 'OUTGOING');
+                    // TISSUE
+                    $this->insertCompletePackagingSale(18, $product['id'], -1, 1, 'OUTGOING');
+                    // DUST BAG
+                    $this->insertCompletePackagingSale(8, $product['id'], -1, 1, 'OUTGOING');
+                }
+
+                if($product['category'] === "MANDIATOR"){
+                    // Box
+                    $this->insertCompletePackagingSale(21, $product['id'], -1, 1, 'OUTGOING');
+                    // LL PILON
+                    $this->insertCompletePackagingSale(4, $product['id'], -1, 1, 'OUTGOING');
+                    // TISSUE
+                    $this->insertCompletePackagingSale(18, $product['id'], -1, 1, 'OUTGOING');
+                    // ll DUST BAG
+                    $this->insertCompletePackagingSale(6, $product['id'], -1, 1, 'OUTGOING');
+                }
+
+                if($product['category'] === "WONDIATOR"){
+                    // Box
+                    $this->insertCompletePackagingSale(22, $product['id'], -1, 1, 'OUTGOING');
+                    // LL PILON
+                    $this->insertCompletePackagingSale(4, $product['id'], -1, 1, 'OUTGOING');
+                    // TISSUE
+                    $this->insertCompletePackagingSale(18, $product['id'], -1, 1, 'OUTGOING');
+                    // ll DUST BAG
+                    $this->insertCompletePackagingSale(7, $product['id'], -1, 1, 'OUTGOING');
+                }
+            }
+        }
+    }
+
+    public function addToPullOut($agentNo, $orderNo, $customerDetails, $orderList, $packagingType, $soldDate, $remarks, $notes, $is_replacement){
+        $this->order_number = $orderNo;
+        $order_numberExist = '';
+        
+        DB::table('pullouts')->insert([
+            'agent_number' => $agentNo,
+            'order_number' => $orderNo,
+            'customer_details' => $customerDetails,
+            'order_lists' => $orderList,
+            'packaging_type' => $packagingType,
+            'sold_date' => $soldDate,
+            'remarks' => $remarks,
+            'notes' => $notes,
+            'is_replacement' => 0
+        ]);
+
+        if ($packagingType != "COMPLETE PACKAGING" && $packagingType != "DUTBAG ONLY") {
+            $products = ProductStocks::where('order_number', intval($orderNo))->where('is_replacement', '<>', 'YES')->get();
+            // dd($products);
+            if ($products->isNotEmpty()) {
+                throw new Error('Already Added!');
+            }
+        }
+
+        if(!$is_replacement){
+            $order_numberExist = PackagingMaterialLogs::where('order_number', intval($orderNo))->exists();
+        }
+
+        // ADD COLUMN IN DATABSE is_replacement in product_stocks
+        if($is_replacement){
+            $order_numberExist = DB::table('product_stocks')->where('order_number', intval($orderNo))->where('is_replacement', '=', 'YES')->exists();
+            if(!$order_numberExist){
+                $products = ProductStocks::where('order_number', intval($orderNo))->where('is_replacement', '<>', 'YES')->get();
+
+                foreach($products as $product){
+                    $product->status = 'INCOMING';
+                    $product->stocks = -($product->stocks);
+                    $product->is_replacement = 'YES';
+                    $product->save();
+                }
+
+            }
+        }
+
+        if ($order_numberExist) {
+            // Handle the case where the order number does not exist
+            throw new Error('Already Added!');
+        }
+
+        $products = $this->getProductIDs($orderList);
+
+        $user_id = Auth::user()->id;
+
+        if(!$products){
+            throw new Error('Unknow Products');
+        }
+
+        // ADD COLUMN IN PRODUCTION ORDER TYPE
+        foreach($products as $product){
+
+            DB::table('product_stocks')->insert([
+                'user_id' => $user_id,
+                'product_id' => $product['id'],
+                'order_number' => $orderNo,
+                'stocks' => -1,
+                'remarks' => "DEDUCT - {$packagingType}",
+                'status' => 'OUTGOING',
+                'action' => 'DEDUCT',
+                'order_from' => 'PULLOUT',
+                'is_replacement' => $is_replacement ? 'YES' : ''
+            ]);
+
+            if($packagingType == 'DUSTBAG ONLY'){
+                if($product['category'] == 'PAGEANT'){
+                    $this->insertCompletePackagingSale(8, $product['id'], -1, 1, 'OUTGOING');
+                }
+                if($product['category'] == 'HEELS'){
+                    $this->insertCompletePackagingSale(8, $product['id'], -1, 1, 'OUTGOING');
+                }
+                if($product['category'] == 'MANDIATOR'){
+                    // ll DUST BAG
+                    $this->insertCompletePackagingSale(6, $product['id'], -1, 1, 'OUTGOING');
+                }
+                if($product['category'] == 'WONDIATOR'){
+                    // ll DUST BAG
+                    $this->insertCompletePackagingSale(7, $product['id'], -1, 1, 'OUTGOING');
+                }
+            }
+
+            if($packagingType == 'COMPLETE PACKAGING'){
+                if($product['category'] === "PAGEANT"){
+
+                    // TISSUE
+                    $this->insertCompletePackagingSale(18, $product['id'], -1, 1, 'OUTGOING');
+                    // DUST BAG
+                    $this->insertCompletePackagingSale(8, $product['id'], -1, 1, 'OUTGOING');
+
+                    if($product['model'] == 'KEVIN-V2'){
+                        // PILLON
+                        $this->insertCompletePackagingSale(1, $product['id'], -2, 1, 'OUTGOING');
+
+                        if($product['size'] >= 9 && $product['size'] <= 12){
+                            // Box
+                            $this->insertCompletePackagingSale(11, $product['id'], -1, 1, 'OUTGOING');
+                            // RIBBON
+                            $this->insertCompletePackagingSale(19, $product['id'], (-1/15), 1, 'OUTGOING');
+                        }
+                        else{
+                            // Box
+                            $this->insertCompletePackagingSale(10, $product['id'], -1, 1, 'OUTGOING');
+                            // RIBBON
+                            $this->insertCompletePackagingSale(19, $product['id'], (-1/20), 1, 'OUTGOING');
+                        }
+                    }
+                    else{
+                        if($product['heel_height'] >= 8 and $product['heel_height'] <= 12){
+                            // Box
+                            $this->insertCompletePackagingSale(16, $product['id'], -1, 1, 'OUTGOING');
+                            // PILON
+                            $this->insertCompletePackagingSale(2, $product['id'], -2, 1, 'OUTGOING');
+                            // RIBBON
+                            $this->insertCompletePackagingSale(20, $product['id'], (-1/15), 1, 'OUTGOING');
+                        }
+                        else {
+                            // Box
+                            $this->insertCompletePackagingSale(16, $product['id'], -1, 1, 'OUTGOING');
+                            // PILON
+                            $this->insertCompletePackagingSale(2, $product['id'], -2, 1, 'OUTGOING');
+                            // RIBBON
+                            $this->insertCompletePackagingSale(20, $product['id'], (-1/20), 1, 'OUTGOING');
+                        }
+
+                    }
+                }
+
+                if($product['category'] === "HEELS"){
+                    // Box
+                    $this->insertCompletePackagingSale(15, $product['id'], -1, 1, 'OUTGOING');
+                    // PILON
+                    $this->insertCompletePackagingSale(3, $product['id'], -2, 1, 'OUTGOING');
+                    // RIBBON
+                    $this->insertCompletePackagingSale(20, $product['id'], (-1/20), 1, 'OUTGOING');
+                    // TISSUE
+                    $this->insertCompletePackagingSale(18, $product['id'], -1, 1, 'OUTGOING');
+                    // DUST BAG
+                    $this->insertCompletePackagingSale(8, $product['id'], -1, 1, 'OUTGOING');
+                }
+
+                if($product['category'] === "MANDIATOR"){
+                    // Box
+                    $this->insertCompletePackagingSale(21, $product['id'], -1, 1, 'OUTGOING');
+                    // LL PILON
+                    $this->insertCompletePackagingSale(4, $product['id'], -1, 1, 'OUTGOING');
+                    // TISSUE
+                    $this->insertCompletePackagingSale(18, $product['id'], -1, 1, 'OUTGOING');
+                    // ll DUST BAG
+                    $this->insertCompletePackagingSale(6, $product['id'], -1, 1, 'OUTGOING');
+                }
+
+                if($product['category'] === "WONDIATOR"){
+                    // Box
+                    $this->insertCompletePackagingSale(22, $product['id'], -1, 1, 'OUTGOING');
+                    // LL PILON
+                    $this->insertCompletePackagingSale(4, $product['id'], -1, 1, 'OUTGOING');
+                    // TISSUE
+                    $this->insertCompletePackagingSale(18, $product['id'], -1, 1, 'OUTGOING');
+                    // ll DUST BAG
+                    $this->insertCompletePackagingSale(7, $product['id'], -1, 1, 'OUTGOING');
+                }
+            }
+        }
+    }
+
+    public function addToMTO($agentNo, $orderNo, $customerDetails, $orderList, $packagingType, $soldDate, $remarks, $notes, $is_replacement){
+        $this->order_number = $orderNo;
+        $order_numberExist = '';
+
+        $newArrayList = $this->reArrayOrder($orderList);
+
+        // dd($newArrayList);
+        $order_numberExist = DB::table('mtos')->where('order_number', intval($orderNo))->get();
+
+        if($order_numberExist->isNotEmpty()){
+            throw new Error('Already Added!');
+        };
+        
+        DB::table('mtos')->insert([
+            'agent_number' => $agentNo,
+            'order_number' => $orderNo,
+            'customer_details' => $customerDetails,
+            'model' => $newArrayList[0],
+            'color' => $newArrayList[1],
+            'size' => $newArrayList[2],
+            'heel_height' => $newArrayList[3],
+            'heel_type' => $newArrayList[4],
+            'round' => $newArrayList[5] ? $newArrayList[5] : '',
+            'packaging_type' => $packagingType,
+            'sold_date' => $soldDate,
+            'remarks' => $remarks,
+            'notes' => $notes,
+            'is_replacement' => 0
+        ]);
+    }
+
+    public function reArrayOrder($orderList){
+        if(!$orderList){
+            throw new Error('Unknown Array');
+        }
+
+        $lists = explode(' ', $orderList);
+        // Remove empty elements
+        $lists = array_filter($lists);
+        // Optional: Re-index the array to start from index 0
+        $lists = array_values($lists);
+
+        $disperseOrdersArray = $lists;
+
+        return $disperseOrdersArray;
     }
 
     private function getProductIDs($orderList){

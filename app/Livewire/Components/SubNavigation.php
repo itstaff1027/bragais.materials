@@ -35,7 +35,10 @@ class SubNavigation extends Component
                 // $title == 'Sold' ||
                 $title == 'Product Summary' ||
                 $title == 'Lara' ||
-                $title == 'Lara Monthly'
+                $title == 'Lara Monthly' ||
+                $title == 'Pullouts' ||
+                $title == 'Sponsorships' ||
+                $title == 'MTOs'
             ){
             $sub_navigation = [
                 ['name' => 'Products', 'path' => 'products', 'to' => 'products' ],

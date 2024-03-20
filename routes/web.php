@@ -8,12 +8,14 @@ use App\Livewire\Packaging;
 use App\Livewire\ListOfUsers;
 use App\Livewire\Products\Lara;
 use App\Livewire\Products\LaraMonthly;
+use App\Livewire\Products\Mto;
 use App\Livewire\Products\Sold;
 use App\Livewire\Packaging\PerDay;
 use App\Livewire\Products\Barcode;
 use App\Livewire\Products\OnStock;
 use App\Exports\MaterialLogsExport;
 use App\Livewire\Products\SalesLog;
+use App\Livewire\Products\Sponsorhip;
 use Illuminate\Support\Facades\Http;
 use App\Livewire\Packaging\AddStocks;
 use Illuminate\Support\Facades\Route;
@@ -44,6 +46,7 @@ use App\Livewire\Products\Details as ProductDetails;
 use App\Livewire\Components\Products\AddStockBarcode;
 use App\Livewire\Inventory\Summary as summaryOutgoing;
 use App\Livewire\Packaging\Summary as summaryPackaging;
+use App\Livewire\Products\Pullouts;
 use App\Livewire\Products\Summary as summaryOutgoingProducts;
 
 /*
@@ -107,11 +110,13 @@ Route::middleware(['auth', 'verified'])->group( function () {
 
     Route::get('/products/lara', Lara::class)->name('products.lara');
     Route::get('/products/lara-monthly', LaraMonthly::class)->name('lara-monthly');
+    Route::get('/products/pullouts', Pullouts::class)->name('pullouts');
+    Route::get('/products/sponsorships', Sponsorhip::class)->name('sponsorships');
+    Route::get('/products/mtos', Mto::class)->name('mtos');
 
     // UNFINISHED 
     // Route::get('/products/sold/per_day', Sold::class)->name('products.sold_per_day');
     Route::get('/products/product_stocks-summary', ProductSummary::class)->name('products.summary_stocks');
-
 
 });
 

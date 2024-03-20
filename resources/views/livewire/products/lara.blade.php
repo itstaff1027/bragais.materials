@@ -19,9 +19,24 @@
         <input type="radio" value="ONLINE" wire:click="filterBySoldFrom('ONLINE')" /> --}}
     </div>
     
-    <a href={{ route('lara-monthly') }} wire:navigate>
-        Monthly
-    </a>
+    <div class="space-x-4">
+        <a class="rounded-lg bg-indigo-400 p-2 hover:bg-indigo-600 hover:text-white" href={{ route('lara-monthly') }} wire:navigate>
+            Monthly
+        </a>
+
+        <a class="rounded-lg bg-indigo-400 p-2 hover:bg-indigo-600 hover:text-white" href={{ route('pullouts') }} wire:navigate>
+            Pullouts
+        </a>
+
+        <a class="rounded-lg bg-indigo-400 p-2 hover:bg-indigo-600 hover:text-white" href={{ route('sponsorships') }} wire:navigate>
+            Sponsorship
+        </a>
+
+        <a class="rounded-lg bg-indigo-400 p-2 hover:bg-indigo-600 hover:text-white" href={{ route('mtos') }} wire:navigate>
+            MTO
+        </a>
+    </div>
+    
         
     @php
         $size_us = ['5', '6', '7', '8', '9', '10', '11', '12'];
@@ -74,8 +89,8 @@
                                         $totalQuantityUS += $sizes[$size];
                                         $totalQuantityOnlineUS += $sizes[$size]
                                     @endphp
-                                @else
-                                    0
+                                {{-- @else
+                                    0 --}}
                                 @endif
                             </td>
                         @endforeach
@@ -131,8 +146,8 @@
                                         $totalQuantityEURO += $sizes[$size];
                                         $totalQuantityOnlineEURO += $sizes[$size];
                                     @endphp
-                                @else
-                                    0
+                                {{-- @else
+                                    0 --}}
                                 @endif
                             </td>
                         @endforeach
@@ -191,8 +206,8 @@
                                         $totalQuantityBELT += $sizes[$size];
                                         $totalQuantityOnlineBELT += $sizes[$size];
                                     @endphp
-                                @else
-                                    0
+                                {{-- @else
+                                    0 --}}
                                 @endif
                             </td>
                         @endforeach
@@ -257,8 +272,8 @@
                                         $totalQuantityUS += $sizes[$size];
                                         $totalQuantityStoreUS += $sizes[$size];
                                     @endphp
-                                @else
-                                    0
+                                {{-- @else
+                                    0 --}}
                                 @endif
                             </td>
                         @endforeach
@@ -315,8 +330,8 @@
                                         $totalQuantityEURO += $sizes[$size];
                                         $totalQuantityStoreEURO += $sizes[$size]
                                     @endphp
-                                @else
-                                    0
+                                {{-- @else
+                                    0 --}}
                                 @endif
                             </td>
                         @endforeach
@@ -375,8 +390,8 @@
                                         $totalQuantityBELT += $sizes[$size];
                                         $totalQuantityStoreBELT += $sizes[$size];
                                     @endphp
-                                @else
-                                    0
+                                {{-- @else
+                                    0 --}}
                                 @endif
                             </td>
                         @endforeach
