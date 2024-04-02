@@ -9,6 +9,7 @@ use App\Livewire\ListOfUsers;
 use App\Livewire\Products\Lara;
 use App\Livewire\Products\LaraMonthly;
 use App\Livewire\Products\Mto;
+use App\Livewire\Products\Runaway;
 use App\Livewire\Products\Sold;
 use App\Livewire\Packaging\PerDay;
 use App\Livewire\Products\Barcode;
@@ -113,6 +114,9 @@ Route::middleware(['auth', 'verified'])->group( function () {
     Route::get('/products/pullouts', Pullouts::class)->name('pullouts');
     Route::get('/products/sponsorships', Sponsorhip::class)->name('sponsorships');
     Route::get('/products/mtos', Mto::class)->name('mtos');
+
+    // ON-GOING
+    Route::get('/products/runaway_generate_codes', Runaway::class)->name('runaway');
 
     // UNFINISHED 
     // Route::get('/products/sold/per_day', Sold::class)->name('products.sold_per_day');

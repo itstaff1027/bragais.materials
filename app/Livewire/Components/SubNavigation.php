@@ -38,7 +38,8 @@ class SubNavigation extends Component
                 $title == 'Lara Monthly' ||
                 $title == 'Pullouts' ||
                 $title == 'Sponsorships' ||
-                $title == 'MTOs'
+                $title == 'MTOs' ||
+                $title == 'Runaway'
             ){
             $sub_navigation = [
                 ['name' => 'Products', 'path' => 'products', 'to' => 'products' ],
@@ -50,6 +51,7 @@ class SubNavigation extends Component
                 // ['name' => 'Sold', 'path' => 'products.sold_per_day', 'to' => 'products.sold_per_day' ],
                 ['name' => 'Product Summary', 'path' => 'products.summary_stocks', 'to' => 'products.summary_stocks' ],
                 ['name' => 'Lara', 'path' => 'products.lara', 'to' => 'products.lara' ],
+                ['name' => 'Runaway', 'path' => 'runaway', 'to' => 'runaway' ],
             ];
             
         }
